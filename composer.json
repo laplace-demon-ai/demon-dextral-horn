@@ -1,0 +1,51 @@
+{
+    "name": "laplace-demon-ai/demon-dextral-horn",
+    "description": "Laravel package for API prediction/prefetching",
+    "keywords": [
+        "Moe Mizrak",
+        "laravel",
+        "demon-dextral-horn",
+        "laplace-demon-ai",
+        "machine learning",
+        "prediction-engine",
+        "api-prefetching",
+        "php 8"
+    ],
+    "type": "package",
+    "homepage": "https://github.com/laplace-demon-ai/demon-dextral-horn",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Moe Mizrak"
+        }
+    ],
+    "require": {
+        "php": "^8.2"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.6.1",
+        "phpunit/phpunit": "^11.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "DemonDextralHorn\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "DemonDextralHorn\\DemonDextralHornServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
