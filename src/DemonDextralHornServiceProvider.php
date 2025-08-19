@@ -5,6 +5,13 @@ declare(strict_types=1);
 namespace DemonDextralHorn;
 
 use Illuminate\Support\ServiceProvider;
+use DemonDextralHorn\Handlers\TargetRouteHandler;
+use DemonDextralHorn\Resolvers\RouteParamResolver;
+use DemonDextralHorn\Resolvers\QueryParamResolver;
+use DemonDextralHorn\Resolvers\HeadersResolver;
+use DemonDextralHorn\Resolvers\TargetRouteResolver;
+use DemonDextralHorn\Resolvers\Contracts\TargetRouteResolverInterface;
+use DemonDextralHorn\Routing\RouteDispatcher;
 
 /**
  * Service provider for DemonDextralHorn.
@@ -31,6 +38,22 @@ final class DemonDextralHornServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->configure();
+
+        // Bind the target route resolver interface to its implementation
+        $this->app->bind(
+            TargetRouteResolverInterface::class,
+            TargetRouteResolver::class
+        );
+
+        // Register the facade for the TargetRouteHandler (DemonDextralHorn)
+        $this->app->singleton('demon-dextral-horn', function ($app) {
+            return new TargetRouteHandler(
+                $app->make(RouteParamResolver::class),
+                $app->make(QueryParamResolver::class),
+                $app->make(HeadersResolver::class),
+                $app->make(RouteDispatcher::class),
+            );
+        });
     }
 
     /**

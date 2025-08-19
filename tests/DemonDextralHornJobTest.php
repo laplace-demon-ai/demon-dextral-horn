@@ -4,25 +4,26 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use DemonDextralHorn\Jobs\DemonDextralHornPrefetchJob;
+use DemonDextralHorn\Jobs\DemonDextralHornJob;
 use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Support\Facades\Queue;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Data\HeadersData;
-use DemonDextralHorn\Data\CookiesData;
 use DemonDextralHorn\Enums\PrefetchType;
+use DemonDextralHorn\Resolvers\Contracts\TargetRouteResolverInterface;
 
 /**
- * Test the DemonDextralHornPrefetchJob.
+ * Test the DemonDextralHornJob.
  *
- * @class DemonDextralHornPrefetchJobTest
+ * @class DemonDextralHornJobTest
  */
-final class DemonDextralHornPrefetchJobTest extends TestCase
+final class DemonDextralHornJobTest extends TestCase
 {
-    private DemonDextralHornPrefetchJob $job;
+    private DemonDextralHornJob $job;
     private RequestData $requestData;
     private ResponseData $responseData;
+    private TargetRouteResolverInterface $targetRouteResolver;
 
     public function setUp(): void
     {
@@ -47,19 +48,21 @@ final class DemonDextralHornPrefetchJobTest extends TestCase
             status: 200,
             content: 'ok',
         );
-        $this->job = $this->app->make(DemonDextralHornPrefetchJob::class, [
+        $this->job = $this->app->make(DemonDextralHornJob::class, [
             'requestData' => $this->requestData,
             'responseData' => $this->responseData,
         ]);
+        $this->targetRouteResolver = $this->app->make(TargetRouteResolverInterface::class);
     }
 
+    // todo tests will be written
     #[Test]
     public function it_tests(): void
     {
         /* SETUP */
 
         /* EXECUTE */
-        $this->job->handle();
+        $this->job->handle($this->targetRouteResolver);
 
         /* ASSERT */
         

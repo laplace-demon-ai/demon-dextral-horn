@@ -6,7 +6,7 @@ namespace Tests;
 
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 use DemonDextralHorn\DemonDextralHornServiceProvider;
-use DemonDextralHorn\Middleware\DemonDextralHornPrefetchMiddleware;
+use DemonDextralHorn\Middleware\DemonDextralHornMiddleware;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Cookie;
 
@@ -46,26 +46,26 @@ class TestCase extends OrchestraTestCase
      */
     protected function defineRoutes($router): void
     {
-        // Define a success route which uses DemonDextralHornPrefetchMiddleware middleware
-        $router->middleware(DemonDextralHornPrefetchMiddleware::class)
+        // Define a success route which uses DemonDextralHornMiddleware middleware
+        $router->middleware(DemonDextralHornMiddleware::class)
             ->get('/prefetch-route-success', function () {
                 return new Response('ok', 200);
             });
 
-        // Define an error route which uses DemonDextralHornPrefetchMiddleware middleware
-        $router->middleware(DemonDextralHornPrefetchMiddleware::class)
+        // Define an error route which uses DemonDextralHornMiddleware middleware
+        $router->middleware(DemonDextralHornMiddleware::class)
             ->get('/prefetch-route-error', function () {
                 return new Response('error', 500);
             });
 
-        // Define a success post route which uses DemonDextralHornPrefetchMiddleware middleware
-        $router->middleware(DemonDextralHornPrefetchMiddleware::class)
+        // Define a success post route which uses DemonDextralHornMiddleware middleware
+        $router->middleware(DemonDextralHornMiddleware::class)
             ->post('/post/prefetch-route-success', function () {
                 return new Response('ok', 200);
             });
 
-        // Define a success login route which uses DemonDextralHornPrefetchMiddleware middleware, add laravel_session cookie to response header set-cookie
-        $router->middleware(DemonDextralHornPrefetchMiddleware::class)
+        // Define a success login route which uses DemonDextralHornMiddleware middleware, add laravel_session cookie to response header set-cookie
+        $router->middleware(DemonDextralHornMiddleware::class)
             ->post('/post/prefetch-login-success', function () {
                 $response = new Response('ok', 200);
                 $response->headers->setCookie(

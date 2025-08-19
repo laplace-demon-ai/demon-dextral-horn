@@ -9,15 +9,15 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
-use DemonDextralHorn\Jobs\DemonDextralHornPrefetchJob;
+use DemonDextralHorn\Jobs\DemonDextralHornJob;
 use DemonDextralHorn\Enums\PrefetchType;
 
 /**
  * Middleware to handle prefetching of related data.
  *
- * @class DemonDextralHornPrefetchMiddleware
+ * @class DemonDextralHornMiddleware
  */
-final readonly class DemonDextralHornPrefetchMiddleware
+final readonly class DemonDextralHornMiddleware
 {
     /**
      * Handle an incoming request.
@@ -53,7 +53,7 @@ final readonly class DemonDextralHornPrefetchMiddleware
             // Checks if the request is a prefetch call (triggered automatically by prefetching logic) so that we prevent circular/cascading prefetching
             if ($requestData->headers->demonPrefetchCall !== PrefetchType::AUTO->value) {
                 // Dispatch the job to the specified queue
-                DemonDextralHornPrefetchJob::dispatch($requestData, $responseData)
+                DemonDextralHornJob::dispatch($requestData, $responseData)
                     ->onConnection($queueConnection)
                     ->onQueue($queueName);
             }
