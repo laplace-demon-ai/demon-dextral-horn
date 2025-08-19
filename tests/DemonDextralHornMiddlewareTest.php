@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use DemonDextralHorn\Middleware\DemonDextralHornPrefetchMiddleware;
-use DemonDextralHorn\Jobs\DemonDextralHornPrefetchJob;
+use DemonDextralHorn\Middleware\DemonDextralHornMiddleware;
+use DemonDextralHorn\Jobs\DemonDextralHornJob;
 use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Http\Request;
@@ -13,11 +13,11 @@ use Illuminate\Http\Response;
 use DemonDextralHorn\Enums\PrefetchType;
 
 /**
- * Test the DemonDextralHornPrefetchMiddleware.
+ * Test the DemonDextralHornMiddlewareTest.
  *
- * @class DemonDextralHornPrefetchMiddlewareTest
+ * @class DemonDextralHornMiddlewareTest
  */
-final class DemonDextralHornPrefetchMiddlewareTest extends TestCase
+final class DemonDextralHornMiddlewareTest extends TestCase
 {
     public function setUp(): void
     {
@@ -31,15 +31,15 @@ final class DemonDextralHornPrefetchMiddlewareTest extends TestCase
     public function it_tests_when_response_is_NOT_successful_by_resolving_middleware(): void
     {
         /* SETUP */
-        $demonDextralHornPrefetchMiddleware = $this->app->make(DemonDextralHornPrefetchMiddleware::class);
+        $demonDextralHornMiddleware = $this->app->make(DemonDextralHornMiddleware::class);
         $request = Request::create('/some/uri', 'GET');
         $response = new Response('error', 500);
 
         /* EXECUTE */
-        $demonDextralHornPrefetchMiddleware->terminate($request, $response);
+        $demonDextralHornMiddleware->terminate($request, $response);
 
         /* ASSERT */
-        Queue::assertNothingPushed(DemonDextralHornPrefetchJob::class);
+        Queue::assertNothingPushed(DemonDextralHornJob::class);
     }
 
     #[Test]
@@ -49,7 +49,7 @@ final class DemonDextralHornPrefetchMiddlewareTest extends TestCase
         $this->get('/prefetch-route-error');
 
         /* ASSERT */
-        Queue::assertNothingPushed(DemonDextralHornPrefetchJob::class);
+        Queue::assertNothingPushed(DemonDextralHornJob::class);
     }
 
     #[Test]
@@ -63,7 +63,7 @@ final class DemonDextralHornPrefetchMiddlewareTest extends TestCase
         $this->get('/prefetch-route-success');
 
         /* ASSERT */
-        Queue::assertPushed(DemonDextralHornPrefetchJob::class, function ($job) use ($queueConnection, $queueName) {
+        Queue::assertPushed(DemonDextralHornJob::class, function ($job) use ($queueConnection, $queueName) {
             return $job->queue === $queueName
                 && $job->connection === $queueConnection;
         });
@@ -80,7 +80,7 @@ final class DemonDextralHornPrefetchMiddlewareTest extends TestCase
             ->get('/prefetch-route-success');
 
         /* ASSERT */
-        Queue::assertNothingPushed(DemonDextralHornPrefetchJob::class);
+        Queue::assertNothingPushed(DemonDextralHornJob::class);
     }
 
     #[Test]
@@ -94,7 +94,7 @@ final class DemonDextralHornPrefetchMiddlewareTest extends TestCase
             ->get('/prefetch-route-success');
 
         /* ASSERT */
-        Queue::assertPushed(DemonDextralHornPrefetchJob::class);
+        Queue::assertPushed(DemonDextralHornJob::class);
     }
 
     #[Test]
@@ -108,7 +108,7 @@ final class DemonDextralHornPrefetchMiddlewareTest extends TestCase
             ->get('/prefetch-route-success');
 
         /* ASSERT */
-        Queue::assertPushed(DemonDextralHornPrefetchJob::class);
+        Queue::assertPushed(DemonDextralHornJob::class);
     }
 
     #[Test]
@@ -127,7 +127,7 @@ final class DemonDextralHornPrefetchMiddlewareTest extends TestCase
             ->get('/prefetch-route-success');
 
         /* ASSERT */
-        Queue::assertPushed(DemonDextralHornPrefetchJob::class);
+        Queue::assertPushed(DemonDextralHornJob::class);
     }
 
     #[Test]
@@ -147,7 +147,7 @@ final class DemonDextralHornPrefetchMiddlewareTest extends TestCase
             ->post('/post/prefetch-route-success', $payload);
 
         /* ASSERT */
-        Queue::assertPushed(DemonDextralHornPrefetchJob::class);
+        Queue::assertPushed(DemonDextralHornJob::class);
     }
 
     #[Test]
@@ -165,6 +165,6 @@ final class DemonDextralHornPrefetchMiddlewareTest extends TestCase
             ->post('/post/prefetch-login-success', $loginPayload);
 
         /* ASSERT */
-        Queue::assertPushed(DemonDextralHornPrefetchJob::class);
+        Queue::assertPushed(DemonDextralHornJob::class);
     }
 }
