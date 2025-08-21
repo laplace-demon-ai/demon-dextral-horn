@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Jobs;
 
 use DemonDextralHorn\Jobs\DemonDextralHornJob;
 use PHPUnit\Framework\Attributes\Test;
@@ -12,6 +12,7 @@ use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Data\HeadersData;
 use DemonDextralHorn\Enums\PrefetchType;
 use DemonDextralHorn\Resolvers\Contracts\TargetRouteResolverInterface;
+use Tests\TestCase;
 
 /**
  * Test the DemonDextralHornJob.

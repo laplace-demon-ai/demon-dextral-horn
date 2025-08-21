@@ -12,6 +12,7 @@ use DemonDextralHorn\Resolvers\HeadersResolver;
 use DemonDextralHorn\Resolvers\TargetRouteResolver;
 use DemonDextralHorn\Resolvers\Contracts\TargetRouteResolverInterface;
 use DemonDextralHorn\Routing\RouteDispatcher;
+use DemonDextralHorn\Factories\StrategyFactory;
 
 /**
  * Service provider for DemonDextralHorn.
@@ -54,6 +55,9 @@ final class DemonDextralHornServiceProvider extends ServiceProvider
                 $app->make(RouteDispatcher::class),
             );
         });
+
+        // Register the strategy factory
+        $this->app->singleton(StrategyFactory::class);
     }
 
     /**

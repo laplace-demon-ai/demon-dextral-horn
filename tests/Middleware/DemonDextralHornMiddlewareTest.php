@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Middleware;
 
 use DemonDextralHorn\Middleware\DemonDextralHornMiddleware;
 use DemonDextralHorn\Jobs\DemonDextralHornJob;
@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Queue;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use DemonDextralHorn\Enums\PrefetchType;
+use Tests\TestCase;
 
 /**
  * Test the DemonDextralHornMiddlewareTest.

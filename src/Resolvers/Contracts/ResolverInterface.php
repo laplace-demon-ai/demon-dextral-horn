@@ -15,16 +15,16 @@ use DemonDextralHorn\Data\ResponseData;
 interface ResolverInterface
 {
     /**
-     * Resolves based on the provided route, request data, and response data.
+     * Resolves based on the provided target route definition, request data, and response data.
      *
-     * @param array|null $route
+     * @param array|null $targetRouteDefinition
      * @param RequestData|null $requestData
      * @param ResponseData|null $responseData
      * 
      * @return array
      */
     public function resolve(
-        ?array $route = null,
+        ?array $targetRouteDefinition = null,
         ?RequestData $requestData = null,
         ?ResponseData $responseData = null
     ): array;
