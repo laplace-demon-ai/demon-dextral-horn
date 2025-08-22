@@ -7,6 +7,7 @@ namespace DemonDextralHorn\Factories;
 use DemonDextralHorn\Resolvers\Contracts\StrategyInterface;
 use InvalidArgumentException;
 use RuntimeException;
+use Exception;
 
 /**
  * Factory class for creating strategy instance from string class name.
@@ -34,7 +35,7 @@ final class StrategyFactory
 
         try {
             return app()->make($strategyClass);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new RuntimeException("Failed to instantiate strategy {$strategyClass}");
         }
     }
