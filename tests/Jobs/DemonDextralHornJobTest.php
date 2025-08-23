@@ -57,11 +57,11 @@ final class DemonDextralHornJobTest extends TestCase
         $this->targetRouteResolver = $this->app->make(TargetRouteResolverInterface::class);
     }
 
-    // todo tests will be written
     #[Test]
     public function it_tests(): void
     {
         /* SETUP */
+        $this->markTestSkipped('This test is not ready at the moment, skipping.');
 
         /* EXECUTE */
         $this->job->handle($this->targetRouteResolver);

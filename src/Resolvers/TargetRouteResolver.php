@@ -7,6 +7,7 @@ namespace DemonDextralHorn\Resolvers;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Resolvers\AbstractResolver;
+use DemonDextralHorn\Resolvers\Contracts\TargetRouteResolverInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ use Illuminate\Http\Request;
  *
  * @class TargetRouteResolver
  */
-final class TargetRouteResolver extends AbstractResolver
+final class TargetRouteResolver extends AbstractResolver implements TargetRouteResolverInterface
 {
     /**
      * @inheritDoc
