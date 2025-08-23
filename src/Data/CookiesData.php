@@ -7,6 +7,11 @@ namespace DemonDextralHorn\Data;
 use Spatie\LaravelData\Data;
 use Illuminate\Support\Arr;
 
+/**
+ * DTO representing HTTP cookies data.
+ *
+ * @class CookiesData
+ */
 final class CookiesData extends Data
 {
     public function __construct(
