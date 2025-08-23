@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DemonDextralHorn\Routing;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Dispatches a request with the given route information/parameters.
