@@ -58,7 +58,7 @@ final class QueryParamResolverTest extends TestCase
         ]; // Route definition for the increment strategy
 
         /* EXECUTE */
-        $resolvedParams = $this->resolver->resolve(targetRouteDefinition: $routeDefinition, requestData:$this->requestData);
+        $resolvedParams = $this->resolver->resolve(targetRouteDefinition: $routeDefinition, requestData: $this->requestData);
 
         /* ASSERT */
         $this->assertEquals(['query_key' => $queryKey + $increment], $resolvedParams);
