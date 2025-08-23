@@ -42,6 +42,4 @@ final class QueryParamResolver extends AbstractResolver
 
         return $resolvedQueryParams;
     }
-
-    // todo check if that covers all kind of query params, for instance when multiple is sent will it add as ?items[]=1&items[]=2
 }

@@ -102,9 +102,9 @@ final class IncrementStrategyTest extends TestCase
         );
         $requestData = RequestData::fromRequest($request);
         $increment = 2;
+        $this->expectException(MissingStrategyOptionException::class);
 
         /* EXECUTE */
-        $this->expectException(MissingStrategyOptionException::class);
         $result = $this->incrementStrategy->handle(
             requestData: $requestData,
             options: ['increment' => $increment]

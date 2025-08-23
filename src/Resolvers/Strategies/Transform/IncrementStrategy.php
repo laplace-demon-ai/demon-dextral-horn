@@ -10,7 +10,7 @@ use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
 use Illuminate\Support\Arr;
 
 /**
- * Increment strategy for transforming data.
+ * Increment strategy for transforming data, it increments the value of a specified key by a given amount.
  *
  * @class IncrementStrategy
  */
