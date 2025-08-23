@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Data;
 
-use Spatie\LaravelData\Data;
 use Illuminate\Http\Request;
+use Spatie\LaravelData\Data;
 
 /**
  * DTO representing HTTP request data.
- * 
+ *
  * @class RequestData
  */
 final class RequestData extends Data
@@ -29,12 +29,12 @@ final class RequestData extends Data
      * Create a new instance from a Request object.
      *
      * @param Request $request
-     * 
+     *
      * @return static
      */
     public static function fromRequest(Request $request): static
     {
-        return new static(
+        return new self(
             uri: $request->getRequestUri(),
             method: $request->method(),
             headers: HeadersData::fromHeaders($request->headers->all()),

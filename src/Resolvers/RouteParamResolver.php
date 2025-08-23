@@ -6,7 +6,6 @@ namespace DemonDextralHorn\Resolvers;
 
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
-use DemonDextralHorn\Resolvers\AbstractResolver;
 use Illuminate\Support\Arr;
 
 /**
@@ -17,7 +16,7 @@ use Illuminate\Support\Arr;
 final class RouteParamResolver extends AbstractResolver
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function resolve(
         ?array $targetRouteDefinition = null,

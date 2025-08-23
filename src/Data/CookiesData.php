@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Data;
 
-use Spatie\LaravelData\Data;
 use Illuminate\Support\Arr;
+use Spatie\LaravelData\Data;
 
 /**
  * DTO representing HTTP cookies data.
@@ -29,7 +29,7 @@ final class CookiesData extends Data
     {
         $laravelSession = Arr::get($cookies, 'laravel_session');
 
-        return new static(
+        return new self(
             laravelSession: $laravelSession,
         );
     }

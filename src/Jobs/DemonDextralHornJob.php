@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Jobs;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Queue\Queueable;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Facades\DemonDextralHorn;
 use DemonDextralHorn\Resolvers\Contracts\TargetRouteResolverInterface;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
 
 /**
  * Queue job to handle prefetching.
@@ -22,7 +22,7 @@ final class DemonDextralHornJob implements ShouldQueue
 
     /**
      * Create a new job instance.
-     * 
+     *
      * @param RequestData $requestData
      * @param ResponseData $responseData
      */

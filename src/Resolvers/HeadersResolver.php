@@ -7,7 +7,6 @@ namespace DemonDextralHorn\Resolvers;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Enums\PrefetchType;
-use DemonDextralHorn\Resolvers\AbstractResolver;
 
 /**
  * Resolves headers for the target route.
@@ -17,7 +16,7 @@ use DemonDextralHorn\Resolvers\AbstractResolver;
 final class HeadersResolver extends AbstractResolver
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function resolve(
         ?array $route = null,
@@ -30,9 +29,9 @@ final class HeadersResolver extends AbstractResolver
         $prefetchHeaderName = config('demon-dextral-horn.defaults.prefetch_header'); // Demon-Prefetch-Call
         $prefetchHeaderValue = PrefetchType::AUTO->value;
         $prefetchHeader = [
-            $prefetchHeaderName => $prefetchHeaderValue
+            $prefetchHeaderName => $prefetchHeaderValue,
         ];
-        
+
         $headersData = $requestData->headers;
 
         // Map the headers to the correct format

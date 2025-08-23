@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn;
 
-use Illuminate\Support\ServiceProvider;
-use DemonDextralHorn\Handlers\TargetRouteHandler;
-use DemonDextralHorn\Resolvers\RouteParamResolver;
-use DemonDextralHorn\Resolvers\QueryParamResolver;
-use DemonDextralHorn\Resolvers\HeadersResolver;
-use DemonDextralHorn\Resolvers\TargetRouteResolver;
-use DemonDextralHorn\Resolvers\Contracts\TargetRouteResolverInterface;
-use DemonDextralHorn\Routing\RouteDispatcher;
 use DemonDextralHorn\Factories\StrategyFactory;
+use DemonDextralHorn\Handlers\TargetRouteHandler;
+use DemonDextralHorn\Resolvers\Contracts\TargetRouteResolverInterface;
+use DemonDextralHorn\Resolvers\HeadersResolver;
+use DemonDextralHorn\Resolvers\QueryParamResolver;
+use DemonDextralHorn\Resolvers\RouteParamResolver;
+use DemonDextralHorn\Resolvers\TargetRouteResolver;
+use DemonDextralHorn\Routing\RouteDispatcher;
+use Illuminate\Support\ServiceProvider;
 
 /**
  * Service provider for DemonDextralHorn.

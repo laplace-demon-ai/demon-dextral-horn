@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Resolvers\Strategies\Source;
 
-use DemonDextralHorn\Resolvers\Contracts\StrategyInterface;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
+use DemonDextralHorn\Resolvers\Contracts\StrategyInterface;
 use Illuminate\Support\Arr;
 
 /**
@@ -17,7 +17,7 @@ use Illuminate\Support\Arr;
 final class ForwardValueStrategy implements StrategyInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function handle(?RequestData $requestData, ?array $options = []): mixed
     {
