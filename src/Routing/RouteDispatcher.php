@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DemonDextralHorn\Routing;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Dispatches a request with the given route information/parameters.
@@ -38,7 +38,11 @@ final class RouteDispatcher
         // Add query parameters to the url
         $url .= '?' . http_build_query($queryParams);
 
-        $request = Request::create($url, $method, [], [], [], []); // todo we might have server (HTTP_AUTHORIZATION etc) and cookies,, so adding all of them to method might not be the best practice?
+        // todo we might have server (HTTP_AUTHORIZATION etc) and cookies,, so adding all of them to method might not be the best practice?
+        $request = Request::create(
+            uri: $url,
+            method: $method,
+        );
 
         $request->headers->replace($headers);
 

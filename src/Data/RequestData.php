@@ -7,6 +7,11 @@ namespace DemonDextralHorn\Data;
 use Spatie\LaravelData\Data;
 use Illuminate\Http\Request;
 
+/**
+ * DTO representing HTTP request data.
+ * 
+ * @class RequestData
+ */
 final class RequestData extends Data
 {
     public function __construct(

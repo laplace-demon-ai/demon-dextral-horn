@@ -10,6 +10,11 @@ use DemonDextralHorn\Enums\PrefetchType;
 use Spatie\LaravelData\Attributes\Validation\Enum;
 use Symfony\Component\HttpFoundation\Cookie;
 
+/**
+ * DTO representing HTTP headers data.
+ *
+ * @class HeadersData
+ */
 final class HeadersData extends Data
 {
     public function __construct(

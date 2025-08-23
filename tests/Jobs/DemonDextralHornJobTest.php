@@ -2,16 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Jobs;
 
 use DemonDextralHorn\Jobs\DemonDextralHornJob;
 use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Http\Request;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Data\HeadersData;
 use DemonDextralHorn\Enums\PrefetchType;
 use DemonDextralHorn\Resolvers\Contracts\TargetRouteResolverInterface;
+use Tests\TestCase;
 
 /**
  * Test the DemonDextralHornJob.
@@ -33,7 +35,7 @@ final class DemonDextralHornJobTest extends TestCase
 
         $this->requestData = new RequestData(
             uri: '/prefetch-route-success/routeValue',
-            method: 'GET',
+            method: Request::METHOD_GET,
             headers: new HeadersData(
                 authorization: 'Bearer some-token',
                 accept: 'application/json',

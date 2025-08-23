@@ -20,11 +20,11 @@ final class RouteParamResolver extends AbstractResolver
      * @inheritDoc
      */
     public function resolve(
-        ?array $route = null,
+        ?array $targetRouteDefinition = null,
         ?RequestData $requestData = null,
         ?ResponseData $responseData = null
     ): array {
-        $params = Arr::get($route, 'route_params', []);
+        $params = Arr::get($targetRouteDefinition, 'route_params', []);
 
         $resolvedParams = [];
         // todo Note that when routes are called, in case they return not success message for one of them, it should not block other requests,, - maybe somehow log them but app should work without breaking

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
+use DemonDextralHorn\Resolvers\Strategies\Transform\IncrementStrategy;
 
 return [
     'defaults' => [
@@ -22,20 +22,33 @@ return [
                 'route' => 'sample.trigger.route.name'
             ],
             'targets' => [
+                /**
+                 * Sample target route with only query parameter, increment strategy will be applied.
+                 * e.g. /api/sample?page=1
+                 */
                 [
                     'method' => Request::METHOD_GET,
-                    'route' => 'sample.target.route.name',
-                    'route_params' => [
-                        'param1' => fn(Request $req, Response $res) => data_get(json_decode($res->getContent(), true), 'data.response_param1'), // derive from response
-                        'param2' => fn(Request $req, Response $res) => $req->route('param2'), // derive from route
-                        'param3' => fn(Request $req, Response $res) => $req->input('param3'), // derive from request input
-                        'param4' => fn(Request $req, Response $res) => auth()->id, // derive from auth
-                    ],
+                    'route' => 'sample.target.route.with.only.query.param',
                     'query_params' => [
-                        'query_param1' => fn(Request $req, Response $res) => $req->query('param1'),  // derive from query param, and will be used on query param
+                        'query_key' => [
+                            'strategy' => IncrementStrategy::class,
+                            'options' => [
+                                'key' => 'query_key',
+                                'increment' => 1,
+                            ],
+                        ],
                     ],
                 ],
-            ]
+
+                /** 
+                 * Sample target route without parameters, so no strategy is needed for resolving the parameters.
+                 * e.g. /api/sample
+                 */
+                [
+                    'method' => Request::METHOD_GET,
+                    'route' => 'sample.target.route.without.params'
+                ]
+            ],
         ],
     ],
 ];

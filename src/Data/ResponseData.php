@@ -7,6 +7,11 @@ namespace DemonDextralHorn\Data;
 use Spatie\LaravelData\Data;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * DTO representing HTTP response data.
+ * 
+ * @class ResponseData
+ */
 final class ResponseData extends Data
 {
     public function __construct(

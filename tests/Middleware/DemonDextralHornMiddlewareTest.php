@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Middleware;
 
 use DemonDextralHorn\Middleware\DemonDextralHornMiddleware;
 use DemonDextralHorn\Jobs\DemonDextralHornJob;
 use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use DemonDextralHorn\Enums\PrefetchType;
+use Tests\TestCase;
 
 /**
  * Test the DemonDextralHornMiddlewareTest.
@@ -32,7 +33,7 @@ final class DemonDextralHornMiddlewareTest extends TestCase
     {
         /* SETUP */
         $demonDextralHornMiddleware = $this->app->make(DemonDextralHornMiddleware::class);
-        $request = Request::create('/some/uri', 'GET');
+        $request = Request::create('/some/uri', Request::METHOD_GET);
         $response = new Response('error', 500);
 
         /* EXECUTE */
