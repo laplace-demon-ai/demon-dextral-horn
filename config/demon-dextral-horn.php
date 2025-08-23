@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Illuminate\Http\Request;
 use DemonDextralHorn\Resolvers\Strategies\Transform\IncrementStrategy;
+use Illuminate\Http\Request;
 
 return [
     'defaults' => [
@@ -19,7 +19,7 @@ return [
             'description' => 'Sample/generalized rule description for prefetching related data',
             'trigger' => [
                 'method' => Request::METHOD_GET,
-                'route' => 'sample.trigger.route.name'
+                'route' => 'sample.trigger.route.name',
             ],
             'targets' => [
                 /**
@@ -40,14 +40,14 @@ return [
                     ],
                 ],
 
-                /** 
+                /**
                  * Sample target route without parameters, so no strategy is needed for resolving the parameters.
                  * e.g. /api/sample
                  */
                 [
                     'method' => Request::METHOD_GET,
-                    'route' => 'sample.target.route.without.params'
-                ]
+                    'route' => 'sample.target.route.without.params',
+                ],
             ],
         ],
     ],

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace DemonDextralHorn\Factories;
 
 use DemonDextralHorn\Resolvers\Contracts\StrategyInterface;
+use Exception;
 use InvalidArgumentException;
 use RuntimeException;
-use Exception;
 
 /**
  * Factory class for creating strategy instance from string class name.
@@ -27,7 +27,7 @@ final class StrategyFactory
         if (! class_exists($strategyClass)) {
             throw new InvalidArgumentException("Strategy class does not exist: {$strategyClass}");
         }
-        
+
         // Check if class implements expected interface
         if (! is_subclass_of($strategyClass, StrategyInterface::class)) {
             throw new InvalidArgumentException("Class {$strategyClass} must implement StrategyInterface");

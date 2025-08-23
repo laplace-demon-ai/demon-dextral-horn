@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Data;
 
-use Spatie\LaravelData\Data;
-use Illuminate\Support\Arr;
 use DemonDextralHorn\Enums\PrefetchType;
+use Illuminate\Support\Arr;
 use Spatie\LaravelData\Attributes\Validation\Enum;
+use Spatie\LaravelData\Data;
 use Symfony\Component\HttpFoundation\Cookie;
 
 /**
@@ -55,13 +55,13 @@ final class HeadersData extends Data
             foreach ($cookies as $cookie) {
                 if ($cookie instanceof Cookie && strcasecmp($cookie->getName(), 'laravel_session') === 0) {
                     $laravelSession = $cookie->getValue();
-                    
+
                     break;
                 }
             }
         }
 
-        return new static(
+        return new self(
             authorization: $authorization,
             accept: $accept,
             acceptLanguage: $acceptLanguage,

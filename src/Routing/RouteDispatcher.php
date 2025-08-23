@@ -22,7 +22,7 @@ final class RouteDispatcher
      * @param array $routeParams
      * @param array $queryParams
      * @param array $headers
-     * 
+     *
      * @return Response
      */
     public function dispatch(

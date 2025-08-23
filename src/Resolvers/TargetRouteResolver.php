@@ -6,10 +6,9 @@ namespace DemonDextralHorn\Resolvers;
 
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
-use DemonDextralHorn\Resolvers\AbstractResolver;
 use DemonDextralHorn\Resolvers\Contracts\TargetRouteResolverInterface;
-use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 /**
  * Resolve the target routes for a given request (get the target routes from the config for given request)
@@ -19,7 +18,7 @@ use Illuminate\Http\Request;
 final class TargetRouteResolver extends AbstractResolver implements TargetRouteResolverInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function resolve(
         ?array $route = null,

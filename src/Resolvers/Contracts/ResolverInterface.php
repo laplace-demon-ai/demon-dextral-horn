@@ -20,7 +20,7 @@ interface ResolverInterface
      * @param array|null $targetRouteDefinition
      * @param RequestData|null $requestData
      * @param ResponseData|null $responseData
-     * 
+     *
      * @return array
      */
     public function resolve(

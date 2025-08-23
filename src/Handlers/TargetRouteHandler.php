@@ -6,12 +6,12 @@ namespace DemonDextralHorn\Handlers;
 
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
-use DemonDextralHorn\Resolvers\RouteParamResolver;
-use DemonDextralHorn\Resolvers\QueryParamResolver;
 use DemonDextralHorn\Resolvers\HeadersResolver;
+use DemonDextralHorn\Resolvers\QueryParamResolver;
+use DemonDextralHorn\Resolvers\RouteParamResolver;
 use DemonDextralHorn\Routing\RouteDispatcher;
-use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 /**
  * Handles the target route related operations.
@@ -54,10 +54,10 @@ final class TargetRouteHandler
 
             // Dispatch the route and get the response
             $response = $this->routeDispatcher->dispatch(
-                $targetRouteName, 
-                $targetMethod, 
-                $targetRouteParams, 
-                $targetQueryParams, 
+                $targetRouteName,
+                $targetMethod,
+                $targetRouteParams,
+                $targetQueryParams,
                 $targetHeaders
             );
             // todo respone will be used for caching purpose later, maybe new ResponseCache class will be created and used here

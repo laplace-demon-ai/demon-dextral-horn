@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace DemonDextralHorn\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
-use DemonDextralHorn\Jobs\DemonDextralHornJob;
 use DemonDextralHorn\Enums\PrefetchType;
+use DemonDextralHorn\Jobs\DemonDextralHornJob;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Middleware to handle prefetching of related data.
@@ -24,7 +24,7 @@ final readonly class DemonDextralHornMiddleware
      *
      * @param Request $request
      * @param Closure $next
-     * 
+     *
      * @return Response
      */
     public function handle(Request $request, Closure $next): Response
@@ -35,7 +35,7 @@ final readonly class DemonDextralHornMiddleware
     /**
      * Handle tasks after the response has been sent to the browser.
      * (Handle prefetching)
-     * 
+     *
      * @param Request $request
      * @param Response $response
      */
