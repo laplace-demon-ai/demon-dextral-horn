@@ -30,7 +30,7 @@ final class TargetRouteResolver extends AbstractResolver implements TargetRouteR
 
         // Set the route name which will be used for matching the appropriate rule
         $routeName = $requestData?->routeName;
-        
+
         // Find the matching rule for the given route name
         $rule = Arr::first($rules, function ($rule) use ($routeName) {
             return Arr::get($rule, 'trigger.route') === $routeName
