@@ -21,7 +21,7 @@ final class TargetRouteResolver extends AbstractResolver implements TargetRouteR
      * {@inheritDoc}
      */
     public function resolve(
-        ?array $route = null,
+        ?array $targetRouteDefinition = null,
         ?RequestData $requestData = null,
         ?ResponseData $responseData = null
     ): array {
@@ -29,8 +29,8 @@ final class TargetRouteResolver extends AbstractResolver implements TargetRouteR
         $rules = config('demon-dextral-horn.rules', []);
 
         // Set the route name which will be used for matching the appropriate rule
-        $routeName = $requestData->routeName;
-
+        $routeName = $requestData?->routeName;
+        
         // Find the matching rule for the given route name
         $rule = Arr::first($rules, function ($rule) use ($routeName) {
             return Arr::get($rule, 'trigger.route') === $routeName
