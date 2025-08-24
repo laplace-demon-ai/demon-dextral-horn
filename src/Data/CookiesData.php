@@ -14,6 +14,11 @@ use Spatie\LaravelData\Data;
  */
 final class CookiesData extends Data
 {
+    /**
+     * Create a new CookiesData object.
+     *
+     * @param string|null $laravelSession
+     */
     public function __construct(
         public ?string $laravelSession = null,
     ) {}

@@ -6,6 +6,7 @@ namespace DemonDextralHorn\Resolvers;
 
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
+use DemonDextralHorn\Factories\StrategyFactory;
 use Illuminate\Support\Arr;
 
 /**
@@ -26,11 +27,20 @@ final class RouteParamResolver extends AbstractResolver
         $params = Arr::get($targetRouteDefinition, 'route_params', []);
 
         $resolvedParams = [];
-        // todo Note that when routes are called, in case they return not success message for one of them, it should not block other requests,, - maybe somehow log them but app should work without breaking
 
         foreach ($params as $key => $value) {
-            // todo here we will have the logic for NOT clousre calling, since config will not have closure,, instead form request validation like config and logic/method to resolve params by using these given config
-            $resolvedParams[$key] = rand(1, 100); // todo this is for testing purpose before addding validation like logic to config file
+            $strategyClass = Arr::get($value, 'strategy');
+            $options = Arr::get($value, 'options', []);
+
+            // Create the strategy instance by using the strategy factory.
+            $strategyFactory = app(StrategyFactory::class);
+            $strategy = $strategyFactory->make($strategyClass);
+
+            $resolvedParams[$key] = $strategy->handle(
+                requestData: $requestData,
+                responseData: $responseData,
+                options: $options
+            );
         }
 
         return $resolvedParams;

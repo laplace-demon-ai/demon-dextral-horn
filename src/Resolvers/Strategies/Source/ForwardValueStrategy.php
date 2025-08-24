@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DemonDextralHorn\Resolvers\Strategies\Source;
 
 use DemonDextralHorn\Data\RequestData;
+use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
 use DemonDextralHorn\Resolvers\Contracts\StrategyInterface;
 use Illuminate\Support\Arr;
@@ -19,8 +20,11 @@ final class ForwardValueStrategy implements StrategyInterface
     /**
      * {@inheritDoc}
      */
-    public function handle(?RequestData $requestData, ?array $options = []): mixed
-    {
+    public function handle(
+        ?RequestData $requestData,
+        ?ResponseData $responseData,
+        ?array $options = []
+    ): mixed {
         $key = Arr::get($options, 'key');
 
         // Throw an exception if the required "key" option is missing, or request does not have the key.

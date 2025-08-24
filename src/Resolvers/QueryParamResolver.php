@@ -36,7 +36,11 @@ final class QueryParamResolver extends AbstractResolver
             $strategyFactory = app(StrategyFactory::class);
             $strategy = $strategyFactory->make($strategyClass);
 
-            $resolvedQueryParams[$key] = $strategy->handle(requestData: $requestData, options: $options);
+            $resolvedQueryParams[$key] = $strategy->handle(
+                requestData: $requestData, 
+                responseData: $responseData,
+                options: $options
+            );
         }
 
         return $resolvedQueryParams;

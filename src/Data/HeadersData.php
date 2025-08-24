@@ -17,6 +17,15 @@ use Symfony\Component\HttpFoundation\Cookie;
  */
 final class HeadersData extends Data
 {
+    /**
+     * Create a new HeadersData object.
+     *
+     * @param string|null $authorization
+     * @param string|null $accept
+     * @param string|null $acceptLanguage
+     * @param string|null $demonPrefetchCall
+     * @param string|null $laravelSessionCookie
+     */
     public function __construct(
         public ?string $authorization = null,
         public ?string $accept = null,

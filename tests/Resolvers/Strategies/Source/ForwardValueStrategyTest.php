@@ -9,6 +9,7 @@ use Tests\TestCase;
 use Illuminate\Http\Request;
 use DemonDextralHorn\Resolvers\Strategies\Source\ForwardValueStrategy;
 use DemonDextralHorn\Data\RequestData;
+use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
 
 /**
@@ -19,10 +20,16 @@ use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
 final class ForwardValueStrategyTest extends TestCase
 {
     private ForwardValueStrategy $forwardValueStrategy;
+    private ResponseData $responseData;
 
     public function setUp(): void
     {
         parent::setUp();
+
+        $this->responseData = new ResponseData(
+            status: 200,
+            content: 'ok'
+        );
 
         $this->forwardValueStrategy = app(ForwardValueStrategy::class);
     }
@@ -41,6 +48,7 @@ final class ForwardValueStrategyTest extends TestCase
         /* EXECUTE */
         $result = $this->forwardValueStrategy->handle(
             requestData: $requestData,
+            responseData: $this->responseData,
             options: ['key' => 'query_key']
         );
 
@@ -63,6 +71,7 @@ final class ForwardValueStrategyTest extends TestCase
         /* EXECUTE */
         $this->forwardValueStrategy->handle(
             requestData: $requestData,
+            responseData: $this->responseData,
             options: ['key' => 'query_key']
         );
     }
@@ -81,6 +90,7 @@ final class ForwardValueStrategyTest extends TestCase
         /* EXECUTE */
         $this->forwardValueStrategy->handle(
             requestData: $requestData,
+            responseData: $this->responseData,
             options: []
         );
     }
@@ -96,6 +106,7 @@ final class ForwardValueStrategyTest extends TestCase
         /* EXECUTE */
         $result = $this->forwardValueStrategy->handle(
             requestData: $requestData,
+            responseData: $this->responseData,
             options: ['key' => 'query_key']
         );
 
@@ -119,6 +130,7 @@ final class ForwardValueStrategyTest extends TestCase
         /* EXECUTE */
         $result = $this->forwardValueStrategy->handle(
             requestData: $requestData,
+            responseData: $this->responseData,
             options: ['key' => 'items']
         );
 

@@ -6,6 +6,7 @@ namespace Tests\Factories;
 
 use DemonDextralHorn\Resolvers\Contracts\StrategyInterface;
 use DemonDextralHorn\Data\RequestData;
+use DemonDextralHorn\Data\ResponseData;
 
 /**
  * This is a sample strategy class for testing purposes.
@@ -17,8 +18,11 @@ final class StrategySample implements StrategyInterface
     /**
      * @inheritDoc
      */
-    public function handle(?RequestData $requestData, ?array $options = []): string
-    {
+    public function handle(
+        ?RequestData $requestData,
+        ?ResponseData $responseData,
+        ?array $options = []
+    ): string {
         return 'sample_response';
     }
 }
