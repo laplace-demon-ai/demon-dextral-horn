@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use DemonDextralHorn\Resolvers\Strategies\Transform\IncrementStrategy;
 use DemonDextralHorn\Resolvers\Strategies\Source\ResponseValueStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Transform\IncrementStrategy;
 use Illuminate\Http\Request;
 
 return [
@@ -63,7 +63,7 @@ return [
                             'strategy' => ResponseValueStrategy::class,
                             'options' => [
                                 'key' => 'route_key',
-                                'position' => 'data.id' // Full path to the value in the response data
+                                'position' => 'data.id', // Full path to the value in the response data
                             ],
                         ],
                     ],
