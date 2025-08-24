@@ -38,7 +38,7 @@ final class StrategyFactoryTest extends TestCase
         /* ASSERT */
         $this->assertInstanceOf(StrategyInterface::class, $strategy);
         $this->assertInstanceOf(StrategySample::class, $strategy);
-        $this->assertEquals('sample_response', $strategy->handle(null));
+        $this->assertEquals('sample_response', $strategy->handle(null, null));
     }
 
     #[Test]
