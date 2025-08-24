@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use DemonDextralHorn\Resolvers\Strategies\Source\ResponseValueStrategy;
 use DemonDextralHorn\Resolvers\Strategies\Transform\IncrementStrategy;
 use Illuminate\Http\Request;
 
@@ -12,6 +13,7 @@ return [
         'queue_connection' => env('PREFETCH_QUEUE_CONNECTION', 'redis'),
         'queue_name' => env('PREFETCH_QUEUE_NAME', 'prefetch'),
         'prefetch_header' => env('PREFETCH_HEADER', 'Demon-Prefetch-Call'),
+        // todo add another default to on/off entire prefetching package, and add its logic also where maybe in middleware, or some place else it will skip package logic
     ],
     'rules' => [
         [
@@ -47,6 +49,24 @@ return [
                 [
                     'method' => Request::METHOD_GET,
                     'route' => 'sample.target.route.without.params',
+                ],
+
+                /**
+                 * Sample target route with route parameter, strategy will be applied to resolve the route parameter from the trigger response data.
+                 * e.g. /api/sample/{route_key} where route_key is extracted from the response data.id
+                 */
+                [
+                    'method' => Request::METHOD_GET,
+                    'route' => 'sample.target.route.with.route.param',
+                    'route_params' => [
+                        'route_key' => [
+                            'strategy' => ResponseValueStrategy::class,
+                            'options' => [
+                                'key' => 'route_key',
+                                'position' => 'data.id', // Full path to the value in the response data
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],

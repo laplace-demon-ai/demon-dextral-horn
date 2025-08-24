@@ -14,6 +14,18 @@ use Spatie\LaravelData\Data;
  */
 final class RequestData extends Data
 {
+    /**
+     * Create a new RequestData object.
+     *
+     * @param string $uri The request URI.
+     * @param string $method The HTTP method.
+     * @param HeadersData $headers The request headers.
+     * @param array|null $payload The request payload (body).
+     * @param CookiesData|null $cookies The request cookies.
+     * @param string|null $routeName The name of the matched route.
+     * @param array|null $routeParams The parameters of the matched route.
+     * @param string|array|null $queryParams The query parameters.
+     */
     public function __construct(
         public string $uri,
         public string $method,

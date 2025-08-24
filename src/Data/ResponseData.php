@@ -14,6 +14,13 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class ResponseData extends Data
 {
+    /**
+     * Create a new ResponseData object.
+     *
+     * @param int $status
+     * @param HeadersData|null $headers
+     * @param string|bool|null $content
+     */
     public function __construct(
         public int $status,
         public ?HeadersData $headers = null,

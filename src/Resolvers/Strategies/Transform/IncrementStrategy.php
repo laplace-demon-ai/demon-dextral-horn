@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DemonDextralHorn\Resolvers\Strategies\Transform;
 
 use DemonDextralHorn\Data\RequestData;
+use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
 use DemonDextralHorn\Resolvers\Contracts\StrategyInterface;
 use Illuminate\Support\Arr;
@@ -19,8 +20,11 @@ final class IncrementStrategy implements StrategyInterface
     /**
      * {@inheritDoc}
      */
-    public function handle(?RequestData $requestData, ?array $options = []): int
-    {
+    public function handle(
+        ?RequestData $requestData,
+        ?ResponseData $responseData,
+        ?array $options = []
+    ): int {
         $key = Arr::get($options, 'key');
         $increment = (int) Arr::get($options, 'increment', 1);
 

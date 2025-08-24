@@ -21,7 +21,7 @@ use Illuminate\Support\Arr;
 final class TargetRouteHandler
 {
     /**
-     * Create a new handler instance.
+     * Create a new TargetRouteHandler instance.
      *
      * @param RouteParamResolver $routeParamResolver
      * @param QueryParamResolver $queryParamResolver
@@ -44,6 +44,7 @@ final class TargetRouteHandler
      */
     public function handle(array $routes, RequestData $requestData, ResponseData $responseData): void
     {
+        // todo Note that when routes are called, in case they return not success message for one of them, it should not block other requests,, - maybe somehow log them but app should work without breaking
         // Iterate over each target route.
         foreach ($routes as $targetRoute) {
             $targetRouteName = Arr::get($targetRoute, 'route');
