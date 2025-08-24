@@ -7,8 +7,10 @@ namespace Tests\Resolvers\Strategies\Transform;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use DemonDextralHorn\Resolvers\Strategies\Transform\IncrementStrategy;
 use DemonDextralHorn\Data\RequestData;
+use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
 
 /**
@@ -19,11 +21,14 @@ use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
 final class IncrementStrategyTest extends TestCase
 {
     private IncrementStrategy $incrementStrategy;
+    private ResponseData $responseData;
 
     public function setUp(): void
     {
         parent::setUp();
 
+        $response = new Response('ok', 200);
+        $this->responseData = ResponseData::fromResponse($response);
         $this->incrementStrategy = app(IncrementStrategy::class);
     }
 
@@ -42,6 +47,7 @@ final class IncrementStrategyTest extends TestCase
         /* EXECUTE */
         $result = $this->incrementStrategy->handle(
             requestData: $requestData,
+            responseData: $this->responseData,
             options: ['key' => 'query_key', 'increment' => $increment]
         );
 
@@ -65,6 +71,7 @@ final class IncrementStrategyTest extends TestCase
         /* EXECUTE */
         $result = $this->incrementStrategy->handle(
             requestData: $requestData,
+            responseData: $this->responseData,
             options: ['key' => 'query_key', 'increment' => $increment]
         );
 
@@ -84,6 +91,7 @@ final class IncrementStrategyTest extends TestCase
         /* EXECUTE */
         $result = $this->incrementStrategy->handle(
             requestData: $requestData,
+            responseData: $this->responseData,
             options: ['key' => 'query_key']
         );
 
@@ -107,6 +115,7 @@ final class IncrementStrategyTest extends TestCase
         /* EXECUTE */
         $result = $this->incrementStrategy->handle(
             requestData: $requestData,
+            responseData: $this->responseData,
             options: ['increment' => $increment]
         );
 
@@ -129,6 +138,7 @@ final class IncrementStrategyTest extends TestCase
         /* EXECUTE */
         $result = $this->incrementStrategy->handle(
             requestData: $requestData,
+            responseData: $this->responseData,
             options: ['key' => 'query_key', 'increment' => $increment]
         );
 
@@ -146,6 +156,7 @@ final class IncrementStrategyTest extends TestCase
         /* EXECUTE */
         $result = $this->incrementStrategy->handle(
             requestData: null,
+            responseData: $this->responseData,
             options: ['key' => 'query_key', 'increment' => $increment]
         );
 
@@ -164,6 +175,7 @@ final class IncrementStrategyTest extends TestCase
         /* EXECUTE */
         $result = $this->incrementStrategy->handle(
             requestData: $requestData,
+            responseData: $this->responseData,
             options: ['key' => 'query_key', 'increment' => $increment]
         );
 
