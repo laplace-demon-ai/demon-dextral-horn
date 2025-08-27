@@ -9,7 +9,6 @@ use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Http\Request;
 use DemonDextralHorn\Resolvers\QueryParamResolver;
 use DemonDextralHorn\Data\RequestData;
-use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Resolvers\Strategies\Transform\IncrementStrategy;
 use DemonDextralHorn\Resolvers\Strategies\Source\ForwardValueStrategy;
 use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
@@ -23,7 +22,6 @@ final class QueryParamResolverTest extends TestCase
 {
     private QueryParamResolver $resolver;
     private ?RequestData $requestData = null;
-    private ?ResponseData $responseData = null;
 
     public function setUp(): void
     {
@@ -118,6 +116,36 @@ final class QueryParamResolverTest extends TestCase
 
         /* ASSERT */
         $this->assertEquals(['first' => $incrementFirst + $first, 'second' => $incrementSecond + $second], $resolvedParams);
+    }
+
+    #[Test]
+    public function it_can_resolve_query_parameters_for_forward_value_strategy(): void
+    {
+        /* SETUP */
+        $queryKey = 3;
+        $request = Request::create(
+            uri: "/sample_trigger_route?query_trigger_key={$queryKey}",
+            method: Request::METHOD_GET,
+        );
+        $this->requestData = RequestData::fromRequest($request);
+        $routeDefinition = [
+            'method' => Request::METHOD_GET,
+            'route' => 'sample.target.route.with.only.query.param',
+            'query_params' => [
+                'query_target_key' => [
+                    'strategy' => ForwardValueStrategy::class,
+                    'options' => [
+                        'key' => 'query_trigger_key',
+                    ],
+                ],
+            ],
+        ];
+
+        /* EXECUTE */
+        $resolvedParams = $this->resolver->resolve(targetRouteDefinition: $routeDefinition, requestData: $this->requestData);
+
+        /* ASSERT */
+        $this->assertEquals(['query_target_key' => $queryKey], $resolvedParams);
     }
 
     #[Test]

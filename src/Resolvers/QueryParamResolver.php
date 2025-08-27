@@ -17,6 +17,13 @@ use Illuminate\Support\Arr;
 final class QueryParamResolver extends AbstractResolver
 {
     /**
+     * Constructor for the resolver.
+     *
+     * @param StrategyFactory $strategyFactory
+     */
+    public function __construct(private readonly StrategyFactory $strategyFactory) {}
+
+    /**
      * {@inheritDoc}
      */
     public function resolve(
@@ -33,9 +40,9 @@ final class QueryParamResolver extends AbstractResolver
             $options = Arr::get($value, 'options', []);
 
             // Create the strategy instance by using the strategy factory.
-            $strategyFactory = app(StrategyFactory::class);
-            $strategy = $strategyFactory->make($strategyClass);
+            $strategy = $this->strategyFactory->make($strategyClass);
 
+            // Resolve the query parameter using the strategy, set the resolved value with its key.
             $resolvedQueryParams[$key] = $strategy->handle(
                 requestData: $requestData,
                 responseData: $responseData,

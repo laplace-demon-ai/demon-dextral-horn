@@ -30,7 +30,7 @@ final class IncrementStrategy implements StrategyInterface
 
         // Throw an exception if the required "key" option is missing.
         if ($key === null) {
-            throw new MissingStrategyOptionException('IncrementStrategy', 'key');
+            throw new MissingStrategyOptionException(self::class, 'key');
         }
 
         // Get the current value from the request data, setting a default 1 if not present (e.g. query parameter 'page' for the pagination)

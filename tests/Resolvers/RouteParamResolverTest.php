@@ -13,6 +13,7 @@ use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
 use DemonDextralHorn\Resolvers\Strategies\Source\ResponseValueStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Source\ResponsePluckStrategy;
 use Illuminate\Support\Arr;
 use InvalidArgumentException;
 use TypeError;
@@ -40,7 +41,8 @@ final class RouteParamResolverTest extends TestCase
     {
         /* SETUP */
         $id = 32;
-        $data = ['id' => $id];
+        $name = 'Sample Name';
+        $data = ['id' => $id, 'name' => $name];
         $request = Request::create(
             uri: "/sample_trigger_route",
             method: Request::METHOD_GET,
@@ -59,19 +61,137 @@ final class RouteParamResolverTest extends TestCase
                         'position' => 'data.id',
                     ],
                 ],
+                'other_key' => [
+                    'strategy' => ResponseValueStrategy::class,
+                    'options' => [
+                        'key' => 'other_key',
+                        'position' => 'data.name',
+                    ],
+                ],
             ],
         ];
 
         /* EXECUTE */
         $result = $this->resolver->resolve(
-            targetRouteDefinition: $routeDefinition, 
+            targetRouteDefinition: $routeDefinition,
             requestData: $this->requestData,
             responseData: $this->responseData
         );
 
         /* ASSERT */
-        $this->assertArrayHasKey('route_key', $result);
-        $this->assertEquals($id, $result['route_key']);
+        $this->assertArrayHasKey('route_key', $result[0]);
+        $this->assertEquals($id, $result[0]['route_key']);
+        $this->assertArrayHasKey('other_key', $result[0]);
+        $this->assertEquals($name, $result[0]['other_key']);
+    }
+
+    #[Test]
+    public function it_tests_response_pluck_strategy_where_multiple_results_return(): void
+    {
+        /* SETUP */
+        $firstId = 13;
+        $secondId = 22;
+        $thirdId = 23;
+        $data = [['id' => $firstId], ['id' => $secondId], ['id' => $thirdId]];
+        $request = Request::create(
+            uri: "/sample_trigger_route",
+            method: Request::METHOD_GET,
+        );
+        $this->requestData = RequestData::fromRequest($request);
+        $response = new Response(json_encode(['data' => $data]), 200);
+        $this->responseData = ResponseData::fromResponse($response);
+        $routeDefinition = [
+            'method' => Request::METHOD_GET,
+            'route' => 'sample.target.route.with.pluck.dispatch',
+            'route_params' => [
+                'route_key' => [
+                    'strategy' => ResponsePluckStrategy::class,
+                    'options' => [
+                        'key' => 'route_key',
+                        'position' => 'data.*.id',
+                    ],
+                ],
+            ],
+        ];
+
+        /* EXECUTE */
+        $result = $this->resolver->resolve(
+            targetRouteDefinition: $routeDefinition,
+            requestData: $this->requestData,
+            responseData: $this->responseData
+        );
+
+            /* ASSERT */;
+        $this->assertEquals($firstId, Arr::get($result[0], 'route_key'));
+        $this->assertEquals($secondId, Arr::get($result[1], 'route_key'));
+        $this->assertEquals($thirdId, Arr::get($result[2], 'route_key'));
+    }
+
+    #[Test]
+    public function it_tests_response_pluck_strategy_where_all_cartesian_results_return(): void
+    {
+        /* SETUP */
+        $firstId = 13;
+        $secondId = 22;
+        $thirdId = 23;
+        $firstName = 'First';
+        $secondName = 'Second';
+        $thirdName = 'Third';
+        $data = [['id' => $firstId, 'name' => $firstName], ['id' => $secondId, 'name' => $secondName], ['id' => $thirdId, 'name' => $thirdName]];
+        $request = Request::create(
+            uri: "/sample_trigger_route",
+            method: Request::METHOD_GET,
+        );
+        $this->requestData = RequestData::fromRequest($request);
+        $response = new Response(json_encode(['data' => $data]), 200);
+        $this->responseData = ResponseData::fromResponse($response);
+        $routeDefinition = [
+            'method' => Request::METHOD_GET,
+            'route' => 'sample.target.route.with.pluck.dispatch',
+            'route_params' => [
+                'route_key' => [
+                    'strategy' => ResponsePluckStrategy::class,
+                    'options' => [
+                        'key' => 'route_key',
+                        'position' => 'data.*.id',
+                    ],
+                ],
+                'other_key' => [
+                    'strategy' => ResponsePluckStrategy::class,
+                    'options' => [
+                        'key' => 'other_key',
+                        'position' => 'data.*.name',
+                    ],
+                ],
+            ],
+        ];
+
+        /* EXECUTE */
+        $result = $this->resolver->resolve(
+            targetRouteDefinition: $routeDefinition,
+            requestData: $this->requestData,
+            responseData: $this->responseData
+        );
+
+        /* ASSERT */
+        $this->assertEquals($firstId, Arr::get($result[0], 'route_key'));
+        $this->assertEquals($firstName, Arr::get($result[0], 'other_key'));
+        $this->assertEquals($firstId, Arr::get($result[1], 'route_key'));
+        $this->assertEquals($secondName, Arr::get($result[1], 'other_key'));
+        $this->assertEquals($firstId, Arr::get($result[2], 'route_key'));
+        $this->assertEquals($thirdName, Arr::get($result[2], 'other_key'));
+        $this->assertEquals($secondId, Arr::get($result[3], 'route_key'));
+        $this->assertEquals($firstName, Arr::get($result[3], 'other_key'));
+        $this->assertEquals($secondId, Arr::get($result[4], 'route_key'));
+        $this->assertEquals($secondName, Arr::get($result[4], 'other_key'));
+        $this->assertEquals($secondId, Arr::get($result[5], 'route_key'));
+        $this->assertEquals($thirdName, Arr::get($result[5], 'other_key'));
+        $this->assertEquals($thirdId, Arr::get($result[6], 'route_key'));
+        $this->assertEquals($firstName, Arr::get($result[6], 'other_key'));
+        $this->assertEquals($thirdId, Arr::get($result[7], 'route_key'));
+        $this->assertEquals($secondName, Arr::get($result[7], 'other_key'));
+        $this->assertEquals($thirdId, Arr::get($result[8], 'route_key'));
+        $this->assertEquals($thirdName, Arr::get($result[8], 'other_key'));
     }
 
     #[Test]
@@ -107,8 +227,8 @@ final class RouteParamResolverTest extends TestCase
         );
 
         /* ASSERT */
-        $this->assertArrayHasKey('route_key', $result);
-        $this->assertNull($result['route_key']);
+        $this->assertArrayHasKey('route_key', $result[0]);
+        $this->assertNull($result[0]['route_key']);
     }
 
     #[Test]
@@ -124,8 +244,8 @@ final class RouteParamResolverTest extends TestCase
         $result = $this->resolver->resolve($routeDefinition);
 
         /* ASSERT */
-        $this->assertIsArray($result);
-        $this->assertEmpty($result);
+        $this->assertIsArray($result[0]);
+        $this->assertEmpty($result[0]);
     }
 
     #[Test]
@@ -170,8 +290,8 @@ final class RouteParamResolverTest extends TestCase
         );
 
         /* ASSERT */
-        $this->assertSame($id, Arr::get($result, 'id_key'));
-        $this->assertSame($name, Arr::get($result, 'name_key'));
+        $this->assertSame($id, Arr::get($result[0], 'id_key'));
+        $this->assertSame($name, Arr::get($result[0], 'name_key'));
     }
 
     #[Test]
@@ -220,12 +340,13 @@ final class RouteParamResolverTest extends TestCase
     public function it_throws_invalid_argument_exception_when_option_key_is_not_existent_for_response_value_strategy(): void
     {
         /* SETUP */
+        $strategy = ResponseValueStrategy::class;
         $routeDefinition = [
             'method' => Request::METHOD_GET,
             'route' => 'sample.route.invalid',
             'route_params' => [
                 'invalid_key' => [
-                    'strategy' => ResponseValueStrategy::class,
+                    'strategy' => $strategy,
                     'options' => [
                         'position' => 'data.id',
                     ],
@@ -233,7 +354,7 @@ final class RouteParamResolverTest extends TestCase
             ],
         ];
         $this->expectException(MissingStrategyOptionException::class);
-        $this->expectExceptionMessage('ResponseValueStrategy requires the "key/position" option.');
+        $this->expectExceptionMessage($strategy . ' requires the "key/position" option.');
 
         /* EXECUTE */
         $this->resolver->resolve(
@@ -245,12 +366,13 @@ final class RouteParamResolverTest extends TestCase
     public function it_throws_invalid_argument_exception_when_option_position_is_not_existent_for_response_value_strategy(): void
     {
         /* SETUP */
+        $strategy = ResponseValueStrategy::class;
         $routeDefinition = [
             'method' => Request::METHOD_GET,
             'route' => 'sample.route.invalid',
             'route_params' => [
                 'invalid_key' => [
-                    'strategy' => ResponseValueStrategy::class,
+                    'strategy' => $strategy,
                     'options' => [
                         'key' => 'invalid_key',
                     ],
@@ -258,11 +380,87 @@ final class RouteParamResolverTest extends TestCase
             ],
         ];
         $this->expectException(MissingStrategyOptionException::class);
-        $this->expectExceptionMessage('ResponseValueStrategy requires the "key/position" option.');
+        $this->expectExceptionMessage($strategy . ' requires the "key/position" option.');
 
         /* EXECUTE */
         $this->resolver->resolve(
             targetRouteDefinition: $routeDefinition,
         );
+    }
+
+    #[Test]
+    public function it_returns_empty_array_when_strategy_returns_empty_array(): void
+    {
+        /* SETUP */
+        $request = Request::create('/sample', Request::METHOD_GET);
+        $requestData = RequestData::fromRequest($request);
+        $response = new Response(json_encode(['data' => []]), 200);
+        $responseData = ResponseData::fromResponse($response);
+        $routeDefinition = [
+            'method' => Request::METHOD_GET,
+            'route' => 'sample.route.empty',
+            'route_params' => [
+                'route_key' => [
+                    'strategy' => ResponsePluckStrategy::class,
+                    'options' => [
+                        'key' => 'route_key',
+                        'position' => 'data.*.id',
+                    ],
+                ],
+            ],
+        ];
+
+        /* EXECUTE */
+        $result = $this->resolver->resolve(
+            targetRouteDefinition: $routeDefinition,
+            requestData: $requestData,
+            responseData: $responseData
+        );
+
+        /* ASSERT */
+        $this->assertSame([], $result);
+    }
+
+    #[Test]
+    public function it_keeps_null_values_in_expanded_results(): void
+    {
+        /* SETUP */
+        $id = 42;
+        $request = Request::create('/sample', Request::METHOD_GET);
+        $requestData = RequestData::fromRequest($request);
+        $response = new Response(json_encode(['data' => ['id' => $id]]), 200);
+        $responseData = ResponseData::fromResponse($response);
+        $routeDefinition = [
+            'method' => Request::METHOD_GET,
+            'route' => 'sample.route.with.nulls',
+            'route_params' => [
+                'id_key' => [
+                    'strategy' => ResponseValueStrategy::class,
+                    'options' => [
+                        'key' => 'id_key',
+                        'position' => 'data.id',
+                    ],
+                ],
+                'null_key' => [
+                    'strategy' => ResponseValueStrategy::class,
+                    'options' => [
+                        'key' => 'null_key',
+                        'position' => 'data.nonexistent',
+                    ],
+                ],
+            ],
+        ];
+
+        /* EXECUTE */
+        $result = $this->resolver->resolve(
+            targetRouteDefinition: $routeDefinition,
+            requestData: $requestData,
+            responseData: $responseData
+        );
+
+        /* ASSERT */
+        $this->assertCount(1, $result);
+        $this->assertSame($id, $result[0]['id_key']);
+        $this->assertNull($result[0]['null_key']);
     }
 }
