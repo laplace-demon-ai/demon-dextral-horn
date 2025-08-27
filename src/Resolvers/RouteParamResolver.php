@@ -18,7 +18,7 @@ final class RouteParamResolver extends AbstractResolver
 {
     /**
      * Constructor for the resolver.
-     * 
+     *
      * @param StrategyFactory $strategyFactory
      */
     public function __construct(private readonly StrategyFactory $strategyFactory) {}
@@ -62,7 +62,7 @@ final class RouteParamResolver extends AbstractResolver
      * Result: [['color' => 'red', 'size' => 'small'], ['color' => 'blue', 'size' => 'small']]
      *
      * @param array $params
-     * 
+     *
      * @return array<int, array<string, mixed>>
      */
     private function cartesianExpandParams(array $params): array

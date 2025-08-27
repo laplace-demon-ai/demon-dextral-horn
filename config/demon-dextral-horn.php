@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use DemonDextralHorn\Enums\OrderType;
-use DemonDextralHorn\Resolvers\Strategies\Source\ResponseValueStrategy;
-use DemonDextralHorn\Resolvers\Strategies\Source\ResponsePluckStrategy;
-use DemonDextralHorn\Resolvers\Strategies\Transform\IncrementStrategy;
 use DemonDextralHorn\Resolvers\Strategies\Source\ForwardValueStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Source\ResponsePluckStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Source\ResponseValueStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Transform\IncrementStrategy;
 use Illuminate\Http\Request;
 
 return [

@@ -18,7 +18,7 @@ final class QueryParamResolver extends AbstractResolver
 {
     /**
      * Constructor for the resolver.
-     * 
+     *
      * @param StrategyFactory $strategyFactory
      */
     public function __construct(private readonly StrategyFactory $strategyFactory) {}
