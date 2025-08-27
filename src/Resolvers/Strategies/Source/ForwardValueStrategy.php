@@ -29,7 +29,7 @@ final class ForwardValueStrategy implements StrategyInterface
 
         // Throw an exception if the required "key" option is missing, or request does not have the key.
         if ($key === null || ! Arr::has($requestData?->queryParams ?? [], $key)) {
-            throw new MissingStrategyOptionException('ForwardValueStrategy', 'key');
+            throw new MissingStrategyOptionException(self::class, 'key');
         }
 
         // Return the current value as is.

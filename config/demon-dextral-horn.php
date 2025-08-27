@@ -2,8 +2,11 @@
 
 declare(strict_types=1);
 
+use DemonDextralHorn\Enums\OrderType;
 use DemonDextralHorn\Resolvers\Strategies\Source\ResponseValueStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Source\ResponsePluckStrategy;
 use DemonDextralHorn\Resolvers\Strategies\Transform\IncrementStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Source\ForwardValueStrategy;
 use Illuminate\Http\Request;
 
 return [
@@ -43,6 +46,24 @@ return [
                 ],
 
                 /**
+                 * Sample target route with only query parameter, forward value strategy will be applied.
+                 * e.g. /api/sample?query_trigger_key=value will be /api/sample?query_target_key=value
+                 * This also showcase that the query parameter can be renamed during the forwarding process.
+                 */
+                [
+                    'method' => Request::METHOD_GET,
+                    'route' => 'sample.target.route.with.forward.value',
+                    'query_params' => [
+                        'query_trigger_key' => [
+                            'strategy' => ForwardValueStrategy::class,
+                            'options' => [
+                                'key' => 'query_target_key',
+                            ],
+                        ],
+                    ],
+                ],
+
+                /**
                  * Sample target route without parameters, so no strategy is needed for resolving the parameters.
                  * e.g. /api/sample
                  */
@@ -64,6 +85,26 @@ return [
                             'options' => [
                                 'key' => 'route_key',
                                 'position' => 'data.id', // Full path to the value in the response data
+                            ],
+                        ],
+                    ],
+                ],
+
+                /**
+                 * Sample target route with route parameter, strategy will be applied to resolve multiple route parameters from the trigger response data.
+                 * e.g. /api/trigger where first 3 ids are extracted/plucked from the response data collection and target route (e.g. api/target/{route_key}) will be dispatched with these 3 ids - route will be called 3 times with each ids separately.
+                 */
+                [
+                    'method' => Request::METHOD_GET,
+                    'route' => 'sample.target.route.with.pluck.dispatch',
+                    'route_params' => [
+                        'route_key' => [
+                            'strategy' => ResponsePluckStrategy::class,
+                            'options' => [
+                                'key' => 'route_key',
+                                'position' => 'data.*.id',
+                                'limit' => 3,
+                                'order' => OrderType::DESC->value,
                             ],
                         ],
                     ],

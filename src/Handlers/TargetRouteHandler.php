@@ -53,15 +53,17 @@ final class TargetRouteHandler
             $targetQueryParams = $this->queryParamResolver->resolve($targetRoute, $requestData, $responseData);
             $targetHeaders = $this->headersResolver->resolve($targetRoute, $requestData, $responseData);
 
-            // Dispatch the route and get the response
-            $response = $this->routeDispatcher->dispatch(
-                $targetRouteName,
-                $targetMethod,
-                $targetRouteParams,
-                $targetQueryParams,
-                $targetHeaders
-            );
-            // todo respone will be used for caching purpose later, maybe new ResponseCache class will be created and used here
+            // targetRouteParams is normalized in route param resolver, so that can be dispatched directly.
+            foreach ($targetRouteParams as $normalizedRouteParams) {
+                // todo respone will be used for caching purpose later, maybe new ResponseCache class will be created and used here,, for each response, it will be cached
+                $response = $this->routeDispatcher->dispatch(
+                    $targetRouteName,
+                    $targetMethod,
+                    $normalizedRouteParams,
+                    $targetQueryParams,
+                    $targetHeaders
+                );
+            }
         }
     }
 }
