@@ -10,6 +10,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use DemonDextralHorn\Enums\HttpHeaderType;
 use DemonDextralHorn\Enums\PrefetchType;
 use Tests\TestCase;
 
@@ -34,7 +35,7 @@ final class DemonDextralHornMiddlewareTest extends TestCase
         /* SETUP */
         $demonDextralHornMiddleware = $this->app->make(DemonDextralHornMiddleware::class);
         $request = Request::create('/some/uri', Request::METHOD_GET);
-        $response = new Response('error', 500);
+        $response = new Response('error', Response::HTTP_INTERNAL_SERVER_ERROR);
 
         /* EXECUTE */
         $demonDextralHornMiddleware->terminate($request, $response);
@@ -120,9 +121,9 @@ final class DemonDextralHornMiddlewareTest extends TestCase
 
         /* EXECUTE */
         $this->withHeaders([
-            'Authorization' => 'Bearer random_token',
-            'Accept' => 'application/json',
-            'Accept-Language' => 'en-US',
+            HttpHeaderType::AUTHORIZATION->value => 'Bearer random_token',
+            HttpHeaderType::ACCEPT->value => 'application/json',
+            HttpHeaderType::ACCEPT_LANGUAGE->value => 'en-US',
             $prefetchHeaderName => PrefetchType::NONE->value,
         ])
             ->get('/prefetch-route-success');
@@ -140,9 +141,9 @@ final class DemonDextralHornMiddlewareTest extends TestCase
 
         /* EXECUTE */
         $this->withHeaders([
-            'Authorization' => 'Bearer random_token',
-            'Accept' => 'application/json',
-            'Accept-Language' => 'en-US',
+            HttpHeaderType::AUTHORIZATION->value => 'Bearer random_token',
+            HttpHeaderType::ACCEPT->value => 'application/json',
+            HttpHeaderType::ACCEPT_LANGUAGE->value => 'en-US',
             $prefetchHeaderName => PrefetchType::NONE->value,
         ])
             ->post('/post/prefetch-route-success', $payload);
@@ -159,9 +160,9 @@ final class DemonDextralHornMiddlewareTest extends TestCase
 
         /* EXECUTE */
         $this->withHeaders([
-            'Authorization' => 'Bearer random_token',
-            'Accept' => 'application/json',
-            'Accept-Language' => 'en-US',
+            HttpHeaderType::AUTHORIZATION->value => 'Bearer random_token',
+            HttpHeaderType::ACCEPT->value => 'application/json',
+            HttpHeaderType::ACCEPT_LANGUAGE->value => 'en-US',
         ])
             ->post('/post/prefetch-login-success', $loginPayload);
 

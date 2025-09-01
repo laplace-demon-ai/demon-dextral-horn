@@ -8,6 +8,7 @@ use DemonDextralHorn\Resolvers\HeadersResolver;
 use DemonDextralHorn\Resolvers\Strategies\Source\ResponseJwtStrategy;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
+use DemonDextralHorn\Enums\HttpHeaderType;
 use DemonDextralHorn\Enums\PrefetchType;
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
@@ -63,7 +64,7 @@ final class HeadersResolverTest extends TestCase
             uri: "/sample_trigger_route",
             method: Request::METHOD_GET,
         );
-        $request->headers->set('Authorization', 'Bearer ' . $bearerToken);
+        $request->headers->set(HttpHeaderType::AUTHORIZATION->value, 'Bearer ' . $bearerToken);
         $this->requestData = RequestData::fromRequest($request);
 
         /* EXECUTE */
@@ -72,7 +73,7 @@ final class HeadersResolverTest extends TestCase
         /* ASSERT */
         $this->assertIsArray($resolvedParams);
         $this->assertSame($this->prefetchHeaderValue, Arr::get($resolvedParams, $this->prefetchHeaderName));
-        $this->assertSame('Bearer '. $bearerToken, Arr::get($resolvedParams, 'Authorization'));
+        $this->assertSame('Bearer '. $bearerToken, Arr::get($resolvedParams, HttpHeaderType::AUTHORIZATION->value));
     }
 
     #[Test]
@@ -136,7 +137,7 @@ final class HeadersResolverTest extends TestCase
             ],
         ]; // Route definition for the JWT access token
         $data = ['access_token' => $jwtToken];
-        $response = new Response(json_encode(['data' => $data]), 200);
+        $response = new Response(json_encode(['data' => $data]), Response::HTTP_OK);
         $responseData = ResponseData::fromResponse($response);
 
         /* EXECUTE */
@@ -147,7 +148,7 @@ final class HeadersResolverTest extends TestCase
 
         /* ASSERT */
         $this->assertIsArray($resolvedParams);
-        $this->assertSame('Bearer ' . $jwtToken, Arr::get($resolvedParams, 'Authorization'));
+        $this->assertSame('Bearer ' . $jwtToken, Arr::get($resolvedParams, HttpHeaderType::AUTHORIZATION->value));
         $this->assertSame($this->prefetchHeaderValue, Arr::get($resolvedParams, $this->prefetchHeaderName));
     }
 
@@ -171,8 +172,8 @@ final class HeadersResolverTest extends TestCase
             ],
         ]; // Route definition for the JWT access token
         $data = ['access_token' => $jwtToken];
-        $response = new Response(json_encode(['data' => $data]), 200);
-        $response->headers->set('Authorization', 'Bearer ' . $existingBearerToken);
+        $response = new Response(json_encode(['data' => $data]), Response::HTTP_OK);
+        $response->headers->set(HttpHeaderType::AUTHORIZATION->value, 'Bearer ' . $existingBearerToken);
         $responseData = ResponseData::fromResponse($response);
 
         /* EXECUTE */
@@ -183,7 +184,7 @@ final class HeadersResolverTest extends TestCase
 
         /* ASSERT */
         $this->assertIsArray($resolvedParams);
-        $this->assertSame('Bearer ' . $jwtToken, Arr::get($resolvedParams, 'Authorization'));
+        $this->assertSame('Bearer ' . $jwtToken, Arr::get($resolvedParams, HttpHeaderType::AUTHORIZATION->value));
         $this->assertSame($this->prefetchHeaderValue, Arr::get($resolvedParams, $this->prefetchHeaderName));
     }
 }

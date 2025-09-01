@@ -49,7 +49,7 @@ final class CookiesResolverTest extends TestCase
                 ],
             ],
         ]; // Route definition for the session cookie
-        $response = new Response(json_encode(['data' => 'ok']), 200);
+        $response = new Response(json_encode(['data' => 'ok']), Response::HTTP_OK);
         $firstCookie = new Cookie($cookieName, $sessionValue, 0, '/', null, false, true);
         $secondCookie = new Cookie('another_cookie', 'another_value', 0, '/', null, false, true);
         $response->headers->setCookie($firstCookie);
@@ -79,7 +79,7 @@ final class CookiesResolverTest extends TestCase
             'method' => Request::METHOD_GET,
             'route' => 'sample.target.route.without.set.cookie',
         ];
-        $response = new Response(json_encode(['data' => 'ok']), 200);
+        $response = new Response(json_encode(['data' => 'ok']), Response::HTTP_OK);
         $responseData = ResponseData::fromResponse($response);
         $request = Request::create(
             uri: "/sample_trigger_route",

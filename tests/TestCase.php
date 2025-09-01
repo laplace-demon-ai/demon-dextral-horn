@@ -49,25 +49,25 @@ class TestCase extends OrchestraTestCase
         // Define a success route which uses DemonDextralHornMiddleware middleware
         $router->middleware(DemonDextralHornMiddleware::class)
             ->get('/prefetch-route-success', function () {
-                return new Response('ok', 200);
+                return new Response('ok', Response::HTTP_OK);
             });
 
         // Define an error route which uses DemonDextralHornMiddleware middleware
         $router->middleware(DemonDextralHornMiddleware::class)
             ->get('/prefetch-route-error', function () {
-                return new Response('error', 500);
+                return new Response('error', Response::HTTP_INTERNAL_SERVER_ERROR);
             });
 
         // Define a success post route which uses DemonDextralHornMiddleware middleware
         $router->middleware(DemonDextralHornMiddleware::class)
             ->post('/post/prefetch-route-success', function () {
-                return new Response('ok', 200);
+                return new Response('ok', Response::HTTP_OK);
             });
 
         // Define a success login route which uses DemonDextralHornMiddleware middleware, add laravel_session cookie to response header set-cookie
         $router->middleware(DemonDextralHornMiddleware::class)
             ->post('/post/prefetch-login-success', function () {
-                $response = new Response('ok', 200);
+                $response = new Response('ok', Response::HTTP_OK);
                 $response->headers->setCookie(
                     new Cookie(config('demon-dextral-horn.defaults.session_cookie_name'), 'session_value')
                 );
@@ -77,7 +77,7 @@ class TestCase extends OrchestraTestCase
 
         // Create route with route name sample.target.route.name
         $router->get('/{param1}/{param2}/sample-target-route-success/{param3}/{param4}', function () {
-                return new Response('Sample Target Route', 200);
+                return new Response('Sample Target Route', Response::HTTP_OK);
             })->name('sample.target.route.name');
     }
 }

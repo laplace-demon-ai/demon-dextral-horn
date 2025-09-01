@@ -8,6 +8,7 @@ use DemonDextralHorn\Jobs\DemonDextralHornJob;
 use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Data\HeadersData;
@@ -47,7 +48,7 @@ final class DemonDextralHornJobTest extends TestCase
             queryParams: ['queryParam1' => 'value1', 'queryParam2' => 'value2'],
         );
         $this->responseData = new ResponseData(
-            status: 200,
+            status: Response::HTTP_OK,
             content: 'ok',
         );
         $this->job = $this->app->make(DemonDextralHornJob::class, [

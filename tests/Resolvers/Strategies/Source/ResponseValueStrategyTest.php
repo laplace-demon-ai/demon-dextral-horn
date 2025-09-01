@@ -40,7 +40,7 @@ final class ResponseValueStrategyTest extends TestCase
             method: Request::METHOD_GET,
         );
         $requestData = RequestData::fromRequest($request);
-        $response = new Response(json_encode(['data' => $data]), 200);
+        $response = new Response(json_encode(['data' => $data]), Response::HTTP_OK);
         $responseData = ResponseData::fromResponse($response);
 
         /* EXECUTE */
@@ -68,7 +68,7 @@ final class ResponseValueStrategyTest extends TestCase
             method: Request::METHOD_GET,
         );
         $requestData = RequestData::fromRequest($request);
-        $response = new Response(json_encode($data), 200);
+        $response = new Response(json_encode($data), Response::HTTP_OK);
         $responseData = ResponseData::fromResponse($response);
 
         /* EXECUTE */
@@ -94,7 +94,7 @@ final class ResponseValueStrategyTest extends TestCase
             method: Request::METHOD_GET,
         );
         $requestData = RequestData::fromRequest($request);
-        $responseData = new ResponseData(200);
+        $responseData = new ResponseData(Response::HTTP_OK);
         $this->expectException(MissingStrategyOptionException::class);
 
         /* EXECUTE */

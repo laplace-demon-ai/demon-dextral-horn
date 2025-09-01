@@ -42,7 +42,7 @@ final class ResponseSessionHeaderStrategyTest extends TestCase
             method: Request::METHOD_GET,
         );
         $requestData = RequestData::fromRequest($request);
-        $response = new Response(json_encode(['data' => 'ok']), 200);
+        $response = new Response(json_encode(['data' => 'ok']), Response::HTTP_OK);
         $response->headers->setCookie($firstCookie);
         $responseData = ResponseData::fromResponse($response);
 
@@ -69,7 +69,7 @@ final class ResponseSessionHeaderStrategyTest extends TestCase
             method: Request::METHOD_GET,
         );
         $requestData = RequestData::fromRequest($request);
-        $responseData = new ResponseData(200);
+        $responseData = new ResponseData(Response::HTTP_OK);
         $this->expectException(MissingStrategyOptionException::class);
 
         /* EXECUTE */
@@ -89,7 +89,7 @@ final class ResponseSessionHeaderStrategyTest extends TestCase
             method: Request::METHOD_GET,
         );
         $requestData = RequestData::fromRequest($request);
-        $response = new Response(json_encode(['data' => 'ok']), 200);
+        $response = new Response(json_encode(['data' => 'ok']), Response::HTTP_OK);
         $responseData = ResponseData::fromResponse($response);
 
         /* EXECUTE */
@@ -113,7 +113,7 @@ final class ResponseSessionHeaderStrategyTest extends TestCase
         $cookie = new Cookie($cookieName, 'other_value', 0, '/', null, false, true);
         $request = Request::create("/sample_endpoint", Request::METHOD_GET);
         $requestData = RequestData::fromRequest($request);
-        $response = new Response('ok', 200);
+        $response = new Response('ok', Response::HTTP_OK);
         $response->headers->setCookie($cookie);
         $responseData = ResponseData::fromResponse($response);
 
@@ -140,7 +140,7 @@ final class ResponseSessionHeaderStrategyTest extends TestCase
         $otherCookie = new Cookie('other_cookie', 'other_value', 0, '/', null, false, true);
         $request = Request::create("/sample_endpoint", Request::METHOD_GET);
         $requestData = RequestData::fromRequest($request);
-        $response = new Response('ok', 200);
+        $response = new Response('ok', Response::HTTP_OK);
         $response->headers->setCookie($otherCookie);
         $response->headers->setCookie($matchingCookie);
         $responseData = ResponseData::fromResponse($response);

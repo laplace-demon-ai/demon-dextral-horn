@@ -48,7 +48,7 @@ final class RouteParamResolverTest extends TestCase
             method: Request::METHOD_GET,
         );
         $this->requestData = RequestData::fromRequest($request);
-        $response = new Response(json_encode(['data' => $data]), 200);
+        $response = new Response(json_encode(['data' => $data]), Response::HTTP_OK);
         $this->responseData = ResponseData::fromResponse($response);
         $routeDefinition = [
             'method' => Request::METHOD_GET,
@@ -98,7 +98,7 @@ final class RouteParamResolverTest extends TestCase
             method: Request::METHOD_GET,
         );
         $this->requestData = RequestData::fromRequest($request);
-        $response = new Response(json_encode(['data' => $data]), 200);
+        $response = new Response(json_encode(['data' => $data]), Response::HTTP_OK);
         $this->responseData = ResponseData::fromResponse($response);
         $routeDefinition = [
             'method' => Request::METHOD_GET,
@@ -143,7 +143,7 @@ final class RouteParamResolverTest extends TestCase
             method: Request::METHOD_GET,
         );
         $this->requestData = RequestData::fromRequest($request);
-        $response = new Response(json_encode(['data' => $data]), 200);
+        $response = new Response(json_encode(['data' => $data]), Response::HTTP_OK);
         $this->responseData = ResponseData::fromResponse($response);
         $routeDefinition = [
             'method' => Request::METHOD_GET,
@@ -203,7 +203,7 @@ final class RouteParamResolverTest extends TestCase
             method: Request::METHOD_GET,
         );
         $requestData = RequestData::fromRequest($request);
-        $response = new Response(json_encode(['data' => null]), 200);
+        $response = new Response(json_encode(['data' => null]), Response::HTTP_OK);
         $responseData = ResponseData::fromResponse($response);
         $routeDefinition = [
             'method' => Request::METHOD_GET,
@@ -259,7 +259,7 @@ final class RouteParamResolverTest extends TestCase
             method: Request::METHOD_GET,
         );
         $requestData = RequestData::fromRequest($request);
-        $response = new Response(json_encode(['data' => ['id' => $id, 'details' => ['name' => $name]]]), 200);
+        $response = new Response(json_encode(['data' => ['id' => $id, 'details' => ['name' => $name]]]), Response::HTTP_OK);
         $responseData = ResponseData::fromResponse($response);
         $routeDefinition = [
             'method' => Request::METHOD_GET,
@@ -394,7 +394,7 @@ final class RouteParamResolverTest extends TestCase
         /* SETUP */
         $request = Request::create('/sample', Request::METHOD_GET);
         $requestData = RequestData::fromRequest($request);
-        $response = new Response(json_encode(['data' => []]), 200);
+        $response = new Response(json_encode(['data' => []]), Response::HTTP_OK);
         $responseData = ResponseData::fromResponse($response);
         $routeDefinition = [
             'method' => Request::METHOD_GET,
@@ -428,7 +428,7 @@ final class RouteParamResolverTest extends TestCase
         $id = 42;
         $request = Request::create('/sample', Request::METHOD_GET);
         $requestData = RequestData::fromRequest($request);
-        $response = new Response(json_encode(['data' => ['id' => $id]]), 200);
+        $response = new Response(json_encode(['data' => ['id' => $id]]), Response::HTTP_OK);
         $responseData = ResponseData::fromResponse($response);
         $routeDefinition = [
             'method' => Request::METHOD_GET,

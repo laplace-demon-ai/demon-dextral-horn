@@ -6,12 +6,13 @@ namespace Tests\Routing;
 
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use DemonDextralHorn\Routing\RouteDispatcher;
-use Illuminate\Support\Arr;
+use DemonDextralHorn\Enums\HttpHeaderType;
 
 /**
  * Test for RouteDispatcher.
@@ -51,7 +52,7 @@ final class RouteDispatcherTest extends TestCase
 
         /* ASSERT */
         $this->assertInstanceOf(Response::class, $response);
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertJson($response->getContent());
         $data = json_decode($response->getContent(), true);
         $this->assertEquals(['id' => $id], $data);
@@ -83,7 +84,7 @@ final class RouteDispatcherTest extends TestCase
         Route::get('/sample/route', fn () => response()->json([
             'message' => $message,
         ]))->name('sample.route');
-        $headers = ['Authorization' => 'Bearer token'];
+        $headers = [HttpHeaderType::AUTHORIZATION->value => 'Bearer token'];
 
         /* EXECUTE */
         $response = $this->dispatcher->dispatch(
@@ -97,7 +98,7 @@ final class RouteDispatcherTest extends TestCase
 
         /* ASSERT */
         $this->assertInstanceOf(Response::class, $response);
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertJson($response->getContent());
         $data = json_decode($response->getContent(), true);
         $this->assertEquals(['message' => $message], $data);
@@ -125,7 +126,7 @@ final class RouteDispatcherTest extends TestCase
 
         /* ASSERT */
         $this->assertInstanceOf(Response::class, $response);
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertJson($response->getContent());
         $data = json_decode($response->getContent(), true);
         $this->assertEquals(['message' => $message], $data);
@@ -160,7 +161,7 @@ final class RouteDispatcherTest extends TestCase
     
         /* ASSERT */
         $this->assertInstanceOf(\Symfony\Component\HttpFoundation\Response::class, $response);
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $data = json_decode($response->getContent(), true);
         $this->assertEquals($expectedSessionValue, Arr::get($data, 'session_cookie'));
         $this->assertEquals($expectedSessionValue, Arr::get($data, 'cookies_bag_value'));
@@ -191,7 +192,7 @@ final class RouteDispatcherTest extends TestCase
 
         /* ASSERT */
         $this->assertInstanceOf(Response::class, $response);
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertJson($response->getContent());
         $data = json_decode($response->getContent(), true);
         $this->assertEquals($message, Arr::get($data, 'message'));

@@ -7,6 +7,7 @@ namespace Tests\Resolvers\Strategies\Transform;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use DemonDextralHorn\Resolvers\Strategies\Source\ForwardValueStrategy;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
@@ -27,7 +28,7 @@ final class ForwardValueStrategyTest extends TestCase
         parent::setUp();
 
         $this->responseData = new ResponseData(
-            status: 200,
+            status: Response::HTTP_OK,
             content: 'ok'
         );
 

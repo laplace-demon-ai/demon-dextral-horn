@@ -6,6 +6,7 @@ namespace DemonDextralHorn\Resolvers;
 
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
+use DemonDextralHorn\Enums\HttpHeaderType;
 use DemonDextralHorn\Enums\PrefetchType;
 use DemonDextralHorn\Factories\StrategyFactory;
 use Illuminate\Support\Arr;
@@ -62,9 +63,10 @@ final class HeadersResolver extends AbstractResolver
 
         // Map the headers to the correct format as hyphenated capitalization
         $mappedHeaders = [
-            'Authorization' => Arr::get($resolvedHeaders, 'authorization') ?? $headersData?->authorization, // Prioritize resolved headers before forwarding which enables config override or response token extraction
-            'Accept' => $headersData?->accept,
-            'Accept-Language' => $headersData?->acceptLanguage,
+            HttpHeaderType::AUTHORIZATION->value => Arr::get($resolvedHeaders, 'authorization')
+                ?? $headersData?->authorization, // Prioritize resolved headers before forwarding which enables config override or response token extraction
+            HttpHeaderType::ACCEPT->value => $headersData?->accept,
+            HttpHeaderType::ACCEPT_LANGUAGE->value => $headersData?->acceptLanguage,
         ];
 
         // Merge prefetchHeader and filter null values from the headers
