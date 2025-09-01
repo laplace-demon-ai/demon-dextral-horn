@@ -69,13 +69,12 @@ class TestCase extends OrchestraTestCase
             ->post('/post/prefetch-login-success', function () {
                 $response = new Response('ok', 200);
                 $response->headers->setCookie(
-                    new Cookie('laravel_session', 'session_value')
+                    new Cookie(config('demon-dextral-horn.defaults.session_cookie_name'), 'session_value')
                 );
 
                 return $response;
             });
 
-        // todo we will have sample routes with middleware and without middleware where it will also be a testing for what happens if target route itself is also a trigger route,, not only middleware enough for ths, also need to add the target route as trigger in the config 
         // Create route with route name sample.target.route.name
         $router->get('/{param1}/{param2}/sample-target-route-success/{param3}/{param4}', function () {
                 return new Response('Sample Target Route', 200);

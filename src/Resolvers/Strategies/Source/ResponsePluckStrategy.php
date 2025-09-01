@@ -39,7 +39,7 @@ final class ResponsePluckStrategy implements StrategyInterface
         // Normalize position by removing any wildcard characters for consistent access. e.g. 'data.*.id' will be 'id'
         $normalizedPosition = preg_replace('/^.*\*\./', '', $position);
 
-        $content = Arr::get(json_decode($responseData->content, true), 'data', []);
+        $content = Arr::get(json_decode($responseData?->content, true), 'data', []);
 
         // Check if the order is set, and if so, apply sorting
         if (in_array($order, [OrderType::ASC->value, OrderType::DESC->value], true)) {

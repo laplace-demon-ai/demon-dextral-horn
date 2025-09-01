@@ -17,10 +17,10 @@ final class CookiesData extends Data
     /**
      * Create a new CookiesData object.
      *
-     * @param string|null $laravelSession
+     * @param string|null $sessionCookie
      */
     public function __construct(
-        public ?string $laravelSession = null,
+        public ?string $sessionCookie = null,
     ) {}
 
     /**
@@ -32,10 +32,10 @@ final class CookiesData extends Data
      */
     public static function fromCookies(array $cookies): static
     {
-        $laravelSession = Arr::get($cookies, 'laravel_session');
+        $sessionCookie = Arr::get($cookies, config('demon-dextral-horn.defaults.session_cookie_name'));
 
         return new self(
-            laravelSession: $laravelSession,
+            sessionCookie: $sessionCookie,
         );
     }
 }
