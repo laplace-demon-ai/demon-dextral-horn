@@ -22,7 +22,7 @@ final class HeadersData extends Data
      * @param string|null $authorization
      * @param string|null $accept
      * @param string|null $acceptLanguage
-     * @param string|null $demonPrefetchCall
+     * @param string|null $prefetchHeader
      * @param array|null $setCookie
      */
     public function __construct(
@@ -30,7 +30,7 @@ final class HeadersData extends Data
         public ?string $accept = null,
         public ?string $acceptLanguage = null,
         #[Enum(PrefetchType::class)]
-        public ?string $demonPrefetchCall = null,
+        public ?string $prefetchHeader = null,
         public ?array $setCookie = null,
     ) {}
 
@@ -62,7 +62,7 @@ final class HeadersData extends Data
             authorization: $authorization,
             accept: $accept,
             acceptLanguage: $acceptLanguage,
-            demonPrefetchCall: $prefetchHeaderValue,
+            prefetchHeader: $prefetchHeaderValue,
             setCookie: $setCookie,
         );
     }

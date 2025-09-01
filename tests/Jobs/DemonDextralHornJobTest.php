@@ -40,7 +40,7 @@ final class DemonDextralHornJobTest extends TestCase
                 authorization: 'Bearer some-token',
                 accept: 'application/json',
                 acceptLanguage: 'en-US',
-                demonPrefetchCall: PrefetchType::NONE->value,
+                prefetchHeader: PrefetchType::NONE->value,
             ),
             routeName: 'sample.trigger.route.name',
             routeParams: ['routeParam' => 'routeValue'],
