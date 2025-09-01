@@ -51,7 +51,7 @@ final readonly class DemonDextralHornMiddleware
             $queueConnection = config('demon-dextral-horn.defaults.queue_connection');
 
             // Checks if the request is a prefetch call (triggered automatically by prefetching logic) so that we prevent circular/cascading prefetching
-            if ($requestData->headers->demonPrefetchCall !== PrefetchType::AUTO->value) {
+            if ($requestData->headers->prefetchHeader !== PrefetchType::AUTO->value) {
                 // Dispatch the job to the specified queue
                 DemonDextralHornJob::dispatch($requestData, $responseData)
                     ->onConnection($queueConnection)
