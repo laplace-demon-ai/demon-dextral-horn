@@ -7,6 +7,7 @@ namespace DemonDextralHorn;
 use DemonDextralHorn\Factories\StrategyFactory;
 use DemonDextralHorn\Handlers\TargetRouteHandler;
 use DemonDextralHorn\Resolvers\Contracts\TargetRouteResolverInterface;
+use DemonDextralHorn\Resolvers\CookiesResolver;
 use DemonDextralHorn\Resolvers\HeadersResolver;
 use DemonDextralHorn\Resolvers\QueryParamResolver;
 use DemonDextralHorn\Resolvers\RouteParamResolver;
@@ -52,6 +53,7 @@ final class DemonDextralHornServiceProvider extends ServiceProvider
                 $app->make(RouteParamResolver::class),
                 $app->make(QueryParamResolver::class),
                 $app->make(HeadersResolver::class),
+                $app->make(CookiesResolver::class),
                 $app->make(RouteDispatcher::class),
             );
         });

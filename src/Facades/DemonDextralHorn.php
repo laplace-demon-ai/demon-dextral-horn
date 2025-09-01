@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * Facade for the DemonDextralHorn.
  *
- * @method static void handle(array $targetRoutes, RequestData $requestData, ResponseData $responseData)
+ * @method static void handle(array $routes, RequestData $requestData, ResponseData $responseData)
  *
  * @class DemonDextralHorn
  */

@@ -8,7 +8,6 @@ use DemonDextralHorn\Enums\PrefetchType;
 use Illuminate\Support\Arr;
 use Spatie\LaravelData\Attributes\Validation\Enum;
 use Spatie\LaravelData\Data;
-use Symfony\Component\HttpFoundation\Cookie;
 
 /**
  * DTO representing HTTP headers data.
@@ -24,7 +23,7 @@ final class HeadersData extends Data
      * @param string|null $accept
      * @param string|null $acceptLanguage
      * @param string|null $demonPrefetchCall
-     * @param string|null $laravelSessionCookie
+     * @param array|null $setCookie
      */
     public function __construct(
         public ?string $authorization = null,
@@ -32,7 +31,7 @@ final class HeadersData extends Data
         public ?string $acceptLanguage = null,
         #[Enum(PrefetchType::class)]
         public ?string $demonPrefetchCall = null,
-        public ?string $laravelSessionCookie = null,
+        public ?array $setCookie = null,
     ) {}
 
     /**
@@ -56,26 +55,15 @@ final class HeadersData extends Data
         $accept = Arr::get($headers, 'accept.0');
         $acceptLanguage = Arr::get($headers, 'accept-language.0');
 
-        // here get the laravel session
-        $laravelSession = null;
-
-        // If cookies are provided, check for the laravel session cookie.
-        if (! empty($cookies)) {
-            foreach ($cookies as $cookie) {
-                if ($cookie instanceof Cookie && strcasecmp($cookie->getName(), 'laravel_session') === 0) {
-                    $laravelSession = $cookie->getValue();
-
-                    break;
-                }
-            }
-        }
+        // Get the Set-Cookie header from the headers (There can be multiple Set-Cookie headers)
+        $setCookie = Arr::get($headers, 'set-cookie');
 
         return new self(
             authorization: $authorization,
             accept: $accept,
             acceptLanguage: $acceptLanguage,
             demonPrefetchCall: $prefetchHeaderValue,
-            laravelSessionCookie: $laravelSession,
+            setCookie: $setCookie,
         );
     }
 }

@@ -16,6 +16,7 @@ use DemonDextralHorn\Resolvers\HeadersResolver;
 use DemonDextralHorn\Routing\RouteDispatcher;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
+use DemonDextralHorn\Resolvers\CookiesResolver;
 
 /**
  * Test for TargetRouteHandler.
@@ -27,6 +28,7 @@ final class TargetRouteHandlerTest extends TestCase
     private RouteParamResolver $routeParamResolver;
     private QueryParamResolver $queryParamResolver;
     private HeadersResolver $headersResolver;
+    private CookiesResolver $cookiesResolver;
     private RouteDispatcher $routeDispatcher;
     private TargetRouteHandler $handler;
     private RequestData $requestData;
@@ -40,10 +42,12 @@ final class TargetRouteHandlerTest extends TestCase
         $this->routeParamResolver = app(RouteParamResolver::class);
         $this->queryParamResolver = app(QueryParamResolver::class);
         $this->headersResolver = app(HeadersResolver::class);
+        $this->cookiesResolver = app(CookiesResolver::class);
         $this->handler = new TargetRouteHandler(
             $this->routeParamResolver,
             $this->queryParamResolver,
             $this->headersResolver,
+            $this->cookiesResolver,
             $this->routeDispatcher
         );
         $request = Request::create(

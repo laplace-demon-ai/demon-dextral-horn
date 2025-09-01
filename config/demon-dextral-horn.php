@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 use DemonDextralHorn\Enums\OrderType;
 use DemonDextralHorn\Resolvers\Strategies\Source\ForwardValueStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Source\ResponseJwtStrategy;
 use DemonDextralHorn\Resolvers\Strategies\Source\ResponsePluckStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Source\ResponseSessionHeaderStrategy;
 use DemonDextralHorn\Resolvers\Strategies\Source\ResponseValueStrategy;
 use DemonDextralHorn\Resolvers\Strategies\Transform\IncrementStrategy;
 use Illuminate\Http\Request;
@@ -16,9 +18,13 @@ return [
         'queue_connection' => env('PREFETCH_QUEUE_CONNECTION', 'redis'),
         'queue_name' => env('PREFETCH_QUEUE_NAME', 'prefetch'),
         'prefetch_header' => env('PREFETCH_HEADER', 'Demon-Prefetch-Call'),
+        'session_cookie_name' => config('session.cookie', 'laravel_session'),
         // todo add another default to on/off entire prefetching package, and add its logic also where maybe in middleware, or some place else it will skip package logic
     ],
     'rules' => [
+        /**
+         * Sample rule logic for showcasing different prefetching strategies/scenarios.
+         */
         [
             'id' => 'sample_rule_id',
             'description' => 'Sample/generalized rule description for prefetching related data',
@@ -105,6 +111,54 @@ return [
                                 'position' => 'data.*.id',
                                 'limit' => 3,
                                 'order' => OrderType::DESC->value,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+
+        /**
+         * Sample rule logic for handling login requests including JWT token extraction, laravel session handling etc.
+         */
+        [
+            'id' => 'login_request_id',
+            'description' => 'Handle login request and prefetch data for authenticated user',
+            'trigger' => [
+                'method' => Request::METHOD_POST,
+                'route' => 'auth.login',
+            ],
+            'targets' => [
+                /**
+                 * Sample target route with authorization header regarding JWT token.
+                 * The Bearer token will be extracted from the response data and added to the authorization header.
+                 */
+                [
+                    'method' => Request::METHOD_GET,
+                    'route' => 'sample.target.route.requires.token.from.login.request',
+                    'headers' => [
+                        'authorization' => [
+                            'strategy' => ResponseJwtStrategy::class,
+                            'options' => [
+                                'key' => 'authorization',
+                                'position' => 'data.access_token',
+                            ],
+                        ],
+                    ],
+                ],
+
+                /**
+                 * Sample target route with laravel session cookie.
+                 * The session cookie will be extracted from the response headers (Set-Cookie) and set in the request cookies.
+                 */
+                [
+                    'method' => Request::METHOD_GET,
+                    'route' => 'sample.target.route.with.session.cookie',
+                    'cookies' => [
+                        'session_cookie' => [
+                            'strategy' => ResponseSessionHeaderStrategy::class,
+                            'options' => [
+                                'key' => config('session.cookie', 'laravel_session'),
                             ],
                         ],
                     ],

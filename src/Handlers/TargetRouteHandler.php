@@ -6,6 +6,7 @@ namespace DemonDextralHorn\Handlers;
 
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
+use DemonDextralHorn\Resolvers\CookiesResolver;
 use DemonDextralHorn\Resolvers\HeadersResolver;
 use DemonDextralHorn\Resolvers\QueryParamResolver;
 use DemonDextralHorn\Resolvers\RouteParamResolver;
@@ -26,12 +27,14 @@ final class TargetRouteHandler
      * @param RouteParamResolver $routeParamResolver
      * @param QueryParamResolver $queryParamResolver
      * @param HeadersResolver $headersResolver
+     * @param CookiesResolver $cookiesResolver
      * @param RouteDispatcher $routeDispatcher
      */
     public function __construct(
         protected RouteParamResolver $routeParamResolver,
         protected QueryParamResolver $queryParamResolver,
         protected HeadersResolver $headersResolver,
+        protected CookiesResolver $cookiesResolver,
         protected RouteDispatcher $routeDispatcher
     ) {}
 
@@ -52,6 +55,7 @@ final class TargetRouteHandler
             $targetRouteParams = $this->routeParamResolver->resolve($targetRoute, $requestData, $responseData);
             $targetQueryParams = $this->queryParamResolver->resolve($targetRoute, $requestData, $responseData);
             $targetHeaders = $this->headersResolver->resolve($targetRoute, $requestData, $responseData);
+            $targetCookies = $this->cookiesResolver->resolve($targetRoute, $requestData, $responseData);
 
             // targetRouteParams is normalized in route param resolver, so that can be dispatched directly.
             foreach ($targetRouteParams as $normalizedRouteParams) {
@@ -61,7 +65,8 @@ final class TargetRouteHandler
                     $targetMethod,
                     $normalizedRouteParams,
                     $targetQueryParams,
-                    $targetHeaders
+                    $targetHeaders,
+                    $targetCookies
                 );
             }
         }

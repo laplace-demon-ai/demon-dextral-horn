@@ -11,11 +11,11 @@ use DemonDextralHorn\Resolvers\Contracts\StrategyInterface;
 use Illuminate\Support\Arr;
 
 /**
- * This strategy extracts the value of a specified key from the response data.
+ * This strategy extracts the JWT token from the response access token.
  *
- * @class ResponseValueStrategy
+ * @class ResponseJwtStrategy
  */
-final class ResponseValueStrategy implements StrategyInterface
+final class ResponseJwtStrategy implements StrategyInterface
 {
     /**
      * {@inheritDoc}
@@ -25,13 +25,17 @@ final class ResponseValueStrategy implements StrategyInterface
         ?ResponseData $responseData,
         ?array $options = []
     ): mixed {
-        $position = Arr::get($options, 'position'); // e.g. data.id
-        $key = Arr::get($options, 'key'); // e.g. route_key
+        $key = Arr::get($options, 'key');
+        $position = Arr::get($options, 'position');
 
         if ($key === null || $position === null) {
             throw new MissingStrategyOptionException(self::class, 'key/position');
         }
 
-        return Arr::get(json_decode($responseData?->content, true), $position);
+        // Get the JWT token from the response data provided position
+        $token = Arr::get(json_decode($responseData?->content, true), $position);
+
+        // Return the token as a Bearer token if it exists, otherwise return null so that request header token will be forwarded.
+        return $token ? 'Bearer ' . $token : null;
     }
 }
