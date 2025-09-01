@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Routing;
 
+use DemonDextralHorn\Enums\HttpHeaderType;
+use DemonDextralHorn\Enums\HttpServerVariableType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\Response;
-use DemonDextralHorn\Enums\HttpHeaderType;
-use DemonDextralHorn\Enums\HttpServerVariableType;
 
 /**
  * Dispatches a request with the given route information/parameters.
