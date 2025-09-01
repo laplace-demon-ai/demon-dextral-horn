@@ -55,7 +55,7 @@ final class TargetRouteHandlerTest extends TestCase
             method: Request::METHOD_GET,
         );
         $this->requestData = RequestData::fromRequest($request);
-        $response = new Response('trigger_response', 200);
+        $response = new Response('trigger_response', Response::HTTP_OK);
         $this->responseData = ResponseData::fromResponse($response);
     }
 

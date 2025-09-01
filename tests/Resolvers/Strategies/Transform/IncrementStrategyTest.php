@@ -27,7 +27,7 @@ final class IncrementStrategyTest extends TestCase
     {
         parent::setUp();
 
-        $response = new Response('ok', 200);
+        $response = new Response('ok', Response::HTTP_OK);
         $this->responseData = ResponseData::fromResponse($response);
         $this->incrementStrategy = app(IncrementStrategy::class);
     }
@@ -39,7 +39,7 @@ final class IncrementStrategyTest extends TestCase
         $initialValue = 5;
         $request = Request::create(
             uri: "/sample_endpoint?query_key=" . $initialValue,
-            method: 'POST',
+            method: Request::METHOD_POST,
         );
         $requestData = RequestData::fromRequest($request);
         $increment = 2;
@@ -63,7 +63,7 @@ final class IncrementStrategyTest extends TestCase
         $defaultValue = 1; // Default value when query key is not present
         $request = Request::create(
             uri: "/sample_endpoint",
-            method: 'POST',
+            method: Request::METHOD_POST,
         );
         $requestData = RequestData::fromRequest($request);
         $increment = 2;
@@ -85,7 +85,7 @@ final class IncrementStrategyTest extends TestCase
         /* SETUP */
         $defaultValue = 1; // Default value when increment is not provided
         $initialValue = 5;
-        $request = Request::create("/sample_endpoint?query_key=" . $initialValue, 'POST');
+        $request = Request::create("/sample_endpoint?query_key=" . $initialValue, Request::METHOD_POST);
         $requestData = RequestData::fromRequest($request);
 
         /* EXECUTE */
@@ -106,7 +106,7 @@ final class IncrementStrategyTest extends TestCase
         $defaultValue = 1; // Default value when query key is not present
         $request = Request::create(
             uri: "/sample_endpoint",
-            method: 'POST',
+            method: Request::METHOD_POST,
         );
         $requestData = RequestData::fromRequest($request);
         $increment = 2;
@@ -130,7 +130,7 @@ final class IncrementStrategyTest extends TestCase
         $defaultValue = 1; // Default value when query key is not present
         $request = Request::create(
             uri: "/sample_endpoint",
-            method: 'POST',
+            method: Request::METHOD_POST,
         );
         $requestData = RequestData::fromRequest($request);
         $increment = '2'; // string increment
@@ -169,7 +169,7 @@ final class IncrementStrategyTest extends TestCase
     {
         /* SETUP */
         $increment = 2;
-        $request = Request::create("/sample_endpoint?query_key=foo", 'POST');
+        $request = Request::create("/sample_endpoint?query_key=foo", Request::METHOD_POST);
         $requestData = RequestData::fromRequest($request);
 
         /* EXECUTE */

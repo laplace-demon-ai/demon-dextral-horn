@@ -129,7 +129,7 @@ final class TargetRouteResolverTest extends TestCase
             [
                 'trigger' => [
                     'route' => $triggerRoute,
-                    'method' => Request::METHOD_POST, // different from GET
+                    'method' => Request::METHOD_POST,
                 ],
                 'targets' => [
                     ['route' => 'some.target'],

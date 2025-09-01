@@ -7,6 +7,8 @@ namespace DemonDextralHorn\Routing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\Response;
+use DemonDextralHorn\Enums\HttpHeaderType;
+use DemonDextralHorn\Enums\HttpServerVariableType;
 
 /**
  * Dispatches a request with the given route information/parameters.
@@ -98,8 +100,11 @@ final class RouteDispatcher
         $request->headers->replace($headers);
 
         // Add server variable for authorization for JWT
-        if (Arr::has($headers, 'Authorization')) {
-            $request->server->set('HTTP_AUTHORIZATION', Arr::get($headers, 'Authorization'));
+        if (Arr::has($headers, HttpHeaderType::AUTHORIZATION->value)) {
+            $request->server->set(
+                HttpServerVariableType::AUTHORIZATION->value,
+                Arr::get($headers, HttpHeaderType::AUTHORIZATION->value)
+            );
         }
 
         if (Arr::has($cookies, 'session_cookie')) {
