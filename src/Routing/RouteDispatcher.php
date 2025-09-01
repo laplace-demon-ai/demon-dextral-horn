@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace DemonDextralHorn\Routing;
 
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Arr;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Dispatches a request with the given route information/parameters.
@@ -91,7 +91,7 @@ final class RouteDispatcher
      */
     private function prepareRequest(Request $request, array $headers, array $cookies): Request
     {
-        /** 
+        /**
          * Replace headers with the provided headers.
          * Note! It erases any existing headers, so it needs to be used before any other header manipulations.
          */
@@ -122,13 +122,12 @@ final class RouteDispatcher
         return $request;
     }
 
-
     /**
      * Extract the session cookie from the raw cookie string.
      * e.g. 'laravel_session=cookie_value; Path=/; HttpOnly; SameSite=Lax', it will return ['name' => 'laravel_session', 'value' => 'cookie_value']
      *
      * @param string $rawCookieString
-     * 
+     *
      * @return array|null
      */
     private function extractSessionCookieFromString(string $rawCookieString): ?array
@@ -139,16 +138,18 @@ final class RouteDispatcher
         foreach (explode(';', $rawCookieString) as $part) {
             $part = trim($part);
 
-            if ($part === '') continue;
-    
+            if ($part === '') {
+                continue;
+            }
+
             [$name, $value] = explode('=', $part, 2);
-    
+
             if ($name === $cookieName) {
                 // decode if urlencoded (Laravel session can be encoded)
                 return ['name' => $name, 'value' => rawurldecode((string) $value)];
             }
         }
-    
+
         return null;
     }
 }
