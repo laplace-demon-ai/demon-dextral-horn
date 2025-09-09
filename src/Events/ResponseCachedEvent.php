@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Events;
 
-use Symfony\Component\HttpFoundation\Response;
 use DemonDextralHorn\Data\TargetRouteData;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Event triggered when a response is successfully cached (Hit the cache, might be useful for logging or analytics).
