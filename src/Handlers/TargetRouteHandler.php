@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Handlers;
 
+use DemonDextralHorn\Cache\ResponseCacheValidator;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
+use DemonDextralHorn\Data\TargetRouteData;
+use DemonDextralHorn\Events\NonCacheableResponseEvent;
+use DemonDextralHorn\Facades\ResponseCache;
 use DemonDextralHorn\Resolvers\CookiesResolver;
 use DemonDextralHorn\Resolvers\HeadersResolver;
 use DemonDextralHorn\Resolvers\QueryParamResolver;
@@ -29,13 +33,15 @@ final class TargetRouteHandler
      * @param HeadersResolver $headersResolver
      * @param CookiesResolver $cookiesResolver
      * @param RouteDispatcher $routeDispatcher
+     * @param ResponseCacheValidator $validator
      */
     public function __construct(
         protected RouteParamResolver $routeParamResolver,
         protected QueryParamResolver $queryParamResolver,
         protected HeadersResolver $headersResolver,
         protected CookiesResolver $cookiesResolver,
-        protected RouteDispatcher $routeDispatcher
+        protected RouteDispatcher $routeDispatcher,
+        protected ResponseCacheValidator $validator
     ) {}
 
     /**
@@ -47,8 +53,7 @@ final class TargetRouteHandler
      */
     public function handle(array $routes, RequestData $requestData, ResponseData $responseData): void
     {
-        // todo Note that when routes are called, in case they return not success message for one of them, it should not block other requests,, - maybe somehow log them but app should work without breaking
-        // Iterate over each target route.
+        // Iterate over each target route to process and cache their responses.
         foreach ($routes as $targetRoute) {
             $targetRouteName = Arr::get($targetRoute, 'route');
             $targetMethod = Arr::get($targetRoute, 'method', Request::METHOD_GET);
@@ -59,15 +64,28 @@ final class TargetRouteHandler
 
             // targetRouteParams is normalized in route param resolver, so that can be dispatched directly.
             foreach ($targetRouteParams as $normalizedRouteParams) {
-                // todo respone will be used for caching purpose later, maybe new ResponseCache class will be created and used here,, for each response, it will be cached
-                $response = $this->routeDispatcher->dispatch(
-                    $targetRouteName,
-                    $targetMethod,
-                    $normalizedRouteParams,
-                    $targetQueryParams,
-                    $targetHeaders,
-                    $targetCookies
+                // Create TargetRouteData instance.
+                $targetRouteData = new TargetRouteData(
+                    routeName: $targetRouteName,
+                    method: $targetMethod,
+                    routeParams: $normalizedRouteParams,
+                    queryParams: $targetQueryParams,
+                    headers: $targetHeaders,
+                    cookies: $targetCookies
                 );
+
+                // Dispatch the target route and get the response.
+                $response = $this->routeDispatcher->dispatch($targetRouteData);
+
+                if ($this->validator->shouldCacheResponse($response)) {
+                    ResponseCache::put(
+                        $response,
+                        $targetRouteData
+                    );
+                } else {
+                    // Fire event for non-cacheable response with validation results
+                    event(new NonCacheableResponseEvent($response, $this->validator->getValidationResults($response)));
+                }
             }
         }
     }

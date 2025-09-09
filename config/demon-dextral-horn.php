@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use DemonDextralHorn\Enums\AuthDriverType;
 use DemonDextralHorn\Enums\OrderType;
 use DemonDextralHorn\Resolvers\Strategies\Source\ForwardValueStrategy;
 use DemonDextralHorn\Resolvers\Strategies\Source\ResponseJwtStrategy;
@@ -13,13 +14,15 @@ use Illuminate\Http\Request;
 
 return [
     'defaults' => [
+        'enabled' => env('PREFETCH_ENABLED', false), // Enable/disable prefetching, default is disabled
         'cache_ttl' => env('PREFETCH_CACHE_TTL', 60),
-        'cache_prefix' => env('PREFETCH_CACHE_PREFIX', 'demon_dextral_horn:'),
+        'cache_prefix' => env('PREFETCH_CACHE_PREFIX', 'demon_dextral_horn'),
+        'cache_max_size' => env('PREFETCH_CACHE_MAX_SIZE', 1048576), // 1 MB = 1024 * 1024 bytes = 1048576 bytes
         'queue_connection' => env('PREFETCH_QUEUE_CONNECTION', 'redis'),
         'queue_name' => env('PREFETCH_QUEUE_NAME', 'prefetch'),
         'prefetch_header' => env('PREFETCH_HEADER', 'Demon-Prefetch-Call'),
+        'auth_driver' => config('auth.guards.api.driver', AuthDriverType::SESSION->value), // It can get session or jwt at the moment (values of AuthDriverType)
         'session_cookie_name' => config('session.cookie', 'laravel_session'),
-        // todo add another default to on/off entire prefetching package, and add its logic also where maybe in middleware, or some place else it will skip package logic
     ],
     'rules' => [
         /**

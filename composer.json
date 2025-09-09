@@ -21,7 +21,8 @@
     ],
     "require": {
         "php": "^8.2",
-        "spatie/laravel-data": "^4.17"
+        "spatie/laravel-data": "^4.17",
+        "spatie/laravel-responsecache": "^7.7"
     },
     "require-dev": {
         "orchestra/testbench": "^9.6.1",

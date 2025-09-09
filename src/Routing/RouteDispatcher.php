@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Routing;
 
+use DemonDextralHorn\Data\TargetRouteData;
 use DemonDextralHorn\Enums\HttpHeaderType;
 use DemonDextralHorn\Enums\HttpServerVariableType;
+use DemonDextralHorn\Events\RouteDispatchFailedEvent;
+use DemonDextralHorn\Traits\RequestParsingTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * Dispatches a request with the given route information/parameters.
@@ -17,34 +21,26 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class RouteDispatcher
 {
+    use RequestParsingTrait;
+
     /**
      * Dispatch the request to the specified route.
      *
-     * @param string $routeName
-     * @param string $method
-     * @param array $routeParams
-     * @param array $queryParams
-     * @param array $headers
-     * @param array $cookies
+     * @param TargetRouteData $targetRouteData
      *
-     * @return Response
+     * @return Response|null
      */
     public function dispatch(
-        string $routeName,
-        string $method,
-        array $routeParams,
-        array $queryParams,
-        array $headers,
-        array $cookies
-    ): Response {
-        $url = $this->prepareUrl($routeName, $routeParams, $queryParams);
+        TargetRouteData $targetRouteData
+    ): ?Response {
+        $url = $this->prepareUrl($targetRouteData->routeName, $targetRouteData->routeParams, $targetRouteData->queryParams);
 
         $request = Request::create(
             uri: $url,
-            method: $method,
+            method: $targetRouteData->method,
         );
 
-        $request = $this->prepareRequest($request, $headers, $cookies);
+        $request = $this->prepareRequest($request, $targetRouteData->headers, $targetRouteData->cookies);
 
         $originalRequest = app('request');
 
@@ -54,6 +50,13 @@ final class RouteDispatcher
 
             // Dispatch the request with the router
             return app('router')->dispatch($request);
+
+        } catch (Throwable $exception) {
+            // Fire an event when dispatching fails - gives more control to the user to log or handle the exception without breaking the main app flow
+            event(new RouteDispatchFailedEvent($exception, $targetRouteData));
+
+            // Return default response in case of an error
+            return new Response('Internal Server Error', 500);
         } finally {
             // Restore the original request instance, preventing any side effects
             app()->instance('request', $originalRequest);
@@ -125,36 +128,5 @@ final class RouteDispatcher
         }
 
         return $request;
-    }
-
-    /**
-     * Extract the session cookie from the raw cookie string.
-     * e.g. 'laravel_session=cookie_value; Path=/; HttpOnly; SameSite=Lax', it will return ['name' => 'laravel_session', 'value' => 'cookie_value']
-     *
-     * @param string $rawCookieString
-     *
-     * @return array|null
-     */
-    private function extractSessionCookieFromString(string $rawCookieString): ?array
-    {
-        $cookieName = config('demon-dextral-horn.defaults.session_cookie_name');
-
-        // Cookie header may contain many parts separated by ';'
-        foreach (explode(';', $rawCookieString) as $part) {
-            $part = trim($part);
-
-            if ($part === '') {
-                continue;
-            }
-
-            [$name, $value] = explode('=', $part, 2);
-
-            if ($name === $cookieName) {
-                // decode if urlencoded (Laravel session can be encoded)
-                return ['name' => $name, 'value' => rawurldecode((string) $value)];
-            }
-        }
-
-        return null;
     }
 }

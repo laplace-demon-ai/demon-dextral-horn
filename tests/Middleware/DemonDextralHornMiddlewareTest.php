@@ -27,6 +27,7 @@ final class DemonDextralHornMiddlewareTest extends TestCase
 
         // Fake the queue
         Queue::fake();
+        config(['demon-dextral-horn.defaults.enabled' => true]);
     }
 
     #[Test]
@@ -168,5 +169,18 @@ final class DemonDextralHornMiddlewareTest extends TestCase
 
         /* ASSERT */
         Queue::assertPushed(DemonDextralHornJob::class);
+    }
+
+    #[Test]
+    public function it_tests_job_is_NOT_dispatched_when_package_is_disabled(): void
+    {
+        /* SETUP */
+        config(['demon-dextral-horn.defaults.enabled' => false]);
+
+        /* EXECUTE */
+        $this->get('/prefetch-route-success');
+
+        /* ASSERT */
+        Queue::assertNothingPushed(DemonDextralHornJob::class);
     }
 }

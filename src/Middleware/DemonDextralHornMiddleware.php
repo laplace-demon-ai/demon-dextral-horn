@@ -41,8 +41,10 @@ final readonly class DemonDextralHornMiddleware
      */
     public function terminate(Request $request, Response $response): void
     {
-        // Only prefetch for successful responses
-        if ($response->isSuccessful()) {
+        $enabled = config('demon-dextral-horn.defaults.enabled');
+
+        // Only prefetch for successful responses, and if the package is enabled
+        if ($response->isSuccessful() && $enabled) {
             $requestData = RequestData::fromRequest($request);
             $responseData = ResponseData::fromResponse($response);
 
