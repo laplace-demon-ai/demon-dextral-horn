@@ -75,9 +75,16 @@ class TestCase extends OrchestraTestCase
                 return $response;
             });
 
-        // Create route with route name sample.target.route.name
+        // Define route with route name sample.target.route.name which has multiple route params
         $router->get('/{param1}/{param2}/sample-target-route-success/{param3}/{param4}', function () {
                 return new Response('Sample Target Route', Response::HTTP_OK);
             })->name('sample.target.route.name');
+
+        // Define route with no params, content-type text/event-stream to make it non-cacheable by default validator
+        $router->get('/sample-target-route-no-params', function () {
+                return new Response('Sample Target Route No Params', Response::HTTP_OK, [
+                    'Content-Type' => 'text/event-stream',
+                ]);
+            })->name('sample.target.route.no.params');
     }
 }

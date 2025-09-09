@@ -7,12 +7,15 @@ namespace Tests\Routing;
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use DemonDextralHorn\Routing\RouteDispatcher;
+use DemonDextralHorn\Data\TargetRouteData;
 use DemonDextralHorn\Enums\HttpHeaderType;
+use DemonDextralHorn\Events\RouteDispatchFailedEvent;
 
 /**
  * Test for RouteDispatcher.
@@ -39,15 +42,18 @@ final class RouteDispatcherTest extends TestCase
         ]))->name('sample.route');
         $id = 42;
         $filter = 'latest';
-
-        /* EXECUTE */
-        $response = $this->dispatcher->dispatch(
+        $targetRouteData = new TargetRouteData(
             routeName: 'sample.route',
             method: Request::METHOD_GET,
             routeParams: ['id' => $id],
             queryParams: ['filter' => $filter],
             headers: [],
             cookies: []
+        );
+
+        /* EXECUTE */
+        $response = $this->dispatcher->dispatch(
+            $targetRouteData
         );
 
         /* ASSERT */
@@ -64,15 +70,18 @@ final class RouteDispatcherTest extends TestCase
         /* SETUP */
         $invalidRouteName = 'invalid.route';
         $this->expectException(RouteNotFoundException::class);
-
-        /* EXECUTE */
-        $this->dispatcher->dispatch(
+        $targetRouteData = new TargetRouteData(
             routeName: $invalidRouteName,
             method: Request::METHOD_GET,
             routeParams: [],
             queryParams: [],
             headers: [],
             cookies: []
+        );
+
+        /* EXECUTE */
+        $this->dispatcher->dispatch(
+            $targetRouteData
         );
     }
 
@@ -85,15 +94,18 @@ final class RouteDispatcherTest extends TestCase
             'message' => $message,
         ]))->name('sample.route');
         $headers = [HttpHeaderType::AUTHORIZATION->value => 'Bearer token'];
-
-        /* EXECUTE */
-        $response = $this->dispatcher->dispatch(
+        $targetRouteData = new TargetRouteData(
             routeName: 'sample.route',
             method: Request::METHOD_GET,
             routeParams: [],
             queryParams: [],
             headers: $headers,
             cookies: []
+        );
+
+        /* EXECUTE */
+        $response = $this->dispatcher->dispatch(
+            $targetRouteData
         );
 
         /* ASSERT */
@@ -113,15 +125,18 @@ final class RouteDispatcherTest extends TestCase
             'message' => $message,
         ]))->name('sample.route');
         $items = [1, 2, 3];
-
-        /* EXECUTE */
-        $response = $this->dispatcher->dispatch(
+        $targetRouteData = new TargetRouteData(
             routeName: 'sample.route',
             method: Request::METHOD_GET,
             routeParams: [],
             queryParams: ['items' => $items],
             headers: [],
             cookies: []
+        );
+
+        /* EXECUTE */
+        $response = $this->dispatcher->dispatch(
+            $targetRouteData
         );
 
         /* ASSERT */
@@ -148,15 +163,18 @@ final class RouteDispatcherTest extends TestCase
             ]);
         })->name('sample.route');
         $rawCookie = $cookieName . '=' . $expectedSessionValue . '; Path=/; HttpOnly; SameSite=Lax';
-
-        /* EXECUTE */
-        $response = $this->dispatcher->dispatch(
+        $targetRouteData = new TargetRouteData(
             routeName: 'sample.route',
             method: Request::METHOD_GET,
             routeParams: [],
             queryParams: [],
-            headers: [], // intentionally empty
+            headers: [],
             cookies: ['session_cookie' => $rawCookie]
+        );
+
+        /* EXECUTE */
+        $response = $this->dispatcher->dispatch(
+            $targetRouteData
         );
     
         /* ASSERT */
@@ -179,15 +197,18 @@ final class RouteDispatcherTest extends TestCase
             'session_cookie' => $sessionCookieName . '=' . request()->cookie($sessionCookieName),
         ]))->name('sample.route');
         $cookies = ['session_cookie' => $sessionCookieName . '=' . $cookieValue];
-
-        /* EXECUTE */
-        $response = $this->dispatcher->dispatch(
+        $targetRouteData = new TargetRouteData(
             routeName: 'sample.route',
             method: Request::METHOD_GET,
             routeParams: [],
             queryParams: [],
             headers: [],
             cookies: $cookies
+        );
+
+        /* EXECUTE */
+        $response = $this->dispatcher->dispatch(
+            $targetRouteData
         );
 
         /* ASSERT */
@@ -197,5 +218,37 @@ final class RouteDispatcherTest extends TestCase
         $data = json_decode($response->getContent(), true);
         $this->assertEquals($message, Arr::get($data, 'message'));
         $this->assertEquals($sessionCookieName . '=' . $cookieValue, Arr::get($data, 'session_cookie'));
+    }
+
+    #[Test]
+    public function it_fires_event_on_dispatch_failure(): void
+    {
+        /* SETUP */
+        $routeName = 'failing.route';
+        Event::fake();
+        $this->withoutExceptionHandling(); // This lets exception bubble up to RouteDispatcher
+        Route::get('/failing/route', function () {
+            throw new \RuntimeException('Sample exception for testing');
+        })->name($routeName);
+        $targetRouteData = new TargetRouteData(
+            routeName: $routeName,
+            method: Request::METHOD_GET,
+            routeParams: [],
+            queryParams: [],
+            headers: [],
+            cookies: []
+        );
+
+        /* EXECUTE */
+        $response = $this->dispatcher->dispatch($targetRouteData);
+
+        /* ASSERT */
+        Event::assertDispatched(RouteDispatchFailedEvent::class, function ($event) use ($targetRouteData) {
+            return $event->exception instanceof \RuntimeException
+                && $event->targetRouteData === $targetRouteData;
+        });
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertEquals(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        $this->assertEquals('Internal Server Error', $response->getContent());
     }
 }
