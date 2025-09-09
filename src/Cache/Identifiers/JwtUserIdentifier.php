@@ -12,7 +12,7 @@ use Illuminate\Support\Arr;
 
 /**
  * User identifier based on JWT token.
- * 
+ *
  * @class JwtUserIdentifier
  */
 final class JwtUserIdentifier implements UserIdentifierInterface
@@ -27,7 +27,7 @@ final class JwtUserIdentifier implements UserIdentifierInterface
         $token = Arr::get($headers, HttpHeaderType::AUTHORIZATION->value);
 
         // If no token is found, return the guest user identifier.
-        if(! $token) {
+        if (! $token) {
             return self::GUEST_USER;
         }
 

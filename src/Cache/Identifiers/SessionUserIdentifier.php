@@ -12,7 +12,7 @@ use Illuminate\Support\Arr;
 
 /**
  * User identifier based on session cookies.
- * 
+ *
  * @class SessionUserIdentifier
  */
 final class SessionUserIdentifier implements UserIdentifierInterface

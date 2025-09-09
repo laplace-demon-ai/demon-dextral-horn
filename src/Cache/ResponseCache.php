@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Cache;
 
-use Spatie\ResponseCache\ResponseCacheRepository;
 use DemonDextralHorn\Data\TargetRouteData;
+use Spatie\ResponseCache\ResponseCacheRepository;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -29,16 +29,16 @@ final class ResponseCache
     /**
      * Store the response in the cache with a unique key generated from the target route data.
      * Use ResponseCacheRepository to store the response.
-     * 
+     *
      * @param Response $response
      * @param TargetRouteData $targetRouteData
-     * 
+     *
      * @return void
      */
     public function put(Response $response, TargetRouteData $targetRouteData): void
     {
         $key = $this->cacheKeyGenerator->generate($targetRouteData);
-        
+
         $this->cache->put(
             key: $key,
             response: $response,

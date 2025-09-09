@@ -71,7 +71,7 @@ final class TargetRouteHandler
                     routeParams: $normalizedRouteParams,
                     queryParams: $targetQueryParams,
                     headers: $targetHeaders,
-                    cookies: $targetCookies 
+                    cookies: $targetCookies
                 );
 
                 // Dispatch the target route and get the response.

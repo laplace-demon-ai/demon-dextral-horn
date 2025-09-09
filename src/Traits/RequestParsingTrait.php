@@ -6,7 +6,7 @@ namespace DemonDextralHorn\Traits;
 
 /**
  * Trait for parsing requests and extracting relevant information.
- * 
+ *
  * @trait RequestParsingTrait
  */
 trait RequestParsingTrait

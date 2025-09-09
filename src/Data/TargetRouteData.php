@@ -15,7 +15,7 @@ final class TargetRouteData extends Data
 {
     /**
      * Create a new TargetRouteData object.
-     * 
+     *
      * @param string $routeName
      * @param string $method
      * @param array $routeParams

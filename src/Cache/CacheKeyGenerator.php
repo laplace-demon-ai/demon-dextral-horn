@@ -30,9 +30,9 @@ final class CacheKeyGenerator
 
     /**
      * Generate a unique cache key based on the target route data (by adding user identifier for user specific caching).
-     * 
+     *
      * @param TargetRouteData $targetRouteData
-     * 
+     *
      * @return string
      */
     public function generate(TargetRouteData $targetRouteData): string
@@ -56,9 +56,9 @@ final class CacheKeyGenerator
 
     /**
      * Normalize route parameters by sorting them by key for deterministic output.
-     * 
+     *
      * @param array $routeParams
-     * 
+     *
      * @return array
      */
     private function normalizeRouteParams(array $routeParams): array
@@ -70,9 +70,9 @@ final class CacheKeyGenerator
 
     /**
      * Normalize query parameters by sorting them by key, sorting the values of arrays, and converting empty strings to null for deterministic output.
-     * 
+     *
      * @param array $queryParams
-     * 
+     *
      * @return array
      */
     private function normalizeQueryParams(array $queryParams): array
@@ -104,9 +104,9 @@ final class CacheKeyGenerator
 
     /**
      * Generate a hash for the cache key components.
-     * 
+     *
      * @param array $keyComponents
-     * 
+     *
      * @return string
      */
     private function generateHash(array $keyComponents): string

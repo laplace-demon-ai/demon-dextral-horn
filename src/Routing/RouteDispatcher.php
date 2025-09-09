@@ -50,7 +50,7 @@ final class RouteDispatcher
 
             // Dispatch the request with the router
             return app('router')->dispatch($request);
-        
+
         } catch (Throwable $exception) {
             // Fire an event when dispatching fails - gives more control to the user to log or handle the exception without breaking the main app flow
             event(new RouteDispatchFailedEvent($exception, $targetRouteData));

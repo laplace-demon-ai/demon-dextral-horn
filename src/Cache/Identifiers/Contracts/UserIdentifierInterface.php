@@ -21,9 +21,9 @@ interface UserIdentifierInterface
 
     /**
      * Get a unique identifier for the user based on the target route data (request data).
-     * 
+     *
      * @param TargetRouteData $targetRouteData
-     * 
+     *
      * @return string
      */
     public function getIdentifierFor(TargetRouteData $targetRouteData): string;

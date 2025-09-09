@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Cache;
 
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Validates if a response is suitable for caching based on various criteria.
@@ -16,9 +16,9 @@ final class ResponseCacheValidator
 {
     /**
      * Determine if the response should be cached based on multiple criteria.
-     * 
+     *
      * @param Response $response
-     * 
+     *
      * @return bool
      */
     public function shouldCacheResponse(Response $response): bool
@@ -31,9 +31,9 @@ final class ResponseCacheValidator
 
     /**
      * Get validation results for each caching criterion.
-     * 
+     *
      * @param Response $response
-     * 
+     *
      * @return array<string, bool>
      */
     public function getValidationResults(Response $response): array
@@ -49,9 +49,9 @@ final class ResponseCacheValidator
     /**
      * Check if the response has a cacheable HTTP status code.
      * Cacheable codes include 200-299 (successful responses) and certain redirects (301, 302, 304).
-     * 
+     *
      * @param Response $response
-     * 
+     *
      * @return bool
      */
     private function hasCacheableResponseCode(Response $response): bool
@@ -74,9 +74,9 @@ final class ResponseCacheValidator
     /**
      * Check if the response has a cacheable Content-Type header.
      * Cacheable types include text/*, application/json, application/xml, etc.
-     * 
+     *
      * @param Response $response
-     * 
+     *
      * @return bool
      */
     private function hasCacheableContentType(Response $response): bool
@@ -101,9 +101,9 @@ final class ResponseCacheValidator
     /**
      * Check if the response size is within a reasonable limit for caching.
      * This prevents caching excessively large responses that could impact performance.
-     * 
+     *
      * @param Response $response
-     * 
+     *
      * @return bool
      */
     private function hasReasonableSize(Response $response): bool
@@ -131,9 +131,9 @@ final class ResponseCacheValidator
     /**
      * Check if the response is a streaming response.
      * Streaming responses are typically not cacheable due to their dynamic nature.
-     * 
+     *
      * @param Response $response
-     * 
+     *
      * @return bool
      */
     private function isStreamingResponse(Response $response): bool

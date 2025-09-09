@@ -9,7 +9,7 @@ use DemonDextralHorn\Data\TargetRouteData;
 
 /**
  * User identifier for guest users (not logged in or auth_driver is neither session nor jwt).
- * 
+ *
  * @class GuestUserIdentifier
  */
 final class GuestUserIdentifier implements UserIdentifierInterface
