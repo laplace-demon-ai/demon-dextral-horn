@@ -9,6 +9,7 @@ use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Data\TargetRouteData;
 use DemonDextralHorn\Events\NonCacheableResponseEvent;
+use DemonDextralHorn\Events\ResponseCachedEvent;
 use DemonDextralHorn\Facades\ResponseCache;
 use DemonDextralHorn\Resolvers\CookiesResolver;
 use DemonDextralHorn\Resolvers\HeadersResolver;
@@ -82,6 +83,9 @@ final class TargetRouteHandler
                         $response,
                         $targetRouteData
                     );
+
+                    // Fire event for successful cached response
+                    event(new ResponseCachedEvent($response, $targetRouteData));
                 } else {
                     // Fire event for non-cacheable response with validation results
                     event(new NonCacheableResponseEvent($response, $this->validator->getValidationResults($response)));
