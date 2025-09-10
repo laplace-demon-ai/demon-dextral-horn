@@ -17,10 +17,10 @@ final class CacheTagGenerator
 
     /**
      * Generate cache tags based on the provided target route data and user identifier.
-     * 
+     *
      * @param TargetRouteData $targetRouteData
      * @param string $userIdentifier
-     * 
+     *
      * @return array
      */
     public function generate(TargetRouteData $targetRouteData, string $userIdentifier): array
@@ -43,9 +43,9 @@ final class CacheTagGenerator
     /**
      * Normalize a tag by converting to lowercase, replacing non-alphanumeric characters with underscores, and trimming.
      * If the tag is empty, return a default unnamed tag. e.g. "User.Profile" becomes "user_profile", "jwt:abc123 " becomes "jwt_abc123"
-     * 
+     *
      * @param string $name
-     * 
+     *
      * @return string
      */
     private function normalizeTag(string $name): string

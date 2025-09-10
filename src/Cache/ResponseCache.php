@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Cache;
 
-use DemonDextralHorn\Data\TargetRouteData;
-use DemonDextralHorn\Cache\Identifiers\Contracts\UserIdentifierInterface;
-use Symfony\Component\HttpFoundation\Response;
 use BadMethodCallException;
+use DemonDextralHorn\Cache\Identifiers\Contracts\UserIdentifierInterface;
+use DemonDextralHorn\Data\TargetRouteData;
 use Spatie\ResponseCache\ResponseCacheRepository;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Caching mechanism for the target routes responses (wrapping/using Spatie's ResponseCache)
