@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Resolvers\Strategies\Transform;
 
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -14,11 +15,7 @@ use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
 
-/**
- * Test for ResponseSessionHeaderStrategy.
- * 
- * @class ResponseSessionHeaderStrategyTest
- */
+#[CoversClass(ResponseSessionHeaderStrategy::class)]
 final class ResponseSessionHeaderStrategyTest extends TestCase
 {
     private ResponseSessionHeaderStrategy $responseSessionHeaderStrategy;

@@ -6,6 +6,7 @@ namespace Tests\Handlers;
 
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
@@ -21,11 +22,7 @@ use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Resolvers\CookiesResolver;
 
-/**
- * Test for TargetRouteHandler.
- * 
- * @class TargetRouteHandlerTest
- */
+#[CoversClass(TargetRouteHandler::class)]
 final class TargetRouteHandlerTest extends TestCase
 {
     private RouteParamResolver $routeParamResolver;

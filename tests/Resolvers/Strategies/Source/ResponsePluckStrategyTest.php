@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Resolvers\Strategies\Transform;
 
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,11 +15,7 @@ use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Enums\OrderType;
 use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
 
-/**
- * Test for ResponsePluckStrategy.
- * 
- * @class ResponsePluckStrategyTest
- */
+#[CoversClass(ResponsePluckStrategy::class)]
 final class ResponsePluckStrategyTest extends TestCase
 {
     private ResponsePluckStrategy $responsePluckStrategy;

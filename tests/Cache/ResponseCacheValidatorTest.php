@@ -6,15 +6,12 @@ namespace Tests\Cache\ResponseCacheValidatorTest;
 
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Arr;
 use DemonDextralHorn\Cache\ResponseCacheValidator;
 
-/**
- * Test for ResponseCacheValidator.
- * 
- * @class ResponseCacheValidatorTest
- */
+#[CoversClass(ResponseCacheValidator::class)]
 final class ResponseCacheValidatorTest extends TestCase
 {
     private ResponseCacheValidator $responseCacheValidator;

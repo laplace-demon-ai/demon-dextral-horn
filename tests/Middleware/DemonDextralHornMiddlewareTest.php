@@ -7,6 +7,7 @@ namespace Tests\Middleware;
 use DemonDextralHorn\Middleware\DemonDextralHornMiddleware;
 use DemonDextralHorn\Jobs\DemonDextralHornJob;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,11 +15,7 @@ use DemonDextralHorn\Enums\HttpHeaderType;
 use DemonDextralHorn\Enums\PrefetchType;
 use Tests\TestCase;
 
-/**
- * Test the DemonDextralHornMiddlewareTest.
- *
- * @class DemonDextralHornMiddlewareTest
- */
+#[CoversClass(DemonDextralHornMiddleware::class)]
 final class DemonDextralHornMiddlewareTest extends TestCase
 {
     public function setUp(): void

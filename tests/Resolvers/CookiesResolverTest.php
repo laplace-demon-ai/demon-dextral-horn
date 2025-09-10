@@ -10,16 +10,13 @@ use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Resolvers\Strategies\Source\ResponseSessionHeaderStrategy;
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Arr;
 
-/**
- * Test for CookiesResolver.
- * 
- * @class CookiesResolverTest
- */
+#[CoversClass(CookiesResolver::class)]
 final class CookiesResolverTest extends TestCase
 {
     private CookiesResolver $resolver;

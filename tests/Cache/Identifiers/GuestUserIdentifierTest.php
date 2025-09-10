@@ -8,13 +8,10 @@ use DemonDextralHorn\Cache\Identifiers\GuestUserIdentifier;
 use DemonDextralHorn\Data\TargetRouteData;
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Illuminate\Http\Request;
 
-/**
- * Test class for GuestUserIdentifier
- *
- * @class GuestUserIdentifierTest
- */
+#[CoversClass(GuestUserIdentifier::class)]
 final class GuestUserIdentifierTest extends TestCase
 {
     private GuestUserIdentifier $guestUserIdentifier;

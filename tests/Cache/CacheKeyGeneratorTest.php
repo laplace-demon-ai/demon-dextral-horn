@@ -6,6 +6,7 @@ namespace Tests\Cache;
 
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Illuminate\Http\Request;
 use DemonDextralHorn\Cache\CacheKeyGenerator;
 use DemonDextralHorn\Cache\Identifiers\Contracts\UserIdentifierInterface;
@@ -13,11 +14,7 @@ use DemonDextralHorn\Data\TargetRouteData;
 use DemonDextralHorn\Enums\AuthDriverType;
 use DemonDextralHorn\Enums\HttpHeaderType;
 
-/**
- * Test for CacheKeyGenerator.
- * 
- * @class CacheKeyGeneratorTest
- */
+#[CoversClass(CacheKeyGenerator::class)]
 final class CacheKeyGeneratorTest extends TestCase
 {
     private CacheKeyGenerator $cacheKeyGenerator;

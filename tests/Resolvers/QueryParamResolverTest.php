@@ -6,6 +6,7 @@ namespace Tests\Resolvers;
 
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Illuminate\Http\Request;
 use DemonDextralHorn\Resolvers\QueryParamResolver;
 use DemonDextralHorn\Data\RequestData;
@@ -13,11 +14,7 @@ use DemonDextralHorn\Resolvers\Strategies\Transform\IncrementStrategy;
 use DemonDextralHorn\Resolvers\Strategies\Source\ForwardValueStrategy;
 use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
 
-/**
- * Test for QueryParamResolver.
- * 
- * @class QueryParamResolverTest
- */
+#[CoversClass(QueryParamResolver::class)]
 final class QueryParamResolverTest extends TestCase
 {
     private QueryParamResolver $resolver;
