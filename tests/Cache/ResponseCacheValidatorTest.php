@@ -87,7 +87,7 @@ final class ResponseCacheValidatorTest extends TestCase
     public function it_rejects_streaming_responses(): void
     {
         /* SETUP */
-        $response = new Response('', 200, [
+        $response = new Response('', Response::HTTP_OK, [
             'Content-Type' => 'text/event-stream',
         ]);
 
@@ -107,7 +107,7 @@ final class ResponseCacheValidatorTest extends TestCase
     public function it_rejects_responses_exceeding_max_size(): void
     {
         /* SETUP */
-        $response = new Response('bigContent', 200, ['Content-Type' => 'text/html']);
+        $response = new Response('bigContent', Response::HTTP_OK, ['Content-Type' => 'text/html']);
         $response->headers->set('Content-Length', (string) (2 * 1024 * 1024)); // 2MB
 
         /* EXECUTE */

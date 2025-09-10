@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DemonDextralHorn;
 
 use DemonDextralHorn\Cache\CacheKeyGenerator;
+use DemonDextralHorn\Cache\CacheTagGenerator;
 use DemonDextralHorn\Cache\Identifiers\Contracts\UserIdentifierInterface;
 use DemonDextralHorn\Cache\Identifiers\GuestUserIdentifier;
 use DemonDextralHorn\Cache\Identifiers\JwtUserIdentifier;
@@ -50,23 +51,13 @@ final class DemonDextralHornServiceProvider extends ServiceProvider
     {
         $this->configure();
 
+        $this->configureSpatieResponseCache();
+
         // Bind the target route resolver interface to its implementation
         $this->app->bind(
             TargetRouteResolverInterface::class,
             TargetRouteResolver::class
         );
-
-        // Register the facade for the TargetRouteHandler (DemonDextralHorn)
-        $this->app->singleton('demon-dextral-horn', function (Container $app) {
-            return new TargetRouteHandler(
-                $app->make(RouteParamResolver::class),
-                $app->make(QueryParamResolver::class),
-                $app->make(HeadersResolver::class),
-                $app->make(CookiesResolver::class),
-                $app->make(RouteDispatcher::class),
-                $app->make(ResponseCacheValidator::class),
-            );
-        });
 
         // Bind UserIdentifierInterface to specific identifier implementations based on the config
         $this->app->bind(UserIdentifierInterface::class, function (Container $app) {
@@ -79,13 +70,7 @@ final class DemonDextralHornServiceProvider extends ServiceProvider
             };
         });
 
-        // Register the facade for the ResponseCache, and bind the ResponseCacheRepository from Spatie's package, and CacheKeyGenerator
-        $this->app->singleton('response-cache', function (Container $app) {
-            return new ResponseCache(
-                $app->make(ResponseCacheRepository::class),
-                $app->make(CacheKeyGenerator::class)
-            );
-        });
+        $this->registerFacades();
     }
 
     /**
@@ -121,6 +106,53 @@ final class DemonDextralHornServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__ . '/../config/demon-dextral-horn.php' => config_path('demon-dextral-horn.php'),
             ], 'demon-dextral-horn');
+        }
+    }
+
+    /**
+     * Register facades.
+     *
+     * @return void
+     */
+    protected function registerFacades(): void
+    {
+        // Register the facade for the TargetRouteHandler (DemonDextralHorn)
+        $this->app->singleton('demon-dextral-horn', function (Container $app) {
+            return new TargetRouteHandler(
+                $app->make(RouteParamResolver::class),
+                $app->make(QueryParamResolver::class),
+                $app->make(HeadersResolver::class),
+                $app->make(CookiesResolver::class),
+                $app->make(RouteDispatcher::class),
+                $app->make(ResponseCacheValidator::class),
+            );
+        });
+
+        // Register the facade for the ResponseCache, and inject the ResponseCacheRepository from Spatie's package, CacheKeyGenerator and CacheTagGenerator
+        $this->app->singleton('response-cache', function (Container $app) {
+            return new ResponseCache(
+                $app->make(ResponseCacheRepository::class),
+                $app->make(UserIdentifierInterface::class),
+                $app->make(CacheKeyGenerator::class),
+                $app->make(CacheTagGenerator::class),
+            );
+        });
+    }
+
+    /**
+     * Configure Spatie Response Cache package settings based on DemonDextralHorn configuration.
+     *
+     * @return void
+     */
+    protected function configureSpatieResponseCache(): void
+    {
+        // If user has not published the responsecache.php config file, we set the our own mapping.
+        if (! file_exists(config_path('responsecache.php'))) {
+            // Map cache_store from our package config to Spatie's responsecache config
+            $this->app['config']->set(
+                'responsecache.cache_store',
+                $this->app['config']->get('demon-dextral-horn.defaults.cache_store')
+            );
         }
     }
 }

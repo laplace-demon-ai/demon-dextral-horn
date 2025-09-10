@@ -23,9 +23,10 @@ return [
         'prefetch_header' => env('PREFETCH_HEADER', 'Demon-Prefetch-Call'),
         'auth_driver' => config('auth.guards.api.driver', AuthDriverType::SESSION->value), // It can get session or jwt at the moment (values of AuthDriverType)
         'session_cookie_name' => config('session.cookie', 'laravel_session'),
+        'cache_store' => env('PREFETCH_RESPONSE_CACHE_DRIVER', 'redis'), // Map spatie laravel-responsecache config 'cache_store' to our package config
     ],
     'rules' => [
-        /**
+        /*
          * Sample rule logic for showcasing different prefetching strategies/scenarios.
          */
         [
@@ -36,7 +37,7 @@ return [
                 'route' => 'sample.trigger.route.name',
             ],
             'targets' => [
-                /**
+                /*
                  * Sample target route with only query parameter, increment strategy will be applied.
                  * e.g. /api/sample?page=1
                  */
@@ -54,7 +55,7 @@ return [
                     ],
                 ],
 
-                /**
+                /*
                  * Sample target route with only query parameter, forward value strategy will be applied.
                  * e.g. /api/sample?query_trigger_key=value will be /api/sample?query_target_key=value
                  * This also showcase that the query parameter can be renamed during the forwarding process.
@@ -72,7 +73,7 @@ return [
                     ],
                 ],
 
-                /**
+                /*
                  * Sample target route without parameters, so no strategy is needed for resolving the parameters.
                  * e.g. /api/sample
                  */
@@ -81,7 +82,7 @@ return [
                     'route' => 'sample.target.route.without.params',
                 ],
 
-                /**
+                /*
                  * Sample target route with route parameter, strategy will be applied to resolve the route parameter from the trigger response data.
                  * e.g. /api/sample/{route_key} where route_key is extracted from the response data.id
                  */
@@ -99,7 +100,7 @@ return [
                     ],
                 ],
 
-                /**
+                /*
                  * Sample target route with route parameter, strategy will be applied to resolve multiple route parameters from the trigger response data.
                  * e.g. /api/trigger where first 3 ids are extracted/plucked from the response data collection and target route (e.g. api/target/{route_key}) will be dispatched with these 3 ids - route will be called 3 times with each ids separately.
                  */
@@ -121,7 +122,7 @@ return [
             ],
         ],
 
-        /**
+        /*
          * Sample rule logic for handling login requests including JWT token extraction, laravel session handling etc.
          */
         [
@@ -132,7 +133,7 @@ return [
                 'route' => 'auth.login',
             ],
             'targets' => [
-                /**
+                /*
                  * Sample target route with authorization header regarding JWT token.
                  * The Bearer token will be extracted from the response data and added to the authorization header.
                  */
@@ -150,7 +151,7 @@ return [
                     ],
                 ],
 
-                /**
+                /*
                  * Sample target route with laravel session cookie.
                  * The session cookie will be extracted from the response headers (Set-Cookie) and set in the request cookies.
                  */

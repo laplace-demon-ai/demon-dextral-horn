@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Cache;
 
-use DemonDextralHorn\Cache\Identifiers\Contracts\UserIdentifierInterface;
 use DemonDextralHorn\Data\TargetRouteData;
 use DemonDextralHorn\Enums\HttpHeaderType;
 use Illuminate\Support\Arr;
@@ -20,25 +19,15 @@ final class CacheKeyGenerator
     public const HASH_ALGORITHM = 'xxh128';
 
     /**
-     * Create a new CacheKeyGenerator instance.
-     *
-     * @param UserIdentifierInterface $identifier
-     */
-    public function __construct(
-        protected UserIdentifierInterface $identifier
-    ) {}
-
-    /**
      * Generate a unique cache key based on the target route data (by adding user identifier for user specific caching).
      *
      * @param TargetRouteData $targetRouteData
+     * @param string $userIdentifier
      *
      * @return string
      */
-    public function generate(TargetRouteData $targetRouteData): string
+    public function generate(TargetRouteData $targetRouteData, string $userIdentifier): string
     {
-        $userIdentifier = $this->identifier->getIdentifierFor($targetRouteData);
-
         $acceptLanguage = Arr::get($targetRouteData->headers, HttpHeaderType::ACCEPT_LANGUAGE->value);
 
         $keyComponents = [
@@ -111,8 +100,8 @@ final class CacheKeyGenerator
      */
     private function generateHash(array $keyComponents): string
     {
-        $json = json_encode($keyComponents, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $jsonKeyComponents = json_encode($keyComponents, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
-        return hash(self::HASH_ALGORITHM, $json);
+        return hash(self::HASH_ALGORITHM, $jsonKeyComponents);
     }
 }
