@@ -10,13 +10,10 @@ use DemonDextralHorn\Enums\AuthDriverType;
 use DemonDextralHorn\Enums\HttpHeaderType;
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Illuminate\Http\Request;
 
-/**
- * Test class for JwtUserIdentifier.
- * 
- * @class JwtUserIdentifierTest
- */
+#[CoversClass(JwtUserIdentifier::class)]
 final class JwtUserIdentifierTest extends TestCase
 {
     private JwtUserIdentifier $jwtUserIdentifier;

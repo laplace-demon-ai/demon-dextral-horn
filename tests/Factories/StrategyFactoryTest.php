@@ -6,15 +6,12 @@ namespace Tests\Factories;
 
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\CoversClass;
 use InvalidArgumentException;
 use DemonDextralHorn\Factories\StrategyFactory;
 use DemonDextralHorn\Resolvers\Contracts\StrategyInterface;
 
-/**
- * Test for StrategyFactory.
- * 
- * @class StrategyFactoryTest
- */
+#[CoversClass(StrategyFactory::class)]
 final class StrategyFactoryTest extends TestCase
 {
     private StrategyFactory $strategyFactory;

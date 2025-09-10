@@ -9,13 +9,10 @@ use DemonDextralHorn\Data\TargetRouteData;
 use DemonDextralHorn\Enums\AuthDriverType;
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Illuminate\Http\Request;
 
-/**
- * Test cases for SessionUserIdentifier.
- *
- * @class SessionUserIdentifierTest
- */
+#[CoversClass(SessionUserIdentifier::class)]
 final class SessionUserIdentifierTest extends TestCase
 {
     private SessionUserIdentifier $sessionUserIdentifier;

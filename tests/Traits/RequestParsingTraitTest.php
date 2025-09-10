@@ -6,14 +6,11 @@ namespace Tests\Traits;
 
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Illuminate\Support\Arr;
 use DemonDextralHorn\Traits\RequestParsingTrait;
 
-/**
- * Test for RequestParsingTrait.
- * 
- * @class RequestParsingTraitTest
- */
+#[CoversClass(RequestParsingTrait::class)]
 final class RequestParsingTraitTest extends TestCase
 {
     private $anonymousClass;

@@ -9,14 +9,11 @@ use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\HeadersData;
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 
-/**
- * Test for TargetRouteResolver.
- * 
- * @class TargetRouteResolverTest
- */
+#[CoversClass(TargetRouteResolver::class)]
 final class TargetRouteResolverTest extends TestCase
 {
     private TargetRouteResolver $resolver;

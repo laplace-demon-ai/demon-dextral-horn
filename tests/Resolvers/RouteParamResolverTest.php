@@ -6,6 +6,7 @@ namespace Tests\Resolvers;
 
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use DemonDextralHorn\Resolvers\RouteParamResolver;
@@ -18,11 +19,7 @@ use Illuminate\Support\Arr;
 use InvalidArgumentException;
 use TypeError;
 
-/**
- * Test for RouteParamResolver.
- * 
- * @class RouteParamResolverTest
- */
+#[CoversClass(RouteParamResolver::class)]
 final class RouteParamResolverTest extends TestCase
 {
     private RouteParamResolver $resolver;

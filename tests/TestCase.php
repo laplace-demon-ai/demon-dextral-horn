@@ -9,6 +9,7 @@ use DemonDextralHorn\DemonDextralHornServiceProvider;
 use DemonDextralHorn\Middleware\DemonDextralHornMiddleware;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Cookie;
+use Spatie\ResponseCache\ResponseCacheServiceProvider;
 
 /**
  * Base test case for the package.
@@ -33,6 +34,7 @@ class TestCase extends OrchestraTestCase
     protected function getPackageProviders($app): array
     {
         return [
+            ResponseCacheServiceProvider::class,
             DemonDextralHornServiceProvider::class,
         ];
     }

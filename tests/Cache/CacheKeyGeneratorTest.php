@@ -6,24 +6,19 @@ namespace Tests\Cache;
 
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
-use ReflectionClass;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Illuminate\Http\Request;
 use DemonDextralHorn\Cache\CacheKeyGenerator;
-use DemonDextralHorn\Cache\Identifiers\GuestUserIdentifier;
+use DemonDextralHorn\Cache\Identifiers\Contracts\UserIdentifierInterface;
 use DemonDextralHorn\Data\TargetRouteData;
 use DemonDextralHorn\Enums\AuthDriverType;
 use DemonDextralHorn\Enums\HttpHeaderType;
-use DemonDextralHorn\Cache\Identifiers\JwtUserIdentifier;
-use DemonDextralHorn\Cache\Identifiers\SessionUserIdentifier;
 
-/**
- * Test for CacheKeyGenerator.
- * 
- * @class CacheKeyGeneratorTest
- */
+#[CoversClass(CacheKeyGenerator::class)]
 final class CacheKeyGeneratorTest extends TestCase
 {
     private CacheKeyGenerator $cacheKeyGenerator;
+    private UserIdentifierInterface $identifier;
 
     public function setUp(): void
     {
@@ -31,54 +26,7 @@ final class CacheKeyGeneratorTest extends TestCase
 
         config(['demon-dextral-horn.defaults.auth_driver' => AuthDriverType::JWT->value]);
         $this->cacheKeyGenerator = app(CacheKeyGenerator::class);
-    }
-
-    #[Test]
-    public function it_successfully_creates_jwt_user_identifier_based_on_config(): void
-    {
-        /* SETUP */
-        config(['demon-dextral-horn.defaults.auth_driver' => AuthDriverType::JWT->value]);
-        $cacheKeyGenerator = app(CacheKeyGenerator::class);
-        $reflection = new ReflectionClass($cacheKeyGenerator);
-        $property = $reflection->getProperty('identifier');
-
-        /* EXECUTE */
-        $identifier = $property->getValue($cacheKeyGenerator);
-        
-        /* ASSERT */
-        $this->assertInstanceOf(JwtUserIdentifier::class, $identifier);
-    }
-
-    #[Test]
-    public function it_successfully_creates_session_user_identifier_based_on_config(): void
-    {
-        /* SETUP */
-        config(['demon-dextral-horn.defaults.auth_driver' => AuthDriverType::SESSION->value]);
-        $cacheKeyGenerator = app(CacheKeyGenerator::class);
-        $reflection = new ReflectionClass($cacheKeyGenerator);
-        $property = $reflection->getProperty('identifier');
-
-        /* EXECUTE */
-        $identifier = $property->getValue($cacheKeyGenerator);
-        
-        /* ASSERT */
-        $this->assertInstanceOf(SessionUserIdentifier::class, $identifier);
-    }
-
-    #[Test]
-    public function it_successfully_creates_guest_user_identifier_based_on_config_as_fallback(): void
-    {
-        /* SETUP */
-        config(['demon-dextral-horn.defaults.auth_driver' => null]);
-        $cacheKeyGenerator = app(CacheKeyGenerator::class);
-        $reflection = new ReflectionClass($cacheKeyGenerator);
-        $property = $reflection->getProperty('identifier');
-
-        /* EXECUTE */
-        $identifier = $property->getValue($cacheKeyGenerator);
-        
-        /* ASSERT */
-        $this->assertInstanceOf(GuestUserIdentifier::class, $identifier);
+        $this->identifier = app(UserIdentifierInterface::class);
     }
 
     #[Test]
@@ -93,10 +41,11 @@ final class CacheKeyGeneratorTest extends TestCase
             headers: [HttpHeaderType::ACCEPT_LANGUAGE->value => 'en-US,en;q=0.5'],
             cookies: []
         );
+        $userIdentifier = $this->identifier->getIdentifierFor($targetRouteData);
 
         /* EXECUTE */
-        $firstKey = $this->cacheKeyGenerator->generate($targetRouteData);
-        $secondKey = $this->cacheKeyGenerator->generate($targetRouteData);
+        $firstKey = $this->cacheKeyGenerator->generate($targetRouteData, $userIdentifier);
+        $secondKey = $this->cacheKeyGenerator->generate($targetRouteData, $userIdentifier);
 
         /* ASSERT */
         $this->assertStringContainsString(config('demon-dextral-horn.defaults.cache_prefix') . ':', $firstKey);
@@ -124,10 +73,12 @@ final class CacheKeyGeneratorTest extends TestCase
             headers: [HttpHeaderType::ACCEPT_LANGUAGE->value => 'en-US,en;q=0.5'],
             cookies: []
         );
+        $firstUserIdentifier = $this->identifier->getIdentifierFor($firstTargetRouteData);
+        $secondUserIdentifier = $this->identifier->getIdentifierFor($secondTargetRouteData);
 
         /* EXECUTE */
-        $firstKey = $this->cacheKeyGenerator->generate($firstTargetRouteData);
-        $secondKey = $this->cacheKeyGenerator->generate($secondTargetRouteData);
+        $firstKey = $this->cacheKeyGenerator->generate($firstTargetRouteData, $firstUserIdentifier);
+        $secondKey = $this->cacheKeyGenerator->generate($secondTargetRouteData, $secondUserIdentifier);
 
         /* ASSERT */
         $this->assertSame($firstKey, $secondKey);
@@ -153,10 +104,12 @@ final class CacheKeyGeneratorTest extends TestCase
             headers: [HttpHeaderType::ACCEPT_LANGUAGE->value => 'en-US,en;q=0.5'],
             cookies: []
         );
+        $firstUserIdentifier = $this->identifier->getIdentifierFor($firstTargetRouteData);
+        $secondUserIdentifier = $this->identifier->getIdentifierFor($secondTargetRouteData);
 
         /* EXECUTE */
-        $firstKey = $this->cacheKeyGenerator->generate($firstTargetRouteData);
-        $secondKey = $this->cacheKeyGenerator->generate($secondTargetRouteData);
+        $firstKey = $this->cacheKeyGenerator->generate($firstTargetRouteData, $firstUserIdentifier);
+        $secondKey = $this->cacheKeyGenerator->generate($secondTargetRouteData, $secondUserIdentifier);
 
         /* ASSERT */
         $this->assertSame($firstKey, $secondKey);
@@ -189,10 +142,12 @@ final class CacheKeyGeneratorTest extends TestCase
             ],
             cookies: []
         );
+        $firstUserIdentifier = $this->identifier->getIdentifierFor($firstTargetRouteData);
+        $secondUserIdentifier = $this->identifier->getIdentifierFor($secondTargetRouteData);
 
         /* EXECUTE */
-        $firstKey = $this->cacheKeyGenerator->generate($firstTargetRouteData);
-        $secondKey = $this->cacheKeyGenerator->generate($secondTargetRouteData);
+        $firstKey = $this->cacheKeyGenerator->generate($firstTargetRouteData, $firstUserIdentifier);
+        $secondKey = $this->cacheKeyGenerator->generate($secondTargetRouteData, $secondUserIdentifier);
 
         /* ASSERT */
         $this->assertStringContainsString(config('demon-dextral-horn.defaults.cache_prefix') . ':', $firstKey);
@@ -205,6 +160,7 @@ final class CacheKeyGeneratorTest extends TestCase
     {
         /* SETUP */
         config(['demon-dextral-horn.defaults.auth_driver' => AuthDriverType::SESSION->value]);
+        $identifier = app(UserIdentifierInterface::class);
         $cacheKeyGenerator = app(CacheKeyGenerator::class);
         $firstTargetRouteData = new TargetRouteData(
             routeName: 'sample.route',
@@ -222,10 +178,12 @@ final class CacheKeyGeneratorTest extends TestCase
             headers: [HttpHeaderType::ACCEPT_LANGUAGE->value => 'en-US,en;q=0.5'],
             cookies: ['session_cookie' => config('demon-dextral-horn.defaults.session_cookie_name') . '=second_session_cookie_value; Path=/; HttpOnly; SameSite=Lax'] // different session cookie
         );
+        $firstUserIdentifier = $identifier->getIdentifierFor($firstTargetRouteData);
+        $secondUserIdentifier = $identifier->getIdentifierFor($secondTargetRouteData);
 
         /* EXECUTE */
-        $firstKey = $cacheKeyGenerator->generate($firstTargetRouteData);
-        $secondKey = $cacheKeyGenerator->generate($secondTargetRouteData);
+        $firstKey = $cacheKeyGenerator->generate($firstTargetRouteData, $firstUserIdentifier);
+        $secondKey = $cacheKeyGenerator->generate($secondTargetRouteData, $secondUserIdentifier);
 
         /* ASSERT */
         $this->assertStringContainsString(config('demon-dextral-horn.defaults.cache_prefix') . ':', $firstKey);

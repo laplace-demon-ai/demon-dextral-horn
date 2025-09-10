@@ -6,6 +6,7 @@ namespace Tests\Jobs;
 
 use DemonDextralHorn\Jobs\DemonDextralHornJob;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,11 +17,7 @@ use DemonDextralHorn\Enums\PrefetchType;
 use DemonDextralHorn\Resolvers\Contracts\TargetRouteResolverInterface;
 use Tests\TestCase;
 
-/**
- * Test the DemonDextralHornJob.
- *
- * @class DemonDextralHornJobTest
- */
+#[CoversClass(DemonDextralHornJob::class)]
 final class DemonDextralHornJobTest extends TestCase
 {
     private DemonDextralHornJob $job;

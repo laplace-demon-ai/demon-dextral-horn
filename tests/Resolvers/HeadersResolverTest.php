@@ -12,15 +12,12 @@ use DemonDextralHorn\Enums\HttpHeaderType;
 use DemonDextralHorn\Enums\PrefetchType;
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Arr;
 
-/**
- * Test for HeadersResolver.
- * 
- * @class HeadersResolverTest
- */
+#[CoversClass(HeadersResolver::class)]
 final class HeadersResolverTest extends TestCase
 {
     private HeadersResolver $resolver;

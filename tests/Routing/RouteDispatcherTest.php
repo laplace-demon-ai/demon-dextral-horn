@@ -6,6 +6,7 @@ namespace Tests\Routing;
 
 use Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
@@ -17,11 +18,7 @@ use DemonDextralHorn\Data\TargetRouteData;
 use DemonDextralHorn\Enums\HttpHeaderType;
 use DemonDextralHorn\Events\RouteDispatchFailedEvent;
 
-/**
- * Test for RouteDispatcher.
- * 
- * @class RouteDispatcherTest
- */
+#[CoversClass(RouteDispatcher::class)]
 final class RouteDispatcherTest extends TestCase
 {
     private RouteDispatcher $dispatcher;
