@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @class DemonDextralHornMiddleware
  */
-final readonly class DemonDextralHornMiddleware
+final class DemonDextralHornMiddleware
 {
     /**
      * Handle an incoming request.

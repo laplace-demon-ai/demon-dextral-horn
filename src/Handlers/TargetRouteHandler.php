@@ -24,7 +24,7 @@ use Illuminate\Support\Arr;
  *
  * @class TargetRouteHandler
  */
-final class TargetRouteHandler
+final readonly class TargetRouteHandler
 {
     /**
      * Create a new TargetRouteHandler instance.

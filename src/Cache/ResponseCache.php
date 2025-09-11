@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @class ResponseCache
  */
-final class ResponseCache
+final readonly class ResponseCache
 {
     /**
      * Create a new ResponseCache instance with the injected ResponseCacheRepository (spatie response cache)

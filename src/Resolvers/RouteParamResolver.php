@@ -14,14 +14,14 @@ use Illuminate\Support\Arr;
  *
  * @class RouteParamResolver
  */
-final class RouteParamResolver extends AbstractResolver
+final readonly class RouteParamResolver extends AbstractResolver
 {
     /**
      * Constructor for the resolver.
      *
      * @param StrategyFactory $strategyFactory
      */
-    public function __construct(private readonly StrategyFactory $strategyFactory) {}
+    public function __construct(private StrategyFactory $strategyFactory) {}
 
     /**
      * {@inheritDoc}

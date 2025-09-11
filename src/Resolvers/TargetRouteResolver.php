@@ -15,7 +15,7 @@ use Illuminate\Support\Arr;
  *
  * @class TargetRouteResolver
  */
-final class TargetRouteResolver extends AbstractResolver implements TargetRouteResolverInterface
+final readonly class TargetRouteResolver extends AbstractResolver implements TargetRouteResolverInterface
 {
     /**
      * {@inheritDoc}

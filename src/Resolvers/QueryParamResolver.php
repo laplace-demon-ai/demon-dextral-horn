@@ -14,14 +14,14 @@ use Illuminate\Support\Arr;
  *
  * @class QueryParamResolver
  */
-final class QueryParamResolver extends AbstractResolver
+final readonly class QueryParamResolver extends AbstractResolver
 {
     /**
      * Constructor for the resolver.
      *
      * @param StrategyFactory $strategyFactory
      */
-    public function __construct(private readonly StrategyFactory $strategyFactory) {}
+    public function __construct(private StrategyFactory $strategyFactory) {}
 
     /**
      * {@inheritDoc}

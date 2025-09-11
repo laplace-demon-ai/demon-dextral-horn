@@ -11,4 +11,4 @@ use DemonDextralHorn\Resolvers\Contracts\ResolverInterface;
  *
  * @abstract AbstractResolver
  */
-abstract class AbstractResolver implements ResolverInterface {}
+abstract readonly class AbstractResolver implements ResolverInterface {}

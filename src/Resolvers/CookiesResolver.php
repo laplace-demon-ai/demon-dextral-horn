@@ -14,14 +14,14 @@ use Illuminate\Support\Arr;
  *
  * @class CookiesResolver
  */
-final class CookiesResolver extends AbstractResolver
+final readonly class CookiesResolver extends AbstractResolver
 {
     /**
      * Constructor for the resolver.
      *
      * @param StrategyFactory $strategyFactory
      */
-    public function __construct(private readonly StrategyFactory $strategyFactory) {}
+    public function __construct(private StrategyFactory $strategyFactory) {}
 
     /**
      * {@inheritDoc}
