@@ -25,7 +25,7 @@ final class CacheTagGenerator
      */
     public function generate(TargetRouteData $targetRouteData, string $userIdentifier): array
     {
-        $defaultTag = config('demon-dextral-horn.defaults.cache_prefix');
+        $defaultTag = config('demon-dextral-horn.defaults.prefetch_prefix');
 
         $tags = [
             // Normalize and add route name as a tag

@@ -42,14 +42,15 @@ final class CacheKeyGeneratorTest extends TestCase
             cookies: []
         );
         $userIdentifier = $this->identifier->getIdentifierFor($targetRouteData);
+        $prefetchPrefix = config('demon-dextral-horn.defaults.prefetch_prefix');
 
         /* EXECUTE */
         $firstKey = $this->cacheKeyGenerator->generate($targetRouteData, $userIdentifier);
         $secondKey = $this->cacheKeyGenerator->generate($targetRouteData, $userIdentifier);
 
         /* ASSERT */
-        $this->assertStringContainsString(config('demon-dextral-horn.defaults.cache_prefix') . ':', $firstKey);
-        $this->assertStringContainsString(config('demon-dextral-horn.defaults.cache_prefix') . ':', $secondKey);
+        $this->assertStringContainsString($prefetchPrefix . ':', $firstKey);
+        $this->assertStringContainsString($prefetchPrefix . ':', $secondKey);
         $this->assertSame($firstKey, $secondKey);
     }
 
@@ -144,14 +145,15 @@ final class CacheKeyGeneratorTest extends TestCase
         );
         $firstUserIdentifier = $this->identifier->getIdentifierFor($firstTargetRouteData);
         $secondUserIdentifier = $this->identifier->getIdentifierFor($secondTargetRouteData);
+        $prefetchPrefix = config('demon-dextral-horn.defaults.prefetch_prefix');
 
         /* EXECUTE */
         $firstKey = $this->cacheKeyGenerator->generate($firstTargetRouteData, $firstUserIdentifier);
         $secondKey = $this->cacheKeyGenerator->generate($secondTargetRouteData, $secondUserIdentifier);
 
         /* ASSERT */
-        $this->assertStringContainsString(config('demon-dextral-horn.defaults.cache_prefix') . ':', $firstKey);
-        $this->assertStringContainsString(config('demon-dextral-horn.defaults.cache_prefix') . ':', $secondKey);
+        $this->assertStringContainsString($prefetchPrefix . ':', $firstKey);
+        $this->assertStringContainsString($prefetchPrefix . ':', $secondKey);
         $this->assertNotSame($firstKey, $secondKey);
     }
 
@@ -180,14 +182,15 @@ final class CacheKeyGeneratorTest extends TestCase
         );
         $firstUserIdentifier = $identifier->getIdentifierFor($firstTargetRouteData);
         $secondUserIdentifier = $identifier->getIdentifierFor($secondTargetRouteData);
+        $prefetchPrefix = config('demon-dextral-horn.defaults.prefetch_prefix');
 
         /* EXECUTE */
         $firstKey = $cacheKeyGenerator->generate($firstTargetRouteData, $firstUserIdentifier);
         $secondKey = $cacheKeyGenerator->generate($secondTargetRouteData, $secondUserIdentifier);
 
         /* ASSERT */
-        $this->assertStringContainsString(config('demon-dextral-horn.defaults.cache_prefix') . ':', $firstKey);
-        $this->assertStringContainsString(config('demon-dextral-horn.defaults.cache_prefix') . ':', $secondKey);
+        $this->assertStringContainsString($prefetchPrefix . ':', $firstKey);
+        $this->assertStringContainsString($prefetchPrefix . ':', $secondKey);
         $this->assertNotSame($firstKey, $secondKey);
     }
 }
