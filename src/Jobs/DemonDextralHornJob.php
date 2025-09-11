@@ -6,10 +6,12 @@ namespace DemonDextralHorn\Jobs;
 
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
+use DemonDextralHorn\Events\DemonDextralHornJobFailedEvent;
 use DemonDextralHorn\Facades\DemonDextralHorn;
 use DemonDextralHorn\Resolvers\Contracts\TargetRouteResolverInterface;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Throwable;
 
 /**
  * Queue job to handle prefetching.
@@ -41,11 +43,32 @@ final class DemonDextralHornJob implements ShouldQueue
         // Handle the target routes
         DemonDextralHorn::handle($targetRoutes, $this->requestData, $this->responseData);
     }
+
+    /**
+     * Get the tags for the job.
+     *
+     * @return array
+     */
+    public function tags(): array
+    {
+        $prefetchPrefix = config('demon-dextral-horn.defaults.prefetch_prefix');
+
+        return [
+            $prefetchPrefix,
+            'attempt:' . $this->attempts(),
+        ];
+    }
+
+    /**
+     * Handle a job failure.
+     *
+     * @param Throwable $exception
+     *
+     * @return void
+     */
+    public function failed(Throwable $exception): void
+    {
+        // Fire event for job failure which can be used for logging etc.
+        event(new DemonDextralHornJobFailedEvent($this->requestData, $this->responseData));
+    }
 }
-
-/*
-todo:
-
-    public $tries = 1; => we can set it to 1 or 2 in case default is more than that, we dont want it so override it here to make sure it will not be retiried much
-    - (?) Maybe right in the seconds when the endpoints resolved/decided/handled, save some info in the db or redis so that the the endpoints are called so they are pending,, so that when it is requested, this status will be checked before making the actual call
-*/

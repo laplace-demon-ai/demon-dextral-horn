@@ -15,7 +15,10 @@ use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Data\HeadersData;
 use DemonDextralHorn\Enums\PrefetchType;
 use DemonDextralHorn\Resolvers\Contracts\TargetRouteResolverInterface;
+use DemonDextralHorn\Events\DemonDextralHornJobFailedEvent;
 use Tests\TestCase;
+use Exception;
+use Illuminate\Support\Facades\Event;
 
 #[CoversClass(DemonDextralHornJob::class)]
 final class DemonDextralHornJobTest extends TestCase
@@ -56,15 +59,19 @@ final class DemonDextralHornJobTest extends TestCase
     }
 
     #[Test]
-    public function it_tests(): void
+    public function it_calls_failed_method_when_job_fails(): void
     {
         /* SETUP */
-        $this->markTestSkipped('This test is not ready at the moment, skipping.');
-
+        Event::fake();
+        $exception = new Exception('Test failure');
+    
         /* EXECUTE */
-        $this->job->handle($this->targetRouteResolver);
+        $this->job->failed($exception);
 
         /* ASSERT */
-        
+        Event::assertDispatched(DemonDextralHornJobFailedEvent::class, function ($event) {
+            return $event->requestData === $this->requestData
+                && $event->responseData === $this->responseData;
+        });
     }
 }

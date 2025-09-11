@@ -26,7 +26,7 @@ final class CacheTagGeneratorTest extends TestCase
         parent::setUp();
 
         $this->cacheTagGenerator = app(CacheTagGenerator::class);
-        $this->defaultPrefix = config('demon-dextral-horn.defaults.cache_prefix');
+        $this->defaultPrefix = config('demon-dextral-horn.defaults.prefetch_prefix');
         config(['demon-dextral-horn.defaults.auth_driver' => AuthDriverType::JWT->value]);
         $this->identifier = app(UserIdentifierInterface::class);
     }

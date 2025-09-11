@@ -16,7 +16,7 @@ return [
     'defaults' => [
         'enabled' => env('PREFETCH_ENABLED', false), // Enable/disable prefetching, default is disabled
         'cache_ttl' => env('PREFETCH_CACHE_TTL', 60),
-        'cache_prefix' => env('PREFETCH_CACHE_PREFIX', 'demon_dextral_horn'),
+        'prefetch_prefix' => env('PREFETCH_PREFIX', 'demon_dextral_horn'),
         'cache_max_size' => env('PREFETCH_CACHE_MAX_SIZE', 1048576), // 1 MB = 1024 * 1024 bytes = 1048576 bytes
         'queue_connection' => env('PREFETCH_QUEUE_CONNECTION', 'redis'),
         'queue_name' => env('PREFETCH_QUEUE_NAME', 'prefetch'),

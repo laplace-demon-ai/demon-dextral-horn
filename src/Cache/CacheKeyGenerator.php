@@ -40,7 +40,7 @@ final class CacheKeyGenerator
         ];
 
         // We will get something like demon_dextral_horn:hashed_string
-        return config('demon-dextral-horn.defaults.cache_prefix') . ':' . $this->generateHash($keyComponents);
+        return config('demon-dextral-horn.defaults.prefetch_prefix') . ':' . $this->generateHash($keyComponents);
     }
 
     /**
