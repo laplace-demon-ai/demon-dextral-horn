@@ -16,14 +16,14 @@ use Illuminate\Support\Arr;
  *
  * @class HeadersResolver
  */
-final class HeadersResolver extends AbstractResolver
+final readonly class HeadersResolver extends AbstractResolver
 {
     /**
      * Constructor for the resolver.
      *
      * @param StrategyFactory $strategyFactory
      */
-    public function __construct(private readonly StrategyFactory $strategyFactory) {}
+    public function __construct(private StrategyFactory $strategyFactory) {}
 
     /**
      * {@inheritDoc}
