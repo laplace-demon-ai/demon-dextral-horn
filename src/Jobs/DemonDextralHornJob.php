@@ -16,7 +16,7 @@ use Illuminate\Foundation\Queue\Queueable;
  *
  * @class DemonDextralHornJob
  */
-final readonly class DemonDextralHornJob implements ShouldQueue
+final class DemonDextralHornJob implements ShouldQueue
 {
     use Queueable;
 
