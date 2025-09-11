@@ -6,8 +6,8 @@ namespace DemonDextralHorn\Jobs;
 
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
-use DemonDextralHorn\Facades\DemonDextralHorn;
 use DemonDextralHorn\Events\DemonDextralHornJobFailedEvent;
+use DemonDextralHorn\Facades\DemonDextralHorn;
 use DemonDextralHorn\Resolvers\Contracts\TargetRouteResolverInterface;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -63,7 +63,7 @@ final class DemonDextralHornJob implements ShouldQueue
      * Handle a job failure.
      *
      * @param Throwable $exception
-     * 
+     *
      * @return void
      */
     public function failed(Throwable $exception): void
