@@ -92,7 +92,7 @@ final readonly class ResponseCache
     public function forget(TargetRouteData $targetRouteData): bool
     {
         $key = $this->getCacheKey($targetRouteData);
-    
+
         return $this->cache->forget($key);
     }
 
@@ -192,7 +192,7 @@ final readonly class ResponseCache
      *
      * @return ResponseCacheRepository
      */
-    private function associateTagsToCache(?array $tags) 
+    private function associateTagsToCache(?array $tags)
     {
         try {
             return $this->cache->tags($tags);
