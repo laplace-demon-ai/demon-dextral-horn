@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Facade;
  * Facade for the ResponseCache.
  *
  * @method static void put(Response $response, TargetRouteData $targetRouteData)
+ * @method static bool has(TargetRouteData $targetRouteData)
+ * @method static Response|null get(TargetRouteData $targetRouteData)
+ * @method static bool forget(TargetRouteData $targetRouteData)
+ * @method static bool clear(?array $tags = [])
  *
  * @class ResponseCache
  */

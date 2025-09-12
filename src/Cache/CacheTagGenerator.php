@@ -48,7 +48,7 @@ final class CacheTagGenerator
      *
      * @return string
      */
-    private function normalizeTag(string $name): string
+    public function normalizeTag(string $name): string
     {
         if ($name === '') {
             return self::UNNAMED_TAG;
