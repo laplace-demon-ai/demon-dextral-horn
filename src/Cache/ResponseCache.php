@@ -7,6 +7,7 @@ namespace DemonDextralHorn\Cache;
 use BadMethodCallException;
 use DemonDextralHorn\Cache\Identifiers\Contracts\UserIdentifierInterface;
 use DemonDextralHorn\Data\TargetRouteData;
+use DemonDextralHorn\Events\TaggedCacheClearFailedEvent;
 use Spatie\ResponseCache\ResponseCacheRepository;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -54,6 +55,101 @@ final readonly class ResponseCache
     }
 
     /**
+     * Check if a cached response exists for the given target route data.
+     *
+     * @param TargetRouteData $targetRouteData
+     *
+     * @return bool
+     */
+    public function has(TargetRouteData $targetRouteData): bool
+    {
+        $key = $this->getCacheKey($targetRouteData);
+
+        return $this->cache->has($key);
+    }
+
+    /**
+     * Retrieve the cached response for the given target route data.
+     *
+     * @param TargetRouteData $targetRouteData
+     *
+     * @return Response|null
+     */
+    public function get(TargetRouteData $targetRouteData): ?Response
+    {
+        $key = $this->getCacheKey($targetRouteData);
+
+        return $this->cache->get($key);
+    }
+
+    /**
+     * Remove the cached response for the given target route data (cache key is generted from the target route data)
+     *
+     * @param TargetRouteData $targetRouteData
+     *
+     * @return bool Whether the cache entry was successfully removed.
+     */
+    public function forget(TargetRouteData $targetRouteData): bool
+    {
+        $key = $this->getCacheKey($targetRouteData);
+
+        return $this->cache->forget($key);
+    }
+
+    /**
+     * Clear the cached responses for the given tags (do NOT clear the whole cache if tags are not supported or no tags provided).
+     *
+     * @param array|null $tags
+     *
+     * @return bool
+     */
+    public function clear(?array $tags = []): bool
+    {
+        $defaultTag = config('demon-dextral-horn.defaults.prefetch_prefix');
+
+        // Remove duplicates and empty values, ensure default tag is always included
+        $allTags = array_values(array_unique(array_filter(array_merge([$defaultTag], $tags))));
+
+        // Get a tagged cache repository by associating the tags to the cache
+        $taggedCache = $this->associateTagsToCache($allTags);
+
+        // If the tagged cache is the same as the untagged cache, the driver doesn't support tags, so we fire an event and return false
+        if ($taggedCache === $this->cache) {
+            event(new TaggedCacheClearFailedEvent($allTags));
+
+            // Driver doesn't support tags, do NOT clear the whole cache - return false
+            return false;
+        }
+
+        return $taggedCache->clear();
+    }
+
+    /**
+     * Retrieve and remove the cached response for the given target route data.
+     *
+     * @param TargetRouteData $targetRouteData
+     *
+     * @return Response|null
+     */
+    public function pull(TargetRouteData $targetRouteData): ?Response
+    {
+        $key = $this->getCacheKey($targetRouteData);
+
+        // Check if the key exists before attempting to get and forget
+        if (! $this->cache->has($key)) {
+            return null;
+        }
+
+        // Retrieve the response
+        $response = $this->cache->get($key);
+
+        // Remove it from the cache
+        $this->cache->forget($key);
+
+        return $response;
+    }
+
+    /**
      * Generate a unique cache key based on the target route data and user identifier.
      *
      * @param TargetRouteData $targetRouteData
@@ -63,7 +159,7 @@ final readonly class ResponseCache
     private function getCacheKey(TargetRouteData $targetRouteData): string
     {
         // Get the user identifier
-        $userIdentifier = $this->getUserIdentifier($targetRouteData);
+        $userIdentifier = $this->identifier->getIdentifierFor($targetRouteData);
 
         return $this->cacheKeyGenerator->generate($targetRouteData, $userIdentifier);
     }
@@ -79,32 +175,30 @@ final readonly class ResponseCache
     private function getTaggedCache(TargetRouteData $targetRouteData): ResponseCacheRepository
     {
         // Get the user identifier
-        $userIdentifier = $this->getUserIdentifier($targetRouteData);
+        $userIdentifier = $this->identifier->getIdentifierFor($targetRouteData);
 
         // Generate tags based on route name and user identifier
         $allTags = $this->cacheTagGenerator->generate($targetRouteData, $userIdentifier);
 
-        if (empty($allTags)) {
-            return $this->cache;
-        }
-
-        try {
-            return $this->cache->tags($allTags);
-        } catch (BadMethodCallException $e) {
-            // Cache driver doesn't support tags - fallback to untagged cache. (redis and memcached support tags, file and database do not)
-            return $this->cache;
-        }
+        return $this->associateTagsToCache($allTags);
     }
 
     /**
-     * Get the user identifier string for the given target route data.
+     * Attempt to associate the given tags to the cache repository.
+     * If the cache driver does not support tags, return the untagged repository.
+     * (redis and memcached support tags, file and database do not)
      *
-     * @param TargetRouteData $targetRouteData
+     * @param array|null $tags
      *
-     * @return string
+     * @return ResponseCacheRepository
      */
-    private function getUserIdentifier(TargetRouteData $targetRouteData): string
+    private function associateTagsToCache(?array $tags)
     {
-        return $this->identifier->getIdentifierFor($targetRouteData);
+        try {
+            return $this->cache->tags($tags);
+        } catch (BadMethodCallException $e) {
+            // Cache driver doesn't support tags - fallback to untagged cache.
+            return $this->cache;
+        }
     }
 }
