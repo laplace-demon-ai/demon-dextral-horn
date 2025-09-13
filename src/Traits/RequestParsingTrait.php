@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Traits;
 
+use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Enums\HttpHeaderType;
 use DemonDextralHorn\Enums\PrefetchType;
-use DemonDextralHorn\Data\RequestData;
 
 /**
  * Trait for parsing requests and extracting relevant information.
@@ -98,10 +98,10 @@ trait RequestParsingTrait
 
     /**
      * Prepare mapped headers array with optional overrides and always include prefetch header.
-     * 
+     *
      * @param RequestData|null $requestData
      * @param array $overrides
-     * 
+     *
      * @return array
      */
     protected function prepareMappedHeaders(?RequestData $requestData, array $overrides = []): array
@@ -134,10 +134,10 @@ trait RequestParsingTrait
 
     /**
      * Prepare cookies array.
-     * 
+     *
      * @param RequestData|null $requestData
      * @param array $overrides
-     * 
+     *
      * @return array
      */
     protected function prepareCookies(?RequestData $requestData, array $overrides = []): array

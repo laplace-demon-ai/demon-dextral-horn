@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace DemonDextralHorn\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
-use DemonDextralHorn\Facades\ResponseCache;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\TargetRouteData;
+use DemonDextralHorn\Facades\ResponseCache;
 use DemonDextralHorn\Traits\RequestParsingTrait;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Middleware to handle cached responses for target routes before processing the actual request.
