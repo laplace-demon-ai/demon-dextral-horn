@@ -15,9 +15,9 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Middleware to handle prefetching of related data.
  *
- * @class DemonDextralHornMiddleware
+ * @class PrefetchTriggerMiddleware
  */
-final class DemonDextralHornMiddleware
+final class PrefetchTriggerMiddleware
 {
     /**
      * Handle an incoming request.

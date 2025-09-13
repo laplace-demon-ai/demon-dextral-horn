@@ -6,6 +6,7 @@ namespace DemonDextralHorn\Cache;
 
 use DemonDextralHorn\Data\TargetRouteData;
 use DemonDextralHorn\Enums\HttpHeaderType;
+use DemonDextralHorn\Traits\RequestParsingTrait;
 use Illuminate\Support\Arr;
 
 /**
@@ -15,6 +16,8 @@ use Illuminate\Support\Arr;
  */
 final class CacheKeyGenerator
 {
+    use RequestParsingTrait;
+
     // xxh128 is fast non-cryptographic hash, suitable for cache keys
     public const HASH_ALGORITHM = 'xxh128';
 
@@ -41,54 +44,6 @@ final class CacheKeyGenerator
 
         // We will get something like demon_dextral_horn:hashed_string
         return config('demon-dextral-horn.defaults.prefetch_prefix') . ':' . $this->generateHash($keyComponents);
-    }
-
-    /**
-     * Normalize route parameters by sorting them by key for deterministic output.
-     *
-     * @param array $routeParams
-     *
-     * @return array
-     */
-    private function normalizeRouteParams(array $routeParams): array
-    {
-        ksort($routeParams);
-
-        return $routeParams;
-    }
-
-    /**
-     * Normalize query parameters by sorting them by key, sorting the values of arrays, and converting empty strings to null for deterministic output.
-     *
-     * @param array $queryParams
-     *
-     * @return array
-     */
-    private function normalizeQueryParams(array $queryParams): array
-    {
-        // Recursive anonymous function to normalize the array
-        $normalize = function (&$array) use (&$normalize) {
-            if (array_is_list($array)) {
-                sort($array); // sort values for lists
-            } else {
-                ksort($array); // sort by keys for associative arrays
-            }
-
-            foreach ($array as &$value) {
-                if (is_array($value)) {
-                    $normalize($value);
-                } elseif ($value === '') {
-                    $value = null;
-                }
-            }
-
-            // We unset the reference to avoid potential side effects
-            unset($value);
-        };
-
-        $normalize($queryParams);
-
-        return $queryParams;
     }
 
     /**

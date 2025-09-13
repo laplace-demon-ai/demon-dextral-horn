@@ -460,4 +460,26 @@ final class RouteParamResolverTest extends TestCase
         $this->assertSame($id, $result[0]['id_key']);
         $this->assertNull($result[0]['null_key']);
     }
+
+    #[Test]
+    public function it_tests_from_request_sets_route_name_and_params_correctly(): void
+    {
+        /* SETUP */
+        $request = Request::create('/value1/value2/sample-target-route-success/value3/value4', Request::METHOD_GET);
+        $request->setRouteResolver(fn () => $this->app['router']->getRoutes()->match($request));
+
+        /* EXECUTE */
+        $requestData = RequestData::fromRequest($request);
+
+        /* ASSERT */
+        $this->assertSame('sample.target.route.name', $requestData->routeName);
+        $this->assertSame([
+            'param1' => 'value1',
+            'param2' => 'value2',
+            'param3' => 'value3',
+            'param4' => 'value4',
+        ], $requestData->routeParams);
+        $this->assertSame('/value1/value2/sample-target-route-success/value3/value4', $requestData->uri);
+        $this->assertSame(Request::METHOD_GET, $requestData->method);
+    }
 }

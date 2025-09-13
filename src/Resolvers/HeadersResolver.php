@@ -7,8 +7,8 @@ namespace DemonDextralHorn\Resolvers;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Enums\HttpHeaderType;
-use DemonDextralHorn\Enums\PrefetchType;
 use DemonDextralHorn\Factories\StrategyFactory;
+use DemonDextralHorn\Traits\RequestParsingTrait;
 use Illuminate\Support\Arr;
 
 /**
@@ -18,6 +18,8 @@ use Illuminate\Support\Arr;
  */
 final readonly class HeadersResolver extends AbstractResolver
 {
+    use RequestParsingTrait;
+
     /**
      * Constructor for the resolver.
      *
@@ -33,15 +35,6 @@ final readonly class HeadersResolver extends AbstractResolver
         ?RequestData $requestData = null,
         ?ResponseData $responseData = null
     ): array {
-        // Prepare custom prefetch header (Demon-Prefetch-Call)
-        $prefetchHeaderName = config('demon-dextral-horn.defaults.prefetch_header');
-        $prefetchHeaderValue = PrefetchType::AUTO->value;
-        $prefetchHeader = [
-            $prefetchHeaderName => $prefetchHeaderValue,
-        ];
-
-        $headersData = $requestData?->headers;
-
         $headers = Arr::get($targetRouteDefinition, 'headers', []);
 
         $resolvedHeaders = [];
@@ -61,18 +54,14 @@ final readonly class HeadersResolver extends AbstractResolver
             );
         }
 
-        // Map the headers to the correct format as hyphenated capitalization
-        $mappedHeaders = [
-            HttpHeaderType::AUTHORIZATION->value => Arr::get($resolvedHeaders, 'authorization')
-                ?? $headersData?->authorization, // Prioritize resolved headers before forwarding which enables config override or response token extraction
-            HttpHeaderType::ACCEPT->value => $headersData?->accept,
-            HttpHeaderType::ACCEPT_LANGUAGE->value => $headersData?->acceptLanguage,
-        ];
-
-        // Merge prefetchHeader and filter null values from the headers
-        return array_filter(
-            array_merge($mappedHeaders, $prefetchHeader),
-            fn ($value) => ! is_null($value)
+        // Prepare the final headers by merging the resolved headers with the original request headers.
+        return $this->prepareMappedHeaders(
+            $requestData,
+            overrides: [
+                // Prioritize resolved headers over request headers.
+                HttpHeaderType::AUTHORIZATION->value => Arr::get($resolvedHeaders, 'authorization')
+                    ?? $requestData?->headers?->authorization,
+            ]
         );
     }
 }
