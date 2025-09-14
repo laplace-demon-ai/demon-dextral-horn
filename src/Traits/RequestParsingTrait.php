@@ -144,11 +144,12 @@ trait RequestParsingTrait
     {
         $cookiesData = $requestData?->cookies;
 
+        // Auto forward session cookie if exists
         $cookies = [
             'session_cookie' => $cookiesData?->sessionCookie,
         ];
 
-        // Auto forward session cookie if not set by strategy and available in the original request.
+        // Apply overrides (e.g. resolved session cookie). Resolved cookies have priority over request cookies.
         foreach ($overrides as $key => $value) {
             if ($value !== null) {
                 $cookies[$key] = $value;

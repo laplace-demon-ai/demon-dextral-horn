@@ -29,7 +29,9 @@ final class RequestParsingTraitTest extends TestCase
         $this->anonymousClass = new class {
             use RequestParsingTrait;
 
-            // Since extractSessionCookieFromString and other methods are protected, we create public methods to access them for testing
+            /*
+             * Since extractSessionCookieFromString and other methods are protected, we create public methods to access them for testing
+             */
             public function callExtractSessionCookieFromString(?string $cookie)
             {
                 return $this->extractSessionCookieFromString($cookie);
