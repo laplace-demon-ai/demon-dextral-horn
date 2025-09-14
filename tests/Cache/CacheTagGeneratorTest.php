@@ -31,6 +31,18 @@ final class CacheTagGeneratorTest extends TestCase
         $this->identifier = app(UserIdentifierInterface::class);
     }
 
+    /**
+     * Add the default prefix to a tag.
+     * 
+     * @param string $tag
+     *
+     * @return string
+     */
+    private function addDefaultPrefix(string $tag): string
+    {
+        return $this->defaultPrefix . ':' . $tag;
+    }
+
     #[Test]
     public function it_generates_tags_correctly(): void
     {
@@ -54,7 +66,7 @@ final class CacheTagGeneratorTest extends TestCase
         /* ASSERT */
         $this->assertIsArray($tags);
         $this->assertContains($this->defaultPrefix, $tags);
-        $this->assertContains('sample_route', $tags);
+        $this->assertContains($this->addDefaultPrefix('sample_route'), $tags);
         $jwtItems = array_filter($tags, fn($item) => str_contains($item, 'jwt_'));
         $this->assertNotEmpty($jwtItems);
     }
@@ -79,7 +91,7 @@ final class CacheTagGeneratorTest extends TestCase
         /* ASSERT */
         $this->assertIsArray($tags);
         $this->assertContains($this->defaultPrefix, $tags);
-        $this->assertContains($this->cacheTagGenerator::UNNAMED_TAG, $tags);
+        $this->assertContains($this->addDefaultPrefix($this->cacheTagGenerator::UNNAMED_TAG), $tags);
         $this->assertCount(2, $tags);
     }
 
@@ -101,7 +113,7 @@ final class CacheTagGeneratorTest extends TestCase
         $tags = $this->cacheTagGenerator->generate($targetRouteData, $userIdentifier);
     
         /* ASSERT */
-        $this->assertEquals([$this->defaultPrefix, 'jwt_abc123'], $tags);
+        $this->assertEquals([$this->defaultPrefix, $this->addDefaultPrefix('jwt_abc123')], $tags);
     }
 
     #[Test]
@@ -122,7 +134,7 @@ final class CacheTagGeneratorTest extends TestCase
         $tags = $this->cacheTagGenerator->generate($targetRouteData, $userIdentifier);
     
         /* ASSERT */
-        $this->assertContains('user_profile_123', $tags);
-        $this->assertContains('jwt_abc_123', $tags);
+        $this->assertContains($this->addDefaultPrefix('user_profile_123'), $tags);
+        $this->assertContains($this->addDefaultPrefix('jwt_abc_123'), $tags);
     }
 }
