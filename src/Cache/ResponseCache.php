@@ -112,7 +112,7 @@ class ResponseCache
             $allTags = [$defaultTag];
         } else {
             // Normalize and prefix each provided tag with the default tag
-            $allTags = array_map(function($tag) use ($defaultTag) {
+            $allTags = array_map(function ($tag) use ($defaultTag) {
                 return $defaultTag . ':' . $tag;
             }, $tags);
         }

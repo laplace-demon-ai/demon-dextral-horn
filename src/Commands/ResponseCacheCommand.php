@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Commands;
 
-use Illuminate\Console\Command;
 use DemonDextralHorn\Facades\ResponseCache;
+use Illuminate\Console\Command;
 
 /**
  * Artisan command to clear the response cache by tags or all cache.
@@ -22,7 +22,7 @@ final class ResponseCacheCommand extends Command
 
     /**
      * Execute the console command.
-     * 
+     *
      * @return int
      */
     public function handle(): int
