@@ -107,8 +107,15 @@ class ResponseCache
     {
         $defaultTag = config('demon-dextral-horn.defaults.prefetch_prefix');
 
-        // Remove duplicates and empty values, ensure default tag is always included
-        $allTags = array_values(array_unique(array_filter(array_merge([$defaultTag], $tags))));
+        if (empty($tags)) {
+            // If no tags are provided, use only the default tag
+            $allTags = [$defaultTag];
+        } else {
+            // Normalize and prefix each provided tag with the default tag
+            $allTags = array_map(function($tag) use ($defaultTag) {
+                return $defaultTag . ':' . $tag;
+            }, $tags);
+        }
 
         // Get a tagged cache repository by associating the tags to the cache
         $taggedCache = $this->associateTagsToCache($allTags);

@@ -28,10 +28,10 @@ final class CacheTagGenerator
         $defaultTag = config('demon-dextral-horn.defaults.prefetch_prefix');
 
         $tags = [
-            // Normalize and add route name as a tag
-            $this->normalizeTag($targetRouteData->routeName),
-            // Normalize and add user identifier as a tag
-            $this->normalizeTag($userIdentifier),
+            // Normalize and add route name as a tag (use default tag as prefix)
+            $defaultTag . ':' . $this->normalizeTag($targetRouteData->routeName),
+            // Normalize and add user identifier as a tag (use default tag as prefix)
+            $defaultTag . ':' . $this->normalizeTag($userIdentifier),
         ];
 
         // Remove duplicates and empty values, ensure default tag is always included

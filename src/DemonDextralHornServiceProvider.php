@@ -12,6 +12,7 @@ use DemonDextralHorn\Cache\Identifiers\JwtUserIdentifier;
 use DemonDextralHorn\Cache\Identifiers\SessionUserIdentifier;
 use DemonDextralHorn\Cache\ResponseCache;
 use DemonDextralHorn\Cache\ResponseCacheValidator;
+use DemonDextralHorn\Commands\ResponseCacheCommand;
 use DemonDextralHorn\Enums\AuthDriverType;
 use DemonDextralHorn\Handlers\TargetRouteHandler;
 use DemonDextralHorn\Resolvers\Contracts\TargetRouteResolverInterface;
@@ -40,6 +41,8 @@ final class DemonDextralHornServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerPublishing();
+
+        $this->registerCommands();
     }
 
     /**
@@ -106,6 +109,20 @@ final class DemonDextralHornServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__ . '/../config/demon-dextral-horn.php' => config_path('demon-dextral-horn.php'),
             ], 'demon-dextral-horn');
+        }
+    }
+
+    /**
+     * Register the package's commands.
+     *
+     * @return void
+     */
+    protected function registerCommands(): void
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                ResponseCacheCommand::class,
+            ]);
         }
     }
 
