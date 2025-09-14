@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Middleware;
 
-use DemonDextralHorn\Middleware\DemonDextralHornMiddleware;
+use DemonDextralHorn\Middleware\PrefetchTriggerMiddleware;
 use DemonDextralHorn\Jobs\DemonDextralHornJob;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -15,8 +15,8 @@ use DemonDextralHorn\Enums\HttpHeaderType;
 use DemonDextralHorn\Enums\PrefetchType;
 use Tests\TestCase;
 
-#[CoversClass(DemonDextralHornMiddleware::class)]
-final class DemonDextralHornMiddlewareTest extends TestCase
+#[CoversClass(PrefetchTriggerMiddleware::class)]
+final class PrefetchTriggerMiddlewareTest extends TestCase
 {
     public function setUp(): void
     {
@@ -31,12 +31,12 @@ final class DemonDextralHornMiddlewareTest extends TestCase
     public function it_tests_when_response_is_NOT_successful_by_resolving_middleware(): void
     {
         /* SETUP */
-        $demonDextralHornMiddleware = $this->app->make(DemonDextralHornMiddleware::class);
+        $prefetchTriggerMiddleware = $this->app->make(PrefetchTriggerMiddleware::class);
         $request = Request::create('/some/uri', Request::METHOD_GET);
         $response = new Response('error', Response::HTTP_INTERNAL_SERVER_ERROR);
 
         /* EXECUTE */
-        $demonDextralHornMiddleware->terminate($request, $response);
+        $prefetchTriggerMiddleware->terminate($request, $response);
 
         /* ASSERT */
         Queue::assertNothingPushed(DemonDextralHornJob::class);

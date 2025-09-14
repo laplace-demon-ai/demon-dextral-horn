@@ -7,6 +7,7 @@ namespace DemonDextralHorn\Resolvers;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Factories\StrategyFactory;
+use DemonDextralHorn\Traits\RequestParsingTrait;
 use Illuminate\Support\Arr;
 
 /**
@@ -16,6 +17,8 @@ use Illuminate\Support\Arr;
  */
 final readonly class CookiesResolver extends AbstractResolver
 {
+    use RequestParsingTrait;
+
     /**
      * Constructor for the resolver.
      *
@@ -49,15 +52,6 @@ final readonly class CookiesResolver extends AbstractResolver
             );
         }
 
-        // Auto forward session cookie if not set by strategy and available in the original request.
-        if (! Arr::has($resolvedCookies, 'session_cookie') || Arr::get($resolvedCookies, 'session_cookie') === null) {
-            $resolvedCookies['session_cookie'] = $requestData?->cookies?->sessionCookie;
-        }
-
-        // Filter out any null values from the resolved cookies.
-        return array_filter(
-            $resolvedCookies,
-            fn ($value) => ! is_null($value)
-        );
+        return $this->prepareCookies($requestData, overrides: $resolvedCookies);
     }
 }

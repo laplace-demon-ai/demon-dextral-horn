@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DemonDextralHorn\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Facade for the ResponseCache.
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static Response|null get(TargetRouteData $targetRouteData)
  * @method static bool forget(TargetRouteData $targetRouteData)
  * @method static bool clear(?array $tags = [])
+ * @method static Response|null pull(TargetRouteData $targetRouteData)
  *
  * @class ResponseCache
  */

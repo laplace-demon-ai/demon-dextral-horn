@@ -24,7 +24,7 @@ final class RequestData extends Data
      * @param CookiesData|null $cookies The request cookies.
      * @param string|null $routeName The name of the matched route.
      * @param array|null $routeParams The parameters of the matched route.
-     * @param string|array|null $queryParams The query parameters.
+     * @param array|null $queryParams The query parameters.
      */
     public function __construct(
         public string $uri,
@@ -34,7 +34,7 @@ final class RequestData extends Data
         public ?CookiesData $cookies = null,
         public ?string $routeName = null,
         public ?array $routeParams = null,
-        public string|array|null $queryParams = null,
+        public ?array $queryParams = null,
     ) {}
 
     /**
