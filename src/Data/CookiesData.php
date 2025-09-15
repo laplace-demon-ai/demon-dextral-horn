@@ -38,4 +38,28 @@ final class CookiesData extends Data
             sessionCookie: $sessionCookie,
         );
     }
+
+    /**
+     * Serialize the current object to an array.
+     *
+     * @return array
+     */
+    public function __serialize(): array
+    {
+        return [
+            'sessionCookie' => $this->sessionCookie,
+        ];
+    }
+
+    /**
+     * Unserialize the data into the current object.
+     *
+     * @param array $data
+     *
+     * @return void
+     */
+    public function __unserialize(array $data): void
+    {
+        $this->sessionCookie = Arr::get($data, 'sessionCookie');
+    }
 }
