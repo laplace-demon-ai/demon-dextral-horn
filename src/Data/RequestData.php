@@ -6,6 +6,7 @@ namespace DemonDextralHorn\Data;
 
 use Illuminate\Http\Request;
 use Spatie\LaravelData\Data;
+use Illuminate\Support\Arr;
 
 /**
  * DTO representing HTTP request data.
@@ -56,5 +57,61 @@ final class RequestData extends Data
             routeParams: $request->route()?->parameters(),
             queryParams: $request->query(),
         );
+    }
+
+    /**
+     * Serialize the current object to an array.
+     *
+     * @return array
+     */
+    public function __serialize(): array
+    {
+        return [
+            'uri' => $this->uri,
+            'method' => $this->method,
+            'headers' => $this->headers->__serialize(),
+            'payload' => $this->payload,
+            'cookies' => $this->cookies?->__serialize(),
+            'routeName' => $this->routeName,
+            'routeParams' => $this->routeParams,
+            'queryParams' => $this->queryParams,
+        ];
+    }
+
+    /**
+     * Unserialize the data into the current object.
+     *
+     * @param array $data
+     *
+     * @return void
+     */
+    public function __unserialize(array $data): void
+    {
+        $this->uri = $data['uri'];
+        $this->method = $data['method'];
+
+        // Unserialize HeadersData
+        $headersArray = Arr::get($data, 'headers', []);
+        $this->headers = new HeadersData(
+            authorization: Arr::get($headersArray, 'authorization'),
+            accept: Arr::get($headersArray, 'accept'),
+            acceptLanguage: Arr::get($headersArray, 'acceptLanguage'),
+            prefetchHeader: Arr::get($headersArray, 'prefetchHeader'),
+            setCookie: Arr::get($headersArray, 'setCookie'),
+        );
+
+        $this->payload = Arr::get($data, 'payload');
+
+        // Unserialize CookiesData
+        $cookiesArray = Arr::get($data, 'cookies');
+        $this->cookies = $cookiesArray
+            ? new CookiesData(
+                sessionCookie: Arr::get($cookiesArray, 'sessionCookie'),
+            )
+            : null;
+
+        $this->routeName = Arr::get($data, 'routeName');
+        $this->routeParams = Arr::get($data, 'routeParams');
+        $this->queryParams = Arr::get($data, 'queryParams');
     }
 }

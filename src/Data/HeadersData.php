@@ -66,4 +66,36 @@ final class HeadersData extends Data
             setCookie: $setCookie,
         );
     }
+
+    /**
+     * Serialize the current object to an array.
+     * 
+     * @return array
+     */
+    public function __serialize(): array
+    {
+        return [
+            'authorization' => $this->authorization,
+            'accept' => $this->accept,
+            'acceptLanguage' => $this->acceptLanguage,
+            'prefetchHeader' => $this->prefetchHeader,
+            'setCookie' => $this->setCookie,
+        ];
+    }
+
+    /**
+     * Unserialize the data into the current object.
+     *
+     * @param array $data
+     *
+     * @return void
+     */
+    public function __unserialize(array $data): void
+    {
+        $this->authorization = Arr::get($data, 'authorization');
+        $this->accept = Arr::get($data, 'accept');
+        $this->acceptLanguage = Arr::get($data, 'acceptLanguage');
+        $this->prefetchHeader = Arr::get($data, 'prefetchHeader');
+        $this->setCookie = Arr::get($data, 'setCookie');
+    }
 }

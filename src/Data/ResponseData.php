@@ -6,6 +6,7 @@ namespace DemonDextralHorn\Data;
 
 use Spatie\LaravelData\Data;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Arr;
 
 /**
  * DTO representing HTTP response data.
@@ -44,5 +45,45 @@ final class ResponseData extends Data
             ),
             content: $response->getContent(),
         );
+    }
+
+    /**
+     * Serialize the current object to an array.
+     *
+     * @return array
+     */
+    public function __serialize(): array
+    {
+        return [
+            'status' => $this->status,
+            'headers' => $this->headers ? $this->headers->__serialize() : null,
+            'content' => $this->content,
+        ];
+    }
+
+    /**
+     * Unserialize the data into the current object.
+     *
+     * @param array $data
+     *
+     * @return void
+     */
+    public function __unserialize(array $data): void
+    {
+        $this->status = Arr::get($data, 'status');
+
+        // Unserialize HeadersData
+        $headersArray = Arr::get($data, 'headers');
+        $this->headers = $headersArray
+            ? new HeadersData(
+                authorization: Arr::get($headersArray, 'authorization'),
+                accept: Arr::get($headersArray, 'accept'),
+                acceptLanguage: Arr::get($headersArray, 'acceptLanguage'),
+                prefetchHeader: Arr::get($headersArray, 'prefetchHeader'),
+                setCookie: Arr::get($headersArray, 'setCookie'),
+            ) 
+            : null;
+
+        $this->content = Arr::get($data, 'content');
     }
 }
