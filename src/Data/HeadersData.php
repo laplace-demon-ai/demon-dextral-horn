@@ -69,7 +69,7 @@ final class HeadersData extends Data
 
     /**
      * Serialize the current object to an array.
-     * 
+     *
      * @return array
      */
     public function __serialize(): array

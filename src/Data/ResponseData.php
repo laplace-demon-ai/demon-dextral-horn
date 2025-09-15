@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Data;
 
+use Illuminate\Support\Arr;
 use Spatie\LaravelData\Data;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Arr;
 
 /**
  * DTO representing HTTP response data.
@@ -81,7 +81,7 @@ final class ResponseData extends Data
                 acceptLanguage: Arr::get($headersArray, 'acceptLanguage'),
                 prefetchHeader: Arr::get($headersArray, 'prefetchHeader'),
                 setCookie: Arr::get($headersArray, 'setCookie'),
-            ) 
+            )
             : null;
 
         $this->content = Arr::get($data, 'content');

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace DemonDextralHorn\Data;
 
 use Illuminate\Http\Request;
-use Spatie\LaravelData\Data;
 use Illuminate\Support\Arr;
+use Spatie\LaravelData\Data;
 
 /**
  * DTO representing HTTP request data.
