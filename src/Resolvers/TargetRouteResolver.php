@@ -7,7 +7,6 @@ namespace DemonDextralHorn\Resolvers;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Resolvers\Contracts\TargetRouteResolverInterface;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
 /**
@@ -33,8 +32,7 @@ final readonly class TargetRouteResolver extends AbstractResolver implements Tar
 
         // Find the matching rule for the given route name
         $rule = Arr::first($rules, function ($rule) use ($routeName) {
-            return Arr::get($rule, 'trigger.route') === $routeName
-                && strtoupper(Arr::get($rule, 'trigger.method', Request::METHOD_GET)) === Request::METHOD_GET;
+            return Arr::get($rule, 'trigger.route') === $routeName;
         });
 
         // Get the target routes from the rule

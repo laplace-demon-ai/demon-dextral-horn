@@ -118,37 +118,6 @@ final class TargetRouteResolverTest extends TestCase
     }
 
     #[Test]
-    public function it_returns_empty_array_when_method_does_not_match(): void
-    {
-        /* SETUP */
-        $triggerRoute = 'sample.trigger.route';
-        Config::set('demon-dextral-horn.rules', [
-            [
-                'trigger' => [
-                    'route' => $triggerRoute,
-                    'method' => Request::METHOD_POST,
-                ],
-                'targets' => [
-                    ['route' => 'some.target'],
-                ],
-            ],
-        ]);
-        $requestData = new RequestData(
-            uri: '/sample_trigger_route',
-            method: Request::METHOD_GET,
-            headers: new HeadersData(),
-            payload: [],
-            routeName: $triggerRoute
-        );
-
-        /* EXECUTE */
-        $result = $this->resolver->resolve(requestData: $requestData);
-
-        /* ASSERT */
-        $this->assertEmpty($result);
-    }
-
-    #[Test]
     public function it_returns_empty_array_when_request_data_is_null(): void
     {
         /* SETUP */
