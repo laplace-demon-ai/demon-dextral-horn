@@ -9,6 +9,7 @@ use DemonDextralHorn\Enums\HttpHeaderType;
 use DemonDextralHorn\Enums\HttpServerVariableType;
 use DemonDextralHorn\Events\RouteDispatchFailedEvent;
 use DemonDextralHorn\Traits\RequestParsingTrait;
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,24 +43,22 @@ final class RouteDispatcher
 
         $request = $this->prepareRequest($request, $targetRouteData->headers, $targetRouteData->cookies);
 
-        $originalRequest = app('request');
+        $kernel = app(Kernel::class);
 
         try {
-            // Bind the request to the application, when request() is called it will return this request instance with proper headers, cookies, etc.
-            app()->instance('request', $request);
+            // Handle the request and get the response by passing it through the application kernel
+            $response = $kernel->handle($request);
 
-            // Dispatch the request with the router
-            return app('router')->dispatch($request);
+            // Terminate the request/response cycle
+            $kernel->terminate($request, $response);
 
+            return $response;
         } catch (Throwable $exception) {
             // Fire an event when dispatching fails - gives more control to the user to log or handle the exception without breaking the main app flow
             event(new RouteDispatchFailedEvent($exception, $targetRouteData));
 
             // Return default response in case of an error
             return new Response('Internal Server Error', 500);
-        } finally {
-            // Restore the original request instance, preventing any side effects
-            app()->instance('request', $originalRequest);
         }
     }
 
