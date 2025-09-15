@@ -9,11 +9,11 @@ use DemonDextralHorn\Enums\HttpHeaderType;
 use DemonDextralHorn\Enums\HttpServerVariableType;
 use DemonDextralHorn\Events\RouteDispatchFailedEvent;
 use DemonDextralHorn\Traits\RequestParsingTrait;
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
-use Illuminate\Contracts\Http\Kernel;
 
 /**
  * Dispatches a request with the given route information/parameters.
@@ -53,8 +53,7 @@ final class RouteDispatcher
             $kernel->terminate($request, $response);
 
             return $response;
-        }
-        catch (Throwable $exception) {
+        } catch (Throwable $exception) {
             // Fire an event when dispatching fails - gives more control to the user to log or handle the exception without breaking the main app flow
             event(new RouteDispatchFailedEvent($exception, $targetRouteData));
 
