@@ -58,6 +58,9 @@ trait RequestParsingTrait
     {
         ksort($routeParams);
 
+        // Convert all values to string for consistency, otherwise integers and strings may cause different hashes
+        $routeParams = array_map(fn($value) => (string) $value, $routeParams);
+
         return $routeParams;
     }
 
