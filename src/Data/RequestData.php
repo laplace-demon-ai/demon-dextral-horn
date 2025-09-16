@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Data;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Spatie\LaravelData\Data;
@@ -47,6 +48,17 @@ final class RequestData extends Data
      */
     public static function fromRequest(Request $request): static
     {
+        // Extract route parameters, converting Eloquent models to their route keys
+        $routeParams = collect($request->route()?->parameters() ?? [])
+            ->map(function ($param) {
+                if ($param instanceof Model) {
+                    return $param->getRouteKey(); // usually "id"
+                }
+
+                return $param;
+            })
+            ->toArray();
+
         return new self(
             uri: $request->getRequestUri(),
             method: $request->method(),
@@ -54,7 +66,7 @@ final class RequestData extends Data
             payload: $request->getPayload()->all(),
             cookies: CookiesData::fromCookies($request->cookies->all()),
             routeName: $request->route()?->getName(),
-            routeParams: $request->route()?->parameters(),
+            routeParams: $routeParams,
             queryParams: $request->query(),
         );
     }
