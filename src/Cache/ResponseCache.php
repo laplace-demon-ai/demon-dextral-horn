@@ -45,9 +45,8 @@ class ResponseCache
     public function put(Response $response, TargetRouteData $targetRouteData): void
     {
         $key = $this->getCacheKey($targetRouteData);
-        $taggedCache = $this->getTaggedCache($targetRouteData);
 
-        $taggedCache->put(
+        $this->cache->put(
             key: $key,
             response: $response,
             seconds: config('demon-dextral-horn.defaults.cache_ttl')
@@ -169,25 +168,6 @@ class ResponseCache
         $userIdentifier = $this->identifier->getIdentifierFor($targetRouteData);
 
         return $this->cacheKeyGenerator->generate($targetRouteData, $userIdentifier);
-    }
-
-    /**
-     * Get a tagged cache repository based on the target route data and user identifier.
-     * If the cache driver does not support tags, return the untagged repository.
-     *
-     * @param TargetRouteData $targetRouteData
-     *
-     * @return ResponseCacheRepository
-     */
-    private function getTaggedCache(TargetRouteData $targetRouteData): ResponseCacheRepository
-    {
-        // Get the user identifier
-        $userIdentifier = $this->identifier->getIdentifierFor($targetRouteData);
-
-        // Generate tags based on route name and user identifier
-        $allTags = $this->cacheTagGenerator->generate($targetRouteData, $userIdentifier);
-
-        return $this->associateTagsToCache($allTags);
     }
 
     /**

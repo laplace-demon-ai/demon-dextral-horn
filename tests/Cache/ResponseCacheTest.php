@@ -103,25 +103,10 @@ final class ResponseCacheTest extends TestCase
         /* SETUP */
         $response = new Response('ok', Response::HTTP_OK);
         $target = new TargetRouteData('route.name', Request::METHOD_GET, [], [], [], []);
-        $defaultTag = config('demon-dextral-horn.defaults.prefetch_prefix');
-        $routeName = 'route_name';
-        $userIdentifier = 'guest';
         $sampleKey = config('demon-dextral-horn.defaults.prefetch_prefix') . ':' . '6adf3b47da7fe788a8f0d3446faf7121';
         $this->mock(ResponseCacheRepository::class, function (MockInterface $mock) use (
-            $response, $sampleKey, $defaultTag, $routeName, $userIdentifier
+            $response, $sampleKey
         ) {
-            // Mock the tags method call
-            $mock->shouldReceive('tags')
-                ->with(
-                    [
-                        $defaultTag,
-                        $defaultTag . ':' . $routeName,
-                        $defaultTag . ':' . $userIdentifier
-                    ]
-                )
-                ->once()
-                ->andReturnSelf();
-
             // Mock the put method call
             $mock->shouldReceive('put')
                 ->with(

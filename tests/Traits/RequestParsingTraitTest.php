@@ -145,7 +145,29 @@ final class RequestParsingTraitTest extends TestCase
         $normalized = $this->anonymousClass->callNormalizeRouteParams($params);
 
         /* ASSERT */
-        $this->assertSame(['id' => 123, 'permission' => 6, 'role' => 3], $normalized);
+        $this->assertSame(['id' => '123', 'permission' => '6', 'role' => '3'], $normalized);
+    }
+
+    #[Test]
+    public function it_converts_route_param_values_to_strings(): void
+    {
+        /* SETUP */
+        $params = [
+            'role' => 45,
+            'id' => 123,
+        ];
+
+        /* EXECUTE */
+        $normalized = $this->anonymousClass->callNormalizeRouteParams($params);
+
+        /* ASSERT */
+        $this->assertSame(
+            [
+                'id' => '123',   // int becomes "123"
+                'role' => '45',
+            ],
+            $normalized
+        );
     }
 
     #[Test]
