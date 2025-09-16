@@ -183,13 +183,13 @@ class ResponseCache
     }
 
     /**
-    * Get a tagged cache repository based on the target route data and user identifier.
-    * If the cache driver does not support tags, return the untagged repository.
-    *
-    * @param TargetRouteData $targetRouteData
-    *
-    * @return ResponseCacheRepository
-    */
+     * Get a tagged cache repository based on the target route data and user identifier.
+     * If the cache driver does not support tags, return the untagged repository.
+     *
+     * @param TargetRouteData $targetRouteData
+     *
+     * @return ResponseCacheRepository
+     */
     private function getTaggedCache(TargetRouteData $targetRouteData): ResponseCacheRepository
     {
         // Generate tags based on route name and user identifier
