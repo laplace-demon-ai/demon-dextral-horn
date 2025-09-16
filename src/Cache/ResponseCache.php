@@ -46,7 +46,10 @@ class ResponseCache
     {
         $key = $this->getCacheKey($targetRouteData);
 
-        $this->cache->put(
+        // Get a tagged cache repository by associating the tags to the cache
+        $taggedCache = $this->getTaggedCache($targetRouteData);
+
+        $taggedCache->put(
             key: $key,
             response: $response,
             seconds: config('demon-dextral-horn.defaults.cache_ttl')
@@ -64,7 +67,9 @@ class ResponseCache
     {
         $key = $this->getCacheKey($targetRouteData);
 
-        return $this->cache->has($key);
+        $taggedCache = $this->getTaggedCache($targetRouteData);
+
+        return $taggedCache->has($key);
     }
 
     /**
@@ -78,7 +83,9 @@ class ResponseCache
     {
         $key = $this->getCacheKey($targetRouteData);
 
-        return $this->cache->get($key);
+        $taggedCache = $this->getTaggedCache($targetRouteData);
+
+        return $taggedCache->get($key);
     }
 
     /**
@@ -92,7 +99,9 @@ class ResponseCache
     {
         $key = $this->getCacheKey($targetRouteData);
 
-        return $this->cache->forget($key);
+        $taggedCache = $this->getTaggedCache($targetRouteData);
+
+        return $taggedCache->forget($key);
     }
 
     /**
@@ -141,16 +150,19 @@ class ResponseCache
     {
         $key = $this->getCacheKey($targetRouteData);
 
+        // Get a tagged cache repository by associating the tags to the cache
+        $taggedCache = $this->getTaggedCache($targetRouteData);
+
         // Check if the key exists before attempting to get and forget
-        if (! $this->cache->has($key)) {
+        if (! $taggedCache->has($key)) {
             return null;
         }
 
         // Retrieve the response
-        $response = $this->cache->get($key);
+        $response = $taggedCache->get($key);
 
         // Remove it from the cache
-        $this->cache->forget($key);
+        $taggedCache->forget($key);
 
         return $response;
     }
@@ -168,6 +180,22 @@ class ResponseCache
         $userIdentifier = $this->identifier->getIdentifierFor($targetRouteData);
 
         return $this->cacheKeyGenerator->generate($targetRouteData, $userIdentifier);
+    }
+
+    /**
+    * Get a tagged cache repository based on the target route data and user identifier.
+    * If the cache driver does not support tags, return the untagged repository.
+    *
+    * @param TargetRouteData $targetRouteData
+    *
+    * @return ResponseCacheRepository
+    */
+    private function getTaggedCache(TargetRouteData $targetRouteData): ResponseCacheRepository
+    {
+        // Generate tags based on route name and user identifier
+        $allTags = $this->cacheTagGenerator->generate($targetRouteData);
+
+        return $this->associateTagsToCache($allTags);
     }
 
     /**

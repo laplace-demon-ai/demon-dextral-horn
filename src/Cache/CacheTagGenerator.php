@@ -16,22 +16,19 @@ final class CacheTagGenerator
     public const UNNAMED_TAG = 'unnamed';
 
     /**
-     * Generate cache tags based on the provided target route data and user identifier.
+     * Generate cache tags based on the provided target route data.
      *
      * @param TargetRouteData $targetRouteData
-     * @param string $userIdentifier
      *
      * @return array
      */
-    public function generate(TargetRouteData $targetRouteData, string $userIdentifier): array
+    public function generate(TargetRouteData $targetRouteData): array
     {
         $defaultTag = config('demon-dextral-horn.defaults.prefetch_prefix');
 
         $tags = [
             // Normalize and add route name as a tag (use default tag as prefix)
             $defaultTag . ':' . $this->normalizeTag($targetRouteData->routeName),
-            // Normalize and add user identifier as a tag (use default tag as prefix)
-            $defaultTag . ':' . $this->normalizeTag($userIdentifier),
         ];
 
         // Remove duplicates and empty values, ensure default tag is always included
@@ -42,7 +39,7 @@ final class CacheTagGenerator
 
     /**
      * Normalize a tag by converting to lowercase, replacing non-alphanumeric characters with underscores, and trimming.
-     * If the tag is empty, return a default unnamed tag. e.g. "User.Profile" becomes "user_profile", "jwt:abc123 " becomes "jwt_abc123"
+     * If the tag is empty, return a default unnamed tag. e.g. "User.Profile" becomes "user_profile" etc.
      *
      * @param string $name
      *
