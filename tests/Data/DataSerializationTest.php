@@ -13,6 +13,8 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Routing\Route;
 
 #[CoversClass(RequestData::class)]
 #[CoversClass(HeadersData::class)]
@@ -215,5 +217,32 @@ final class DataSerializationTest extends TestCase
         $this->assertEquals($this->originalResponseData->status, $newResponseData->status);
         $this->assertEquals($this->originalResponseData->headers->setCookie, $newResponseData->headers->setCookie);
         $this->assertEquals($this->originalResponseData->content, $newResponseData->content);
+    }
+
+    #[Test]
+    public function it_converts_eloquent_route_parameters_to_route_keys(): void
+    {
+        /* SETUP */
+        $id = 42;
+        $model = new class extends Model {
+            public $id = 42;
+            public function getRouteKey()
+            {
+                return $this->id;
+            }
+        };
+        $request = Request::create('/sample/' . $id, 'GET');
+        $route = new Route(['GET'], '/sample/{id}', ['uses' => function () {}]);
+        $route->bind($request); // Bind the request to the route
+        $route->setParameter('id', $model);
+        $request->setRouteResolver(static fn () => $route);
+    
+        // execute
+        $requestData = RequestData::fromRequest($request);
+    
+        // assertions
+        $this->assertIsArray($requestData->routeParams);
+        $this->assertArrayHasKey('id', $requestData->routeParams);
+        $this->assertEquals($id, $requestData->routeParams['id']);
     }
 }
