@@ -351,7 +351,6 @@ final class RequestParsingTraitTest extends TestCase
         /* ASSERT */
         $this->assertSame(
             [
-                HttpHeaderType::AUTHORIZATION->value => 'Bearer token',
                 HttpHeaderType::ACCEPT->value => 'application/json',
                 HttpHeaderType::ACCEPT_LANGUAGE->value => 'en-US',
                 config('demon-dextral-horn.defaults.prefetch_header') => PrefetchType::AUTO->value,
@@ -386,6 +385,92 @@ final class RequestParsingTraitTest extends TestCase
         /* ASSERT */
         $this->assertArrayHasKey(HttpHeaderType::ACCEPT->value, $headers);
         $this->assertSame($acceptValue, Arr::get($headers, HttpHeaderType::ACCEPT->value));
+    }
+
+    #[Test]
+    public function it_applies_authorization_header_override(): void
+    {
+        /* SETUP */
+        $headersData = new HeadersData(
+            authorization: null,
+            accept: 'application/json',
+            acceptLanguage: 'en-US'
+        );
+        $requestData = new RequestData(
+            uri: '/sample_route',
+            method: Request::METHOD_GET,
+            headers: $headersData,
+            routeName: 'sample.route',
+        );
+        $authValue = 'Bearer overridden_token';
+        $overrides = [
+            HttpHeaderType::AUTHORIZATION->value => $authValue,
+        ];
+
+        /* EXECUTE */
+        $headers = $this->anonymousClass->callPrepareMappedHeaders($requestData, $overrides);
+
+        /* ASSERT */
+        $this->assertArrayHasKey(HttpHeaderType::AUTHORIZATION->value, $headers);
+        $this->assertSame($authValue, Arr::get($headers, HttpHeaderType::AUTHORIZATION->value));
+    }
+
+    #[Test]
+    public function it_forwards_authorization_header_for_route_with_auth_middleware(): void
+    {
+        /* SETUP */
+        $token = 'Bearer sample_token';
+        $acceptValue = 'application/json';
+        $languageValue = 'en-US';
+        $headersData = new HeadersData(
+            authorization: $token,
+            accept: $acceptValue,
+            acceptLanguage: $languageValue
+        );
+        $requestData = new RequestData(
+            uri: '/auth-protected-route',
+            method: Request::METHOD_GET,
+            headers: $headersData,
+            routeName: 'auth.protected.route',
+        );
+
+        /* EXECUTE */
+        $headers = $this->anonymousClass->callPrepareMappedHeaders($requestData);
+    
+        /* ASSERT */
+        $this->assertArrayHasKey(HttpHeaderType::AUTHORIZATION->value, $headers);
+        $this->assertSame($token, $headers[HttpHeaderType::AUTHORIZATION->value]);
+        $this->assertSame($acceptValue, $headers[HttpHeaderType::ACCEPT->value]);
+        $this->assertSame($languageValue, $headers[HttpHeaderType::ACCEPT_LANGUAGE->value]);
+        $this->assertArrayHasKey(config('demon-dextral-horn.defaults.prefetch_header'), $headers);
+    }
+
+    #[Test]
+    public function it_does_not_forward_authorization_header_for_public_named_route(): void
+    {
+        /* SETUP */
+        $acceptValue = 'application/json';
+        $languageValue = 'en-US';
+        $headersData = new HeadersData(
+            authorization: 'Bearer token',
+            accept: $acceptValue,
+            acceptLanguage: $languageValue
+        );
+        $requestData = new RequestData(
+            uri: '/public-route-no-auth',
+            method: Request::METHOD_GET,
+            headers: $headersData,
+            routeName: 'public.route.no.auth',
+        );
+
+        /* EXECUTE */
+        $headers = $this->anonymousClass->callPrepareMappedHeaders($requestData);
+
+        /* ASSERT */
+        $this->assertArrayNotHasKey(HttpHeaderType::AUTHORIZATION->value, $headers);
+        $this->assertSame($acceptValue, $headers[HttpHeaderType::ACCEPT->value]);
+        $this->assertSame($languageValue, $headers[HttpHeaderType::ACCEPT_LANGUAGE->value]);
+        $this->assertArrayHasKey(config('demon-dextral-horn.defaults.prefetch_header'), $headers);
     }
 
     #[Test]

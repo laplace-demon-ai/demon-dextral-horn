@@ -58,10 +58,11 @@ final class HeadersResolverTest extends TestCase
         /* SETUP */
         $bearerToken = 'your-token-here';
         $request = Request::create(
-            uri: "/sample_trigger_route",
+            uri: "/auth-protected-route",
             method: Request::METHOD_GET,
         );
         $request->headers->set(HttpHeaderType::AUTHORIZATION->value, 'Bearer ' . $bearerToken);
+        $request->setRouteResolver(fn () => $this->app['router']->getRoutes()->match($request));
         $this->requestData = RequestData::fromRequest($request);
 
         /* EXECUTE */
