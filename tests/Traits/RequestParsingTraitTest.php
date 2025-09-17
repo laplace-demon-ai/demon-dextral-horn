@@ -52,9 +52,9 @@ final class RequestParsingTraitTest extends TestCase
                 return $this->prepareCookies($requestData, $overrides);
             }
 
-            public function callPrepareMappedHeaders(?RequestData $requestData, array $overrides = []): array
+            public function callPrepareMappedHeaders(?RequestData $requestData, ?string $targetRouteName, array $overrides = []): array
             {
-                return $this->prepareMappedHeaders($requestData, $overrides);
+                return $this->prepareMappedHeaders($requestData, $targetRouteName, $overrides);
             }
         };
     }
@@ -346,7 +346,7 @@ final class RequestParsingTraitTest extends TestCase
         );
 
         /* EXECUTE */
-        $headers = $this->anonymousClass->callPrepareMappedHeaders($requestData);
+        $headers = $this->anonymousClass->callPrepareMappedHeaders($requestData, 'sample.route');
 
         /* ASSERT */
         $this->assertSame(
@@ -363,6 +363,7 @@ final class RequestParsingTraitTest extends TestCase
     public function it_applies_header_overrides(): void
     {
         /* SETUP */
+        $routeName = 'sample.route';
         $headersData = new HeadersData(
             authorization: 'Bearer token',
             accept: 'application/json',
@@ -372,7 +373,7 @@ final class RequestParsingTraitTest extends TestCase
             uri: '/sample_route',
             method: Request::METHOD_GET,
             headers: $headersData,
-            routeName: 'sample.route',
+            routeName: $routeName,
         );
         $acceptValue = 'text/html';
         $overrides = [
@@ -380,7 +381,7 @@ final class RequestParsingTraitTest extends TestCase
         ];
 
         /* EXECUTE */
-        $headers = $this->anonymousClass->callPrepareMappedHeaders($requestData, $overrides);
+        $headers = $this->anonymousClass->callPrepareMappedHeaders($requestData, $routeName, $overrides);
 
         /* ASSERT */
         $this->assertArrayHasKey(HttpHeaderType::ACCEPT->value, $headers);
@@ -391,6 +392,7 @@ final class RequestParsingTraitTest extends TestCase
     public function it_applies_authorization_header_override(): void
     {
         /* SETUP */
+        $routeName = 'sample.route';
         $headersData = new HeadersData(
             authorization: null,
             accept: 'application/json',
@@ -400,7 +402,7 @@ final class RequestParsingTraitTest extends TestCase
             uri: '/sample_route',
             method: Request::METHOD_GET,
             headers: $headersData,
-            routeName: 'sample.route',
+            routeName: $routeName,
         );
         $authValue = 'Bearer overridden_token';
         $overrides = [
@@ -408,7 +410,7 @@ final class RequestParsingTraitTest extends TestCase
         ];
 
         /* EXECUTE */
-        $headers = $this->anonymousClass->callPrepareMappedHeaders($requestData, $overrides);
+        $headers = $this->anonymousClass->callPrepareMappedHeaders($requestData, $routeName, $overrides);
 
         /* ASSERT */
         $this->assertArrayHasKey(HttpHeaderType::AUTHORIZATION->value, $headers);
@@ -419,6 +421,7 @@ final class RequestParsingTraitTest extends TestCase
     public function it_forwards_authorization_header_for_route_with_auth_middleware(): void
     {
         /* SETUP */
+        $routeName = 'auth.protected.route';
         $token = 'Bearer sample_token';
         $acceptValue = 'application/json';
         $languageValue = 'en-US';
@@ -431,11 +434,11 @@ final class RequestParsingTraitTest extends TestCase
             uri: '/auth-protected-route',
             method: Request::METHOD_GET,
             headers: $headersData,
-            routeName: 'auth.protected.route',
+            routeName: $routeName,
         );
 
         /* EXECUTE */
-        $headers = $this->anonymousClass->callPrepareMappedHeaders($requestData);
+        $headers = $this->anonymousClass->callPrepareMappedHeaders($requestData, $routeName);
     
         /* ASSERT */
         $this->assertArrayHasKey(HttpHeaderType::AUTHORIZATION->value, $headers);
@@ -449,6 +452,7 @@ final class RequestParsingTraitTest extends TestCase
     public function it_does_not_forward_authorization_header_for_public_named_route(): void
     {
         /* SETUP */
+        $routeName = 'public.route.no.auth';
         $acceptValue = 'application/json';
         $languageValue = 'en-US';
         $headersData = new HeadersData(
@@ -460,11 +464,11 @@ final class RequestParsingTraitTest extends TestCase
             uri: '/public-route-no-auth',
             method: Request::METHOD_GET,
             headers: $headersData,
-            routeName: 'public.route.no.auth',
+            routeName: $routeName,
         );
 
         /* EXECUTE */
-        $headers = $this->anonymousClass->callPrepareMappedHeaders($requestData);
+        $headers = $this->anonymousClass->callPrepareMappedHeaders($requestData, $routeName);
 
         /* ASSERT */
         $this->assertArrayNotHasKey(HttpHeaderType::AUTHORIZATION->value, $headers);
@@ -477,6 +481,7 @@ final class RequestParsingTraitTest extends TestCase
     public function it_filters_out_null_header_values(): void
     {
         /* SETUP */
+        $routeName = 'sample.route';
         $headersData = new HeadersData(
             authorization: null,
             accept: null,
@@ -486,11 +491,11 @@ final class RequestParsingTraitTest extends TestCase
             uri: '/sample_route',
             method: Request::METHOD_GET,
             headers: $headersData,
-            routeName: 'sample.route',
+            routeName: $routeName,
         );
 
         /* EXECUTE */
-        $headers = $this->anonymousClass->callPrepareMappedHeaders($requestData);
+        $headers = $this->anonymousClass->callPrepareMappedHeaders($requestData, $routeName);
 
         /* ASSERT */
         $this->assertSame(
