@@ -45,7 +45,7 @@ final class QueryParamResolverTest extends TestCase
                 'query_key' => [
                     'strategy' => IncrementStrategy::class,
                     'options' => [
-                        'key' => 'query_key',
+                        'source_key' => 'query_key',
                         'increment' => $increment,
                     ],
                 ],
@@ -96,11 +96,11 @@ final class QueryParamResolverTest extends TestCase
             'query_params' => [
                 'first' => [
                     'strategy' => IncrementStrategy::class,
-                    'options' => ['key' => 'first', 'increment' => $incrementFirst],
+                    'options' => ['source_key' => 'first', 'increment' => $incrementFirst],
                 ],
                 'second' => [
                     'strategy' => IncrementStrategy::class,
-                    'options' => ['key' => 'second', 'increment' => $incrementSecond],
+                    'options' => ['source_key' => 'second', 'increment' => $incrementSecond],
                 ],
             ],
         ];
@@ -132,7 +132,7 @@ final class QueryParamResolverTest extends TestCase
                 'query_target_key' => [
                     'strategy' => ForwardValueStrategy::class,
                     'options' => [
-                        'key' => 'query_trigger_key',
+                        'source_key' => 'query_trigger_key',
                     ],
                 ],
             ],
@@ -160,7 +160,7 @@ final class QueryParamResolverTest extends TestCase
             'query_params' => [
                 'items' => [
                     'strategy' => ForwardValueStrategy::class,
-                    'options' => ['key' => 'items'],
+                    'options' => ['source_key' => 'items'],
                 ],
             ],
         ];
@@ -192,7 +192,7 @@ final class QueryParamResolverTest extends TestCase
                 'query_key' => [
                     'strategy' => ForwardValueStrategy::class,
                     'options' => [
-                        'key' => 'query_key',
+                        'source_key' => 'query_key',
                     ],
                 ],
             ],
@@ -221,7 +221,7 @@ final class QueryParamResolverTest extends TestCase
                 'query_key' => [
                     'strategy' => ForwardValueStrategy::class,
                     'options' => [
-                        'key' => 'query_key',
+                        'source_key' => 'query_key',
                     ],
                 ],
             ],

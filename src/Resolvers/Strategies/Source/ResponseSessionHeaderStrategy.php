@@ -25,10 +25,10 @@ final class ResponseSessionHeaderStrategy implements StrategyInterface
         ?ResponseData $responseData,
         ?array $options = []
     ): mixed {
-        $key = Arr::get($options, 'key'); // The key for the session cookie e.g. laravel_session
+        $sourceKey = Arr::get($options, 'source_key'); // The key for the session cookie e.g. laravel_session
 
-        if ($key === null) {
-            throw new MissingStrategyOptionException(self::class, 'key');
+        if ($sourceKey === null) {
+            throw new MissingStrategyOptionException(self::class, 'source_key');
         }
 
         $headersData = $responseData?->headers;
@@ -37,7 +37,7 @@ final class ResponseSessionHeaderStrategy implements StrategyInterface
 
         foreach ($headersData?->setCookie ?? [] as $cookie) {
             // Check if the cookie matches the session cookie name (laravel_session)
-            if (str_contains($cookie, $key)) {
+            if (str_contains($cookie, $sourceKey)) {
                 $sessionCookie = $cookie;
 
                 break;

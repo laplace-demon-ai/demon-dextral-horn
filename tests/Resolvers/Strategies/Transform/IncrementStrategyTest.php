@@ -45,7 +45,7 @@ final class IncrementStrategyTest extends TestCase
         $result = $this->incrementStrategy->handle(
             requestData: $requestData,
             responseData: $this->responseData,
-            options: ['key' => 'query_key', 'increment' => $increment]
+            options: ['source_key' => 'query_key', 'increment' => $increment]
         );
 
         /* ASSERT */
@@ -69,7 +69,7 @@ final class IncrementStrategyTest extends TestCase
         $result = $this->incrementStrategy->handle(
             requestData: $requestData,
             responseData: $this->responseData,
-            options: ['key' => 'query_key', 'increment' => $increment]
+            options: ['source_key' => 'query_key', 'increment' => $increment]
         );
 
         /* ASSERT */
@@ -89,7 +89,7 @@ final class IncrementStrategyTest extends TestCase
         $result = $this->incrementStrategy->handle(
             requestData: $requestData,
             responseData: $this->responseData,
-            options: ['key' => 'query_key']
+            options: ['source_key' => 'query_key']
         );
 
         /* ASSERT */
@@ -136,7 +136,7 @@ final class IncrementStrategyTest extends TestCase
         $result = $this->incrementStrategy->handle(
             requestData: $requestData,
             responseData: $this->responseData,
-            options: ['key' => 'query_key', 'increment' => $increment]
+            options: ['source_key' => 'query_key', 'increment' => $increment]
         );
 
         /* ASSERT */
@@ -154,7 +154,7 @@ final class IncrementStrategyTest extends TestCase
         $result = $this->incrementStrategy->handle(
             requestData: null,
             responseData: $this->responseData,
-            options: ['key' => 'query_key', 'increment' => $increment]
+            options: ['source_key' => 'query_key', 'increment' => $increment]
         );
 
         /* ASSERT */
@@ -173,7 +173,7 @@ final class IncrementStrategyTest extends TestCase
         $result = $this->incrementStrategy->handle(
             requestData: $requestData,
             responseData: $this->responseData,
-            options: ['key' => 'query_key', 'increment' => $increment]
+            options: ['source_key' => 'query_key', 'increment' => $increment]
         );
 
         /* ASSERT */

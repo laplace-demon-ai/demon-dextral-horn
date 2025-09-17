@@ -25,16 +25,16 @@ final class IncrementStrategy implements StrategyInterface
         ?ResponseData $responseData,
         ?array $options = []
     ): int {
-        $key = Arr::get($options, 'key');
+        $sourceKey = Arr::get($options, 'source_key');
         $increment = (int) Arr::get($options, 'increment', 1);
 
-        // Throw an exception if the required "key" option is missing.
-        if ($key === null) {
-            throw new MissingStrategyOptionException(self::class, 'key');
+        // Throw an exception if the required "source_key" option is missing.
+        if ($sourceKey === null) {
+            throw new MissingStrategyOptionException(self::class, 'source_key');
         }
 
         // Get the current value from the request data, setting a default 1 if not present (e.g. query parameter 'page' for the pagination)
-        $currentValue = (int) Arr::get($requestData?->queryParams ?? [], $key, 1);
+        $currentValue = (int) Arr::get($requestData?->queryParams ?? [], $sourceKey, 1);
 
         // Increment the current value.
         return $currentValue + $increment;

@@ -52,7 +52,6 @@ final class ResponsePluckStrategyTest extends TestCase
             requestData: $requestData,
             responseData: $responseData,
             options: [
-                'key' => 'route_key',
                 'position' => 'data.*.id'
             ]
         );
@@ -87,7 +86,6 @@ final class ResponsePluckStrategyTest extends TestCase
             requestData: $requestData,
             responseData: $responseData,
             options: [
-                'key' => 'route_key',
                 'position' => 'data.*.id',
                 'limit' => $limit,
             ]
@@ -123,7 +121,6 @@ final class ResponsePluckStrategyTest extends TestCase
             requestData: $requestData,
             responseData: $responseData,
             options: [
-                'key' => 'route_key',
                 'position' => 'data.*.id',
                 'order' => OrderType::DESC->value
             ]
@@ -159,7 +156,6 @@ final class ResponsePluckStrategyTest extends TestCase
             requestData: $requestData,
             responseData: $responseData,
             options: [
-                'key' => 'route_key',
                 'position' => 'data.*.id',
                 'order' => OrderType::DESC->value,
                 'limit' => $limit,
@@ -216,7 +212,6 @@ final class ResponsePluckStrategyTest extends TestCase
             requestData: $requestData,
             responseData: $responseData,
             options: [
-                'key' => 'route_key',
                 'position' => 'data.*.id',
                 'order' => OrderType::ASC->value,
             ]

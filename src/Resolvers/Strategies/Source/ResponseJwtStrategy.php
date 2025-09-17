@@ -25,11 +25,10 @@ final class ResponseJwtStrategy implements StrategyInterface
         ?ResponseData $responseData,
         ?array $options = []
     ): mixed {
-        $key = Arr::get($options, 'key');
         $position = Arr::get($options, 'position');
 
-        if ($key === null || $position === null) {
-            throw new MissingStrategyOptionException(self::class, 'key/position');
+        if ($position === null) {
+            throw new MissingStrategyOptionException(self::class, 'position');
         }
 
         // Get the JWT token from the response data provided position

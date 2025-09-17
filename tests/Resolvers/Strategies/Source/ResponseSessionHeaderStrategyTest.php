@@ -48,7 +48,7 @@ final class ResponseSessionHeaderStrategyTest extends TestCase
             requestData: $requestData,
             responseData: $responseData,
             options: [
-                'key' => config('demon-dextral-horn.defaults.session_cookie_name'),
+                'source_key' => config('demon-dextral-horn.defaults.session_cookie_name'),
             ]
         );
 
@@ -94,7 +94,7 @@ final class ResponseSessionHeaderStrategyTest extends TestCase
             requestData: $requestData,
             responseData: $responseData,
             options: [
-                'key' => config('demon-dextral-horn.defaults.session_cookie_name'),
+                'source_key' => config('demon-dextral-horn.defaults.session_cookie_name'),
             ]
         );
 
@@ -119,7 +119,7 @@ final class ResponseSessionHeaderStrategyTest extends TestCase
             requestData: $requestData,
             responseData: $responseData,
             options: [
-                'key' => config('demon-dextral-horn.defaults.session_cookie_name'),
+                'source_key' => config('demon-dextral-horn.defaults.session_cookie_name'),
             ]
         );
 
@@ -147,7 +147,7 @@ final class ResponseSessionHeaderStrategyTest extends TestCase
             requestData: $requestData,
             responseData: $responseData,
             options: [
-                'key' => $cookieName,
+                'source_key' => $cookieName,
             ]
         );
 
@@ -164,7 +164,7 @@ final class ResponseSessionHeaderStrategyTest extends TestCase
             requestData: null,
             responseData: null,
             options: [
-                'key' => config('demon-dextral-horn.defaults.session_cookie_name'),
+                'source_key' => config('demon-dextral-horn.defaults.session_cookie_name'),
             ]
         );
 
