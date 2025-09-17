@@ -127,7 +127,6 @@ final class HeadersResolverTest extends TestCase
                 'authorization' => [
                     'strategy' => ResponseJwtStrategy::class,
                     'options' => [
-                        'key' => 'authorization',
                         'position' => 'data.access_token',
                     ],
                 ],
@@ -162,7 +161,6 @@ final class HeadersResolverTest extends TestCase
                 'authorization' => [
                     'strategy' => ResponseJwtStrategy::class,
                     'options' => [
-                        'key' => 'authorization',
                         'position' => 'data.access_token',
                     ],
                 ],

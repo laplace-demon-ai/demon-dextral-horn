@@ -25,14 +25,14 @@ final class ForwardValueStrategy implements StrategyInterface
         ?ResponseData $responseData,
         ?array $options = []
     ): mixed {
-        $key = Arr::get($options, 'key');
+        $sourceKey = Arr::get($options, 'source_key');
 
         // Throw an exception if the required "key" option is missing, or request does not have the key.
-        if ($key === null || ! Arr::has($requestData?->queryParams ?? [], $key)) {
-            throw new MissingStrategyOptionException(self::class, 'key');
+        if ($sourceKey === null || ! Arr::has($requestData?->queryParams ?? [], $sourceKey)) {
+            throw new MissingStrategyOptionException(self::class, 'source_key');
         }
 
         // Return the current value as is.
-        return Arr::get($requestData?->queryParams ?? [], $key);
+        return Arr::get($requestData?->queryParams ?? [], $sourceKey);
     }
 }

@@ -45,7 +45,6 @@ final class ResponseValueStrategyTest extends TestCase
             requestData: $requestData,
             responseData: $responseData,
             options: [
-                'key' => 'route_key',
                 'position' => 'data.id'
             ]
         );
@@ -73,7 +72,6 @@ final class ResponseValueStrategyTest extends TestCase
             requestData: $requestData,
             responseData: $responseData,
             options: [
-                'key' => 'route_key',
                 'position' => 'data.0'
             ]
         );

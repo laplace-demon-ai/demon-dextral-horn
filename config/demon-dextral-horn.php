@@ -30,7 +30,6 @@ return [
          * Sample rule logic for showcasing different prefetching strategies/scenarios.
          */
         [
-            'id' => 'sample_rule_id',
             'description' => 'Sample/generalized rule description for prefetching related data',
             'trigger' => [
                 'method' => Request::METHOD_GET,
@@ -48,7 +47,7 @@ return [
                         'query_key' => [
                             'strategy' => IncrementStrategy::class,
                             'options' => [
-                                'key' => 'query_key',
+                                'source_key' => 'query_key',
                                 'increment' => 1,
                             ],
                         ],
@@ -64,10 +63,10 @@ return [
                     'method' => Request::METHOD_GET,
                     'route' => 'sample.target.route.with.forward.value',
                     'query_params' => [
-                        'query_trigger_key' => [
+                        'query_target_key' => [
                             'strategy' => ForwardValueStrategy::class,
                             'options' => [
-                                'key' => 'query_target_key',
+                                'source_key' => 'query_trigger_key',
                             ],
                         ],
                     ],
@@ -93,7 +92,6 @@ return [
                         'route_key' => [
                             'strategy' => ResponseValueStrategy::class,
                             'options' => [
-                                'key' => 'route_key',
                                 'position' => 'data.id', // Full path to the value in the response data
                             ],
                         ],
@@ -111,7 +109,6 @@ return [
                         'route_key' => [
                             'strategy' => ResponsePluckStrategy::class,
                             'options' => [
-                                'key' => 'route_key',
                                 'position' => 'data.*.id',
                                 'limit' => 3,
                                 'order' => OrderType::DESC->value,
@@ -126,7 +123,6 @@ return [
          * Sample rule logic for handling login requests including JWT token extraction, laravel session handling etc.
          */
         [
-            'id' => 'login_request_id',
             'description' => 'Handle login request and prefetch data for authenticated user',
             'trigger' => [
                 'method' => Request::METHOD_POST,
@@ -144,7 +140,6 @@ return [
                         'authorization' => [
                             'strategy' => ResponseJwtStrategy::class,
                             'options' => [
-                                'key' => 'authorization',
                                 'position' => 'data.access_token',
                             ],
                         ],
@@ -162,7 +157,7 @@ return [
                         'session_cookie' => [
                             'strategy' => ResponseSessionHeaderStrategy::class,
                             'options' => [
-                                'key' => config('session.cookie', 'laravel_session'),
+                                'source_key' => config('session.cookie', 'laravel_session'),
                             ],
                         ],
                     ],

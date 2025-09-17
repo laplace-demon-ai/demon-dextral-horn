@@ -26,10 +26,9 @@ final class ResponseValueStrategy implements StrategyInterface
         ?array $options = []
     ): mixed {
         $position = Arr::get($options, 'position'); // e.g. data.id
-        $key = Arr::get($options, 'key'); // e.g. route_key
 
-        if ($key === null || $position === null) {
-            throw new MissingStrategyOptionException(self::class, 'key/position');
+        if ($position === null) {
+            throw new MissingStrategyOptionException(self::class, 'position');
         }
 
         return Arr::get(json_decode($responseData?->content, true), $position);

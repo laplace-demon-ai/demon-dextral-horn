@@ -27,13 +27,12 @@ final class ResponsePluckStrategy implements StrategyInterface
         ?array $options = []
     ): mixed {
         $position = Arr::get($options, 'position');
-        $key = Arr::get($options, 'key'); // e.g. route_key
         $limitRaw = Arr::get($options, 'limit', null);
         $limit = $limitRaw === null ? null : (int) $limitRaw;
         $order = strtolower((string) Arr::get($options, 'order', ''));
 
-        if ($key === null || $position === null) {
-            throw new MissingStrategyOptionException(self::class, 'key/position');
+        if ($position === null) {
+            throw new MissingStrategyOptionException(self::class, 'position');
         }
 
         // Normalize position by removing any wildcard characters for consistent access. e.g. 'data.*.id' will be 'id'

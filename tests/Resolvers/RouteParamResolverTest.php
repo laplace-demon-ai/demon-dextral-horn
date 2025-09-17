@@ -54,14 +54,14 @@ final class RouteParamResolverTest extends TestCase
                 'route_key' => [
                     'strategy' => ResponseValueStrategy::class,
                     'options' => [
-                        'key' => 'route_key',
+                        'source_key' => 'route_key',
                         'position' => 'data.id',
                     ],
                 ],
                 'other_key' => [
                     'strategy' => ResponseValueStrategy::class,
                     'options' => [
-                        'key' => 'other_key',
+                        'source_key' => 'other_key',
                         'position' => 'data.name',
                     ],
                 ],
@@ -104,7 +104,6 @@ final class RouteParamResolverTest extends TestCase
                 'route_key' => [
                     'strategy' => ResponsePluckStrategy::class,
                     'options' => [
-                        'key' => 'route_key',
                         'position' => 'data.*.id',
                     ],
                 ],
@@ -149,14 +148,12 @@ final class RouteParamResolverTest extends TestCase
                 'route_key' => [
                     'strategy' => ResponsePluckStrategy::class,
                     'options' => [
-                        'key' => 'route_key',
                         'position' => 'data.*.id',
                     ],
                 ],
                 'other_key' => [
                     'strategy' => ResponsePluckStrategy::class,
                     'options' => [
-                        'key' => 'other_key',
                         'position' => 'data.*.name',
                     ],
                 ],
@@ -209,7 +206,6 @@ final class RouteParamResolverTest extends TestCase
                 'route_key' => [
                     'strategy' => ResponseValueStrategy::class,
                     'options' => [
-                        'key' => 'route_key',
                         'position' => 'data.id',
                     ],
                 ],
@@ -265,14 +261,14 @@ final class RouteParamResolverTest extends TestCase
                 'id_key' => [
                     'strategy' => ResponseValueStrategy::class,
                     'options' => [
-                        'key' => 'id_key',
+                        'source_key' => 'id_key',
                         'position' => 'data.id',
                     ],
                 ],
                 'name_key' => [
                     'strategy' => ResponseValueStrategy::class,
                     'options' => [
-                        'key' => 'name_key',
+                        'source_key' => 'name_key',
                         'position' => 'data.details.name',
                     ],
                 ],
@@ -334,32 +330,6 @@ final class RouteParamResolverTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_invalid_argument_exception_when_option_key_is_not_existent_for_response_value_strategy(): void
-    {
-        /* SETUP */
-        $strategy = ResponseValueStrategy::class;
-        $routeDefinition = [
-            'method' => Request::METHOD_GET,
-            'route' => 'sample.route.invalid',
-            'route_params' => [
-                'invalid_key' => [
-                    'strategy' => $strategy,
-                    'options' => [
-                        'position' => 'data.id',
-                    ],
-                ],
-            ],
-        ];
-        $this->expectException(MissingStrategyOptionException::class);
-        $this->expectExceptionMessage($strategy . ' requires the "key/position" option.');
-
-        /* EXECUTE */
-        $this->resolver->resolve(
-            targetRouteDefinition: $routeDefinition,
-        );
-    }
-
-    #[Test]
     public function it_throws_invalid_argument_exception_when_option_position_is_not_existent_for_response_value_strategy(): void
     {
         /* SETUP */
@@ -370,14 +340,12 @@ final class RouteParamResolverTest extends TestCase
             'route_params' => [
                 'invalid_key' => [
                     'strategy' => $strategy,
-                    'options' => [
-                        'key' => 'invalid_key',
-                    ],
+                    'options' => [],
                 ],
             ],
         ];
         $this->expectException(MissingStrategyOptionException::class);
-        $this->expectExceptionMessage($strategy . ' requires the "key/position" option.');
+        $this->expectExceptionMessage($strategy . ' requires the "position" option.');
 
         /* EXECUTE */
         $this->resolver->resolve(
@@ -400,7 +368,6 @@ final class RouteParamResolverTest extends TestCase
                 'route_key' => [
                     'strategy' => ResponsePluckStrategy::class,
                     'options' => [
-                        'key' => 'route_key',
                         'position' => 'data.*.id',
                     ],
                 ],
@@ -434,14 +401,14 @@ final class RouteParamResolverTest extends TestCase
                 'id_key' => [
                     'strategy' => ResponseValueStrategy::class,
                     'options' => [
-                        'key' => 'id_key',
+                        'source_key' => 'id_key',
                         'position' => 'data.id',
                     ],
                 ],
                 'null_key' => [
                     'strategy' => ResponseValueStrategy::class,
                     'options' => [
-                        'key' => 'null_key',
+                        'source_key' => 'null_key',
                         'position' => 'data.nonexistent',
                     ],
                 ],

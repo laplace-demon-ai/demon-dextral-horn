@@ -41,7 +41,7 @@ final class CookiesResolverTest extends TestCase
                 'session_cookie' => [
                     'strategy' => ResponseSessionHeaderStrategy::class,
                     'options' => [
-                        'key' => $cookieName,
+                        'source_key' => $cookieName,
                     ],
                 ],
             ],

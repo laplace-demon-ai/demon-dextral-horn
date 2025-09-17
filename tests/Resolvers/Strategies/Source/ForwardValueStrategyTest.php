@@ -47,7 +47,7 @@ final class ForwardValueStrategyTest extends TestCase
         $result = $this->forwardValueStrategy->handle(
             requestData: $requestData,
             responseData: $this->responseData,
-            options: ['key' => 'query_key']
+            options: ['source_key' => 'query_key']
         );
 
         /* ASSERT */
@@ -70,7 +70,7 @@ final class ForwardValueStrategyTest extends TestCase
         $this->forwardValueStrategy->handle(
             requestData: $requestData,
             responseData: $this->responseData,
-            options: ['key' => 'query_key']
+            options: ['source_key' => 'query_key']
         );
     }
 
@@ -105,7 +105,7 @@ final class ForwardValueStrategyTest extends TestCase
         $result = $this->forwardValueStrategy->handle(
             requestData: $requestData,
             responseData: $this->responseData,
-            options: ['key' => 'query_key']
+            options: ['source_key' => 'query_key']
         );
 
         /* ASSERT */
@@ -129,7 +129,7 @@ final class ForwardValueStrategyTest extends TestCase
         $result = $this->forwardValueStrategy->handle(
             requestData: $requestData,
             responseData: $this->responseData,
-            options: ['key' => 'items']
+            options: ['source_key' => 'items']
         );
 
         /* ASSERT */
