@@ -62,11 +62,14 @@ final class HeadersResolverTest extends TestCase
             method: Request::METHOD_GET,
         );
         $request->headers->set(HttpHeaderType::AUTHORIZATION->value, 'Bearer ' . $bearerToken);
-        $request->setRouteResolver(fn () => $this->app['router']->getRoutes()->match($request));
+        $targetRouteDefinition = [
+            'method' => Request::METHOD_GET,
+            'route' => 'auth.protected.route',
+        ];
         $this->requestData = RequestData::fromRequest($request);
 
         /* EXECUTE */
-        $resolvedParams = $this->resolver->resolve(requestData: $this->requestData);
+        $resolvedParams = $this->resolver->resolve(targetRouteDefinition: $targetRouteDefinition, requestData: $this->requestData);
 
         /* ASSERT */
         $this->assertIsArray($resolvedParams);

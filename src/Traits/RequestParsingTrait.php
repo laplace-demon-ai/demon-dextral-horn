@@ -7,6 +7,7 @@ namespace DemonDextralHorn\Traits;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Enums\HttpHeaderType;
 use DemonDextralHorn\Enums\PrefetchType;
+use Illuminate\Support\Arr;
 
 /**
  * Trait for parsing requests and extracting relevant information.
@@ -103,16 +104,17 @@ trait RequestParsingTrait
      * Prepare mapped headers array with optional overrides and always include prefetch header.
      *
      * @param RequestData|null $requestData
+     * @param string|null $targetRouteName - Sometimes derived from the target route definition, sometimes from the request data
      * @param array $overrides
      *
      * @return array
      */
-    protected function prepareMappedHeaders(?RequestData $requestData, array $overrides = []): array
+    protected function prepareMappedHeaders(?RequestData $requestData, ?string $targetRouteName = null, array $overrides = []): array
     {
         $headersData = $requestData?->headers;
 
         // Only add authorization header if the route requires authentication
-        $authenticationHeader = $this->routeRequiresAuth($requestData?->routeName) ? $headersData?->authorization : null;
+        $authenticationHeader = $this->routeRequiresAuth($targetRouteName) ? $headersData?->authorization : null;
 
         // Map the headers to the correct format as hyphenated capitalization
         $mappedHeaders = [

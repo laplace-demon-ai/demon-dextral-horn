@@ -56,7 +56,8 @@ final readonly class HeadersResolver extends AbstractResolver
 
         // Prepare the final headers by merging the resolved headers with the original request headers.
         return $this->prepareMappedHeaders(
-            $requestData,
+            requestData: $requestData,
+            targetRouteName: Arr::get($targetRouteDefinition, 'route'), // We need route name of the target (NOT request data route name)
             overrides: array_filter([
                 // Prioritize resolved headers over request headers
                 HttpHeaderType::AUTHORIZATION->value => Arr::get($resolvedHeaders, 'authorization'),
