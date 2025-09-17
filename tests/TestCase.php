@@ -100,5 +100,20 @@ class TestCase extends OrchestraTestCase
             ->get('/sample-target-route-with-middleware', function () {
                 return new Response('ok', Response::HTTP_OK);
             })->name('sample.target.route.with.middleware');
+
+        // Define route with auth middleware
+        $router->middleware('auth')->get('/auth-protected-route', function () {
+            return new Response('ok', Response::HTTP_OK);
+        })->name('auth.protected.route');
+
+        // Define public route with no auth middleware
+        $router->get('/public-route-no-auth', function () {
+            return new Response('ok', Response::HTTP_OK);
+        })->name('public.route.no.auth');
+
+        // Define route with auth middleware that requires token from login request
+        $router->middleware('auth')->get('/sample-target-route-requires-token-from-login-request', function () {
+            return new Response('ok', Response::HTTP_OK);
+        })->name('sample.target.route.requires.token.from.login.request');
     }
 }

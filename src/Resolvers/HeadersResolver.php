@@ -57,11 +57,10 @@ final readonly class HeadersResolver extends AbstractResolver
         // Prepare the final headers by merging the resolved headers with the original request headers.
         return $this->prepareMappedHeaders(
             $requestData,
-            overrides: [
-                // Prioritize resolved headers over request headers.
-                HttpHeaderType::AUTHORIZATION->value => Arr::get($resolvedHeaders, 'authorization')
-                    ?? $requestData?->headers?->authorization,
-            ]
+            overrides: array_filter([
+                // Prioritize resolved headers over request headers
+                HttpHeaderType::AUTHORIZATION->value => Arr::get($resolvedHeaders, 'authorization'),
+            ], fn($value) => ! is_null($value))
         );
     }
 }

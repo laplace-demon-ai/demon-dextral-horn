@@ -111,9 +111,12 @@ trait RequestParsingTrait
     {
         $headersData = $requestData?->headers;
 
+        // Only add authorization header if the route requires authentication
+        $authenticationHeader = $this->routeRequiresAuth($requestData?->routeName) ? $headersData?->authorization : null;
+
         // Map the headers to the correct format as hyphenated capitalization
         $mappedHeaders = [
-            HttpHeaderType::AUTHORIZATION->value => $headersData?->authorization,
+            HttpHeaderType::AUTHORIZATION->value => $authenticationHeader,
             HttpHeaderType::ACCEPT->value => $headersData?->accept,
             HttpHeaderType::ACCEPT_LANGUAGE->value => $headersData?->acceptLanguage,
         ];
@@ -163,5 +166,31 @@ trait RequestParsingTrait
             $cookies,
             fn ($value) => ! is_null($value)
         );
+    }
+
+    /**
+     * Check if a given route requires authentication by inspecting its middleware.
+     *
+     * @param string|null $routeName
+     *
+     * @return bool
+     */
+    private function routeRequiresAuth(?string $routeName): bool
+    {
+        if ($routeName) {
+            $middlewareArray = app('router')
+                ->getRoutes()
+                ->getByName($routeName)?->gatherMiddleware() ?? [];
+
+            // Check if any middleware has 'auth' prefix
+            foreach ($middlewareArray as $middleware) {
+                // catches: 'auth', 'auth:api', 'auth:sanctum', 'auth:web'
+                if (str_starts_with($middleware, 'auth')) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
