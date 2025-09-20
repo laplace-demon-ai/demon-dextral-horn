@@ -2,33 +2,33 @@
 
 declare(strict_types=1);
 
-namespace Tests\Resolvers\Strategies\Transform;
+namespace Tests\Resolvers\Strategies\Composite;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
-use DemonDextralHorn\Resolvers\Strategies\Source\ResponseSessionHeaderStrategy;
+use Symfony\Component\HttpFoundation\Cookie;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
+use DemonDextralHorn\Resolvers\Strategies\Composite\ForwardSetCookieHeaderStrategy;
 
-#[CoversClass(ResponseSessionHeaderStrategy::class)]
-final class ResponseSessionHeaderStrategyTest extends TestCase
+#[CoversClass(ForwardSetCookieHeaderStrategy::class)]
+final class ForwardSetCookieHeaderStrategyTest extends TestCase
 {
-    private ResponseSessionHeaderStrategy $responseSessionHeaderStrategy;
+    private ForwardSetCookieHeaderStrategy $forwardSetCookieHeaderStrategy;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->responseSessionHeaderStrategy = app(ResponseSessionHeaderStrategy::class);
+        $this->forwardSetCookieHeaderStrategy = app(ForwardSetCookieHeaderStrategy::class);
     }
 
     #[Test]
-    public function it_tests_response_session_header_strategy_when_set_cookie_is_present_in_response_headers(): void
+    public function it_tests_forward_set_cookie_header_strategy_when_set_cookie_is_present_in_response_headers(): void
     {
         /* SETUP */
         $cookieName = config('demon-dextral-horn.defaults.session_cookie_name');
@@ -44,7 +44,7 @@ final class ResponseSessionHeaderStrategyTest extends TestCase
         $responseData = ResponseData::fromResponse($response);
 
         /* EXECUTE */
-        $result = $this->responseSessionHeaderStrategy->handle(
+        $result = $this->forwardSetCookieHeaderStrategy->handle(
             requestData: $requestData,
             responseData: $responseData,
             options: [
@@ -58,7 +58,7 @@ final class ResponseSessionHeaderStrategyTest extends TestCase
     }
 
     #[Test]
-    public function it_throws_missing_strategy_option_exception_when_route_key_missing_in_options(): void
+    public function it_throws_missing_strategy_option_exception_when_source_key_missing_in_options(): void
     {
         /* SETUP */
         $request = Request::create(
@@ -66,11 +66,12 @@ final class ResponseSessionHeaderStrategyTest extends TestCase
             method: Request::METHOD_GET,
         );
         $requestData = RequestData::fromRequest($request);
-        $responseData = new ResponseData(Response::HTTP_OK);
+        $response = new Response(json_encode(['data' => 'ok']), Response::HTTP_OK);
+        $responseData = ResponseData::fromResponse($response);
         $this->expectException(MissingStrategyOptionException::class);
 
         /* EXECUTE */
-        $this->responseSessionHeaderStrategy->handle(
+        $this->forwardSetCookieHeaderStrategy->handle(
             requestData: $requestData,
             responseData: $responseData,
             options: []
@@ -90,7 +91,7 @@ final class ResponseSessionHeaderStrategyTest extends TestCase
         $responseData = ResponseData::fromResponse($response);
 
         /* EXECUTE */
-        $result = $this->responseSessionHeaderStrategy->handle(
+        $result = $this->forwardSetCookieHeaderStrategy->handle(
             requestData: $requestData,
             responseData: $responseData,
             options: [
@@ -115,7 +116,7 @@ final class ResponseSessionHeaderStrategyTest extends TestCase
         $responseData = ResponseData::fromResponse($response);
 
         /* EXECUTE */
-        $result = $this->responseSessionHeaderStrategy->handle(
+        $result = $this->forwardSetCookieHeaderStrategy->handle(
             requestData: $requestData,
             responseData: $responseData,
             options: [
@@ -143,7 +144,7 @@ final class ResponseSessionHeaderStrategyTest extends TestCase
         $responseData = ResponseData::fromResponse($response);
 
         /* EXECUTE */
-        $result = $this->responseSessionHeaderStrategy->handle(
+        $result = $this->forwardSetCookieHeaderStrategy->handle(
             requestData: $requestData,
             responseData: $responseData,
             options: [
@@ -160,7 +161,7 @@ final class ResponseSessionHeaderStrategyTest extends TestCase
     public function it_returns_null_when_response_data_is_null(): void
     {
         /* EXECUTE */
-        $result = $this->responseSessionHeaderStrategy->handle(
+        $result = $this->forwardSetCookieHeaderStrategy->handle(
             requestData: null,
             responseData: null,
             options: [

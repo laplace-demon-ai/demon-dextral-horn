@@ -2,28 +2,29 @@
 
 declare(strict_types=1);
 
-namespace DemonDextralHorn\Resolvers\Strategies\Source;
+namespace DemonDextralHorn\Resolvers\Strategies\Atomic;
 
+use DemonDextralHorn\Resolvers\Strategies\AbstractStrategy;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
-use DemonDextralHorn\Resolvers\Contracts\StrategyInterface;
 use Illuminate\Support\Arr;
 
 /**
- * This strategy extracts session cookies from the response headers (from `Set-Cookie` for laravel session authentication).
- *
- * @class ResponseSessionHeaderStrategy
+ * [Atomic]: Strategy to retrieve a specific cookie (session cookie) from the Set-Cookie headers (provided with $value) in an HTTP response.
+ * 
+ * @class ParseSetCookieStrategy
  */
-final class ResponseSessionHeaderStrategy implements StrategyInterface
+final readonly class ParseSetCookieStrategy extends AbstractStrategy
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function handle(
-        ?RequestData $requestData,
-        ?ResponseData $responseData,
-        ?array $options = []
+        ?RequestData $requestData = null,
+        ?ResponseData $responseData = null,
+        ?array $options = [],
+        mixed $value = null
     ): mixed {
         $sourceKey = Arr::get($options, 'source_key'); // The key for the session cookie e.g. laravel_session
 
@@ -31,11 +32,9 @@ final class ResponseSessionHeaderStrategy implements StrategyInterface
             throw new MissingStrategyOptionException(self::class, 'source_key');
         }
 
-        $headersData = $responseData?->headers;
-
         $sessionCookie = null;
 
-        foreach ($headersData?->setCookie ?? [] as $cookie) {
+        foreach ($value ?? [] as $cookie) {
             // Check if the cookie matches the session cookie name (laravel_session)
             if (str_contains($cookie, $sourceKey)) {
                 $sessionCookie = $cookie;

@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Tests\Resolvers\Strategies\Transform;
+namespace Tests\Resolvers\Strategies\Composite;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use DemonDextralHorn\Resolvers\Strategies\Source\ForwardValueStrategy;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
+use DemonDextralHorn\Resolvers\Strategies\Composite\ForwardQueryParamStrategy;
 
-#[CoversClass(ForwardValueStrategy::class)]
-final class ForwardValueStrategyTest extends TestCase
+#[CoversClass(ForwardQueryParamStrategy::class)]
+final class ForwardQueryParamStrategyTest extends TestCase
 {
-    private ForwardValueStrategy $forwardValueStrategy;
+    private ForwardQueryParamStrategy $forwardQueryParamStrategy;
     private ResponseData $responseData;
 
     public function setUp(): void
@@ -28,12 +28,11 @@ final class ForwardValueStrategyTest extends TestCase
             status: Response::HTTP_OK,
             content: 'ok'
         );
-
-        $this->forwardValueStrategy = app(ForwardValueStrategy::class);
+        $this->forwardQueryParamStrategy = app(ForwardQueryParamStrategy::class);
     }
 
     #[Test]
-    public function it_tests_forward_value_strategy_when_query_key_is_present(): void
+    public function it_tests_forward_query_param_strategy_when_query_key_is_present(): void
     {
         /* SETUP */
         $value = 5;
@@ -44,9 +43,8 @@ final class ForwardValueStrategyTest extends TestCase
         $requestData = RequestData::fromRequest($request);
 
         /* EXECUTE */
-        $result = $this->forwardValueStrategy->handle(
+        $result = $this->forwardQueryParamStrategy->handle(
             requestData: $requestData,
-            responseData: $this->responseData,
             options: ['source_key' => 'query_key']
         );
 
@@ -56,7 +54,7 @@ final class ForwardValueStrategyTest extends TestCase
     }
 
     #[Test]
-    public function it_tests_forward_value_strategy_when_query_key_is_NOT_present(): void
+    public function it_tests_forward_query_param_strategy_when_query_key_is_NOT_present(): void
     {
         /* SETUP */
         $request = Request::create(
@@ -67,7 +65,7 @@ final class ForwardValueStrategyTest extends TestCase
         $this->expectException(MissingStrategyOptionException::class);
 
         /* EXECUTE */
-        $this->forwardValueStrategy->handle(
+        $this->forwardQueryParamStrategy->handle(
             requestData: $requestData,
             responseData: $this->responseData,
             options: ['source_key' => 'query_key']
@@ -86,7 +84,7 @@ final class ForwardValueStrategyTest extends TestCase
         $this->expectException(MissingStrategyOptionException::class);
 
         /* EXECUTE */
-        $this->forwardValueStrategy->handle(
+        $this->forwardQueryParamStrategy->handle(
             requestData: $requestData,
             responseData: $this->responseData,
             options: []
@@ -94,7 +92,7 @@ final class ForwardValueStrategyTest extends TestCase
     }
 
     #[Test]
-    public function it_forwards_string_value(): void
+    public function it_forwards_string_query_param(): void
     {
         /* SETUP */
         $stringValue = 'some_value';
@@ -102,7 +100,7 @@ final class ForwardValueStrategyTest extends TestCase
         $requestData = RequestData::fromRequest($request);
 
         /* EXECUTE */
-        $result = $this->forwardValueStrategy->handle(
+        $result = $this->forwardQueryParamStrategy->handle(
             requestData: $requestData,
             responseData: $this->responseData,
             options: ['source_key' => 'query_key']
@@ -113,7 +111,7 @@ final class ForwardValueStrategyTest extends TestCase
     }
 
     #[Test]
-    public function it_tests_forward_value_strategy_when_query_key_is_array(): void
+    public function it_tests_forward_query_param_strategy_when_query_key_is_array(): void
     {
         /* SETUP */
         $firstItem = 1;
@@ -126,7 +124,7 @@ final class ForwardValueStrategyTest extends TestCase
         $requestData = RequestData::fromRequest($request);
 
         /* EXECUTE */
-        $result = $this->forwardValueStrategy->handle(
+        $result = $this->forwardQueryParamStrategy->handle(
             requestData: $requestData,
             responseData: $this->responseData,
             options: ['source_key' => 'items']

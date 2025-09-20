@@ -7,7 +7,6 @@ namespace DemonDextralHorn\Traits;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Enums\HttpHeaderType;
 use DemonDextralHorn\Enums\PrefetchType;
-use Illuminate\Support\Arr;
 
 /**
  * Trait for parsing requests and extracting relevant information.
@@ -148,13 +147,15 @@ trait RequestParsingTrait
      *
      * @return array
      */
-    protected function prepareCookies(?RequestData $requestData, array $overrides = []): array
+    protected function prepareCookies(?RequestData $requestData, ?string $targetRouteName = null, array $overrides = []): array
     {
         $cookiesData = $requestData?->cookies;
 
-        // Auto forward session cookie if exists
+        // Only add session cookie if the route requires authentication
+        $sessionCookie = $this->routeRequiresAuth($targetRouteName) ? $cookiesData?->sessionCookie : null;
+
         $cookies = [
-            'session_cookie' => $cookiesData?->sessionCookie,
+            'session_cookie' => $sessionCookie,
         ];
 
         // Apply overrides (e.g. resolved session cookie). Resolved cookies have priority over request cookies.
@@ -180,6 +181,7 @@ trait RequestParsingTrait
     private function routeRequiresAuth(?string $routeName): bool
     {
         if ($routeName) {
+            // Get middleware for the route
             $middlewareArray = app('router')
                 ->getRoutes()
                 ->getByName($routeName)?->gatherMiddleware() ?? [];

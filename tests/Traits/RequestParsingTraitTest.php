@@ -47,9 +47,9 @@ final class RequestParsingTraitTest extends TestCase
                 return $this->normalizeQueryParams($params);
             }
 
-            public function callPrepareCookies(?RequestData $requestData, array $overrides = []): array
+            public function callPrepareCookies(?RequestData $requestData, ?string $targetRouteName = null, array $overrides = []): array
             {
-                return $this->prepareCookies($requestData, $overrides);
+                return $this->prepareCookies($requestData, $targetRouteName, $overrides);
             }
 
             public function callPrepareMappedHeaders(?RequestData $requestData, ?string $targetRouteName, array $overrides = []): array
@@ -259,21 +259,22 @@ final class RequestParsingTraitTest extends TestCase
     public function it_prepares_cookies_with_session_cookie(): void
     {
         /* SETUP */
+        $routeName = 'auth.protected.route';
         $sessionValue = 'session_value';
         $cookiesData = new CookiesData(
             sessionCookie: $sessionValue
         );
         $requestData = new RequestData(
-            uri: '/sample_route',
+            uri: '/auth-protected-route',
             method: Request::METHOD_GET,
             headers: new HeadersData(),
             payload: [],
-            routeName: 'sample.route',
+            routeName: $routeName,
             cookies: $cookiesData
         );
 
         /* EXECUTE */
-        $cookies = $this->anonymousClass->callPrepareCookies($requestData);
+        $cookies = $this->anonymousClass->callPrepareCookies($requestData, $routeName);
 
         /* ASSERT */
         $this->assertSame(['session_cookie' => $sessionValue], $cookies);
@@ -299,7 +300,7 @@ final class RequestParsingTraitTest extends TestCase
         $overrides = ['session_cookie' => $overrideSessionValue];
 
         /* EXECUTE */
-        $cookies = $this->anonymousClass->callPrepareCookies($requestData, $overrides);
+        $cookies = $this->anonymousClass->callPrepareCookies(requestData: $requestData, overrides: $overrides);
 
         /* ASSERT */
         $this->assertSame(['session_cookie' => $overrideSessionValue], $cookies);

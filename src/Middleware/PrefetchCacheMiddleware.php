@@ -43,7 +43,7 @@ final class PrefetchCacheMiddleware
                 routeParams: $this->normalizeRouteParams($requestData->routeParams ?? []),
                 queryParams: $this->normalizeQueryParams($requestData->queryParams ?? []),
                 headers: $this->prepareMappedHeaders($requestData, $requestData->routeName),
-                cookies: $this->prepareCookies($requestData)
+                cookies: $this->prepareCookies($requestData, $requestData->routeName)
             );
 
             if (ResponseCache::has($targetRouteData)) {

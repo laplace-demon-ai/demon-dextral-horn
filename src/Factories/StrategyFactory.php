@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Factories;
 
-use DemonDextralHorn\Resolvers\Contracts\StrategyInterface;
+use DemonDextralHorn\Resolvers\Strategies\StrategyInterface;
 use Exception;
 use InvalidArgumentException;
 use RuntimeException;
@@ -16,6 +16,13 @@ use RuntimeException;
  */
 final class StrategyFactory
 {
+    /**
+     * Create an instance of a strategy class given its class name (the fully qualified class name of the strategy).
+     * 
+     * @param string $strategyClass
+     * 
+     * @return StrategyInterface
+     */
     public function make(string $strategyClass): StrategyInterface
     {
         // Check if strategy class is provided

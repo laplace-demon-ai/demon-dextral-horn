@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Tests\Resolvers\Strategies\Transform;
+namespace Tests\Resolvers\Strategies\Composite;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use DemonDextralHorn\Resolvers\Strategies\Source\ResponsePluckStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Composite\ResponsePluckStrategy;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Enums\OrderType;
@@ -101,7 +101,7 @@ final class ResponsePluckStrategyTest extends TestCase
     {
         /* SETUP */
         $firstId = 32;
-        $secondId = 33;
+        $secondId = 39;
         $thirdId = 34;
         $data = [
             ['id' => $firstId],
@@ -127,7 +127,7 @@ final class ResponsePluckStrategyTest extends TestCase
         );
 
         /* ASSERT */
-        $this->assertEquals([$thirdId, $secondId, $firstId], $result);
+        $this->assertEquals([$secondId, $thirdId, $firstId], $result);
     }
 
     #[Test]

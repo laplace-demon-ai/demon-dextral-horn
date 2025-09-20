@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Factories;
 
-use DemonDextralHorn\Resolvers\Contracts\StrategyInterface;
+use DemonDextralHorn\Resolvers\Strategies\StrategyInterface;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 
@@ -16,12 +16,13 @@ use DemonDextralHorn\Data\ResponseData;
 final class StrategySample implements StrategyInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function handle(
-        ?RequestData $requestData,
-        ?ResponseData $responseData,
-        ?array $options = []
+        ?RequestData $requestData = null,
+        ?ResponseData $responseData = null,
+        ?array $options = [],
+        mixed $value = null
     ): string {
         return 'sample_response';
     }

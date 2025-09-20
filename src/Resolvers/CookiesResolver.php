@@ -52,6 +52,10 @@ final readonly class CookiesResolver extends AbstractResolver
             );
         }
 
-        return $this->prepareCookies($requestData, overrides: $resolvedCookies);
+        return $this->prepareCookies(
+            requestData: $requestData,
+            targetRouteName: Arr::get($targetRouteDefinition, 'route'), // We need route name of the target (NOT request data route name)
+            overrides: $resolvedCookies
+        );
     }
 }

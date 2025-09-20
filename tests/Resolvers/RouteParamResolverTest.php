@@ -13,8 +13,8 @@ use DemonDextralHorn\Resolvers\RouteParamResolver;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
-use DemonDextralHorn\Resolvers\Strategies\Source\ResponseValueStrategy;
-use DemonDextralHorn\Resolvers\Strategies\Source\ResponsePluckStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Atomic\FromResponseBodyStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Composite\ResponsePluckStrategy;
 use Illuminate\Support\Arr;
 use InvalidArgumentException;
 use TypeError;
@@ -52,14 +52,14 @@ final class RouteParamResolverTest extends TestCase
             'route' => 'sample.target.route.with.route.param',
             'route_params' => [
                 'route_key' => [
-                    'strategy' => ResponseValueStrategy::class,
+                    'strategy' => FromResponseBodyStrategy::class,
                     'options' => [
                         'source_key' => 'route_key',
                         'position' => 'data.id',
                     ],
                 ],
                 'other_key' => [
-                    'strategy' => ResponseValueStrategy::class,
+                    'strategy' => FromResponseBodyStrategy::class,
                     'options' => [
                         'source_key' => 'other_key',
                         'position' => 'data.name',
@@ -204,7 +204,7 @@ final class RouteParamResolverTest extends TestCase
             'route' => 'sample.target.route.with.route.param',
             'route_params' => [
                 'route_key' => [
-                    'strategy' => ResponseValueStrategy::class,
+                    'strategy' => FromResponseBodyStrategy::class,
                     'options' => [
                         'position' => 'data.id',
                     ],
@@ -259,14 +259,14 @@ final class RouteParamResolverTest extends TestCase
             'route' => 'sample.route.with.multiple.params',
             'route_params' => [
                 'id_key' => [
-                    'strategy' => ResponseValueStrategy::class,
+                    'strategy' => FromResponseBodyStrategy::class,
                     'options' => [
                         'source_key' => 'id_key',
                         'position' => 'data.id',
                     ],
                 ],
                 'name_key' => [
-                    'strategy' => ResponseValueStrategy::class,
+                    'strategy' => FromResponseBodyStrategy::class,
                     'options' => [
                         'source_key' => 'name_key',
                         'position' => 'data.details.name',
@@ -333,7 +333,7 @@ final class RouteParamResolverTest extends TestCase
     public function it_throws_invalid_argument_exception_when_option_position_is_not_existent_for_response_value_strategy(): void
     {
         /* SETUP */
-        $strategy = ResponseValueStrategy::class;
+        $strategy = FromResponseBodyStrategy::class;
         $routeDefinition = [
             'method' => Request::METHOD_GET,
             'route' => 'sample.route.invalid',
@@ -399,14 +399,14 @@ final class RouteParamResolverTest extends TestCase
             'route' => 'sample.route.with.nulls',
             'route_params' => [
                 'id_key' => [
-                    'strategy' => ResponseValueStrategy::class,
+                    'strategy' => FromResponseBodyStrategy::class,
                     'options' => [
                         'source_key' => 'id_key',
                         'position' => 'data.id',
                     ],
                 ],
                 'null_key' => [
-                    'strategy' => ResponseValueStrategy::class,
+                    'strategy' => FromResponseBodyStrategy::class,
                     'options' => [
                         'source_key' => 'null_key',
                         'position' => 'data.nonexistent',
