@@ -9,7 +9,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\CoversClass;
 use InvalidArgumentException;
 use DemonDextralHorn\Factories\StrategyFactory;
-use DemonDextralHorn\Resolvers\Contracts\StrategyInterface;
+use DemonDextralHorn\Resolvers\Strategies\StrategyInterface;
 
 #[CoversClass(StrategyFactory::class)]
 final class StrategyFactoryTest extends TestCase

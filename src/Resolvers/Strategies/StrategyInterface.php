@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DemonDextralHorn\Resolvers\Contracts;
+namespace DemonDextralHorn\Resolvers\Strategies;
 
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
@@ -20,12 +20,14 @@ interface StrategyInterface
      * @param RequestData|null $requestData
      * @param ResponseData|null $responseData
      * @param array|null $options
+     * @param mixed $value
      *
      * @return mixed
      */
     public function handle(
-        ?RequestData $requestData,
-        ?ResponseData $responseData,
-        ?array $options = []
+        ?RequestData $requestData = null,
+        ?ResponseData $responseData = null,
+        ?array $options = [],
+        mixed $value = null
     ): mixed;
 }

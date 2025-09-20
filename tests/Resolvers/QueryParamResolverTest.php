@@ -10,8 +10,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Illuminate\Http\Request;
 use DemonDextralHorn\Resolvers\QueryParamResolver;
 use DemonDextralHorn\Data\RequestData;
-use DemonDextralHorn\Resolvers\Strategies\Transform\IncrementStrategy;
-use DemonDextralHorn\Resolvers\Strategies\Source\ForwardValueStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Composite\IncrementQueryParamStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Composite\ForwardQueryParamStrategy;
 use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
 
 #[CoversClass(QueryParamResolver::class)]
@@ -28,7 +28,7 @@ final class QueryParamResolverTest extends TestCase
     }
 
     #[Test]
-    public function it_resolves_query_parameters_for_increment_strategy(): void
+    public function it_resolves_query_parameters_for_increment_query_param_strategy(): void
     {
         /* SETUP */
         $queryKey = 3;
@@ -43,7 +43,7 @@ final class QueryParamResolverTest extends TestCase
             'route' => 'sample.target.route.with.only.query.param',
             'query_params' => [
                 'query_key' => [
-                    'strategy' => IncrementStrategy::class,
+                    'strategy' => IncrementQueryParamStrategy::class,
                     'options' => [
                         'source_key' => 'query_key',
                         'increment' => $increment,
@@ -95,11 +95,11 @@ final class QueryParamResolverTest extends TestCase
             'route' => 'sample.target.route.with.multiple.query.params',
             'query_params' => [
                 'first' => [
-                    'strategy' => IncrementStrategy::class,
+                    'strategy' => IncrementQueryParamStrategy::class,
                     'options' => ['source_key' => 'first', 'increment' => $incrementFirst],
                 ],
                 'second' => [
-                    'strategy' => IncrementStrategy::class,
+                    'strategy' => IncrementQueryParamStrategy::class,
                     'options' => ['source_key' => 'second', 'increment' => $incrementSecond],
                 ],
             ],
@@ -130,7 +130,7 @@ final class QueryParamResolverTest extends TestCase
             'route' => 'sample.target.route.with.only.query.param',
             'query_params' => [
                 'query_target_key' => [
-                    'strategy' => ForwardValueStrategy::class,
+                    'strategy' => ForwardQueryParamStrategy::class,
                     'options' => [
                         'source_key' => 'query_trigger_key',
                     ],
@@ -159,7 +159,7 @@ final class QueryParamResolverTest extends TestCase
             'route' => 'sample.target.route.with.array.query.params',
             'query_params' => [
                 'items' => [
-                    'strategy' => ForwardValueStrategy::class,
+                    'strategy' => ForwardQueryParamStrategy::class,
                     'options' => ['source_key' => 'items'],
                 ],
             ],
@@ -190,7 +190,7 @@ final class QueryParamResolverTest extends TestCase
             'route' => 'sample.target.route.with.only.query.param',
             'query_params' => [
                 'query_key' => [
-                    'strategy' => ForwardValueStrategy::class,
+                    'strategy' => ForwardQueryParamStrategy::class,
                     'options' => [
                         'source_key' => 'query_key',
                     ],
@@ -219,7 +219,7 @@ final class QueryParamResolverTest extends TestCase
             'route' => 'sample.target.route.with.only.query.param',
             'query_params' => [
                 'query_key' => [
-                    'strategy' => ForwardValueStrategy::class,
+                    'strategy' => ForwardQueryParamStrategy::class,
                     'options' => [
                         'source_key' => 'query_key',
                     ],

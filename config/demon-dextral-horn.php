@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 use DemonDextralHorn\Enums\AuthDriverType;
 use DemonDextralHorn\Enums\OrderType;
-use DemonDextralHorn\Resolvers\Strategies\Source\ForwardValueStrategy;
-use DemonDextralHorn\Resolvers\Strategies\Source\ResponseJwtStrategy;
-use DemonDextralHorn\Resolvers\Strategies\Source\ResponsePluckStrategy;
-use DemonDextralHorn\Resolvers\Strategies\Source\ResponseSessionHeaderStrategy;
-use DemonDextralHorn\Resolvers\Strategies\Source\ResponseValueStrategy;
-use DemonDextralHorn\Resolvers\Strategies\Transform\IncrementStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Atomic\FromResponseBodyStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Composite\ForwardQueryParamStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Composite\ForwardSetCookieHeaderStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Composite\IncrementQueryParamStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Composite\ResponseJwtStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Composite\ResponsePluckStrategy;
 use Illuminate\Http\Request;
 
 return [
@@ -37,7 +37,7 @@ return [
             ],
             'targets' => [
                 /*
-                 * Sample target route with only query parameter, increment strategy will be applied.
+                 * Sample target route with only query parameter, increment query param strategy will be applied.
                  * e.g. /api/sample?page=1
                  */
                 [
@@ -45,7 +45,7 @@ return [
                     'route' => 'sample.target.route.with.only.query.param',
                     'query_params' => [
                         'query_key' => [
-                            'strategy' => IncrementStrategy::class,
+                            'strategy' => IncrementQueryParamStrategy::class,
                             'options' => [
                                 'source_key' => 'query_key',
                                 'increment' => 1,
@@ -64,7 +64,7 @@ return [
                     'route' => 'sample.target.route.with.forward.value',
                     'query_params' => [
                         'query_target_key' => [
-                            'strategy' => ForwardValueStrategy::class,
+                            'strategy' => ForwardQueryParamStrategy::class,
                             'options' => [
                                 'source_key' => 'query_trigger_key',
                             ],
@@ -90,7 +90,7 @@ return [
                     'route' => 'sample.target.route.with.route.param',
                     'route_params' => [
                         'route_key' => [
-                            'strategy' => ResponseValueStrategy::class,
+                            'strategy' => FromResponseBodyStrategy::class,
                             'options' => [
                                 'position' => 'data.id', // Full path to the value in the response data
                             ],
@@ -148,14 +148,14 @@ return [
 
                 /*
                  * Sample target route with laravel session cookie.
-                 * The session cookie will be extracted from the response headers (Set-Cookie) and set in the request cookies.
+                 * The session cookie will be extracted from the response headers (Set-Cookie) and forwarded in the request cookies.
                  */
                 [
                     'method' => Request::METHOD_GET,
                     'route' => 'sample.target.route.with.session.cookie',
                     'cookies' => [
                         'session_cookie' => [
-                            'strategy' => ResponseSessionHeaderStrategy::class,
+                            'strategy' => ForwardSetCookieHeaderStrategy::class,
                             'options' => [
                                 'source_key' => config('session.cookie', 'laravel_session'),
                             ],

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Resolvers;
 
 use DemonDextralHorn\Resolvers\HeadersResolver;
-use DemonDextralHorn\Resolvers\Strategies\Source\ResponseJwtStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Composite\ResponseJwtStrategy;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Enums\HttpHeaderType;
