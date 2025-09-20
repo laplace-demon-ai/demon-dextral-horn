@@ -6,14 +6,14 @@ namespace DemonDextralHorn\Resolvers\Strategies\Composite;
 
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
+use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
 use DemonDextralHorn\Resolvers\Strategies\AbstractStrategy;
 use DemonDextralHorn\Resolvers\Strategies\Atomic\FromRequestQueryStrategy;
-use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
 use Illuminate\Support\Arr;
 
 /**
  * [Composite]: Strategy that forwards a value from the request query parameters to another strategy.
- * 
+ *
  * @class ForwardQueryParamStrategy
  */
 final readonly class ForwardQueryParamStrategy extends AbstractStrategy

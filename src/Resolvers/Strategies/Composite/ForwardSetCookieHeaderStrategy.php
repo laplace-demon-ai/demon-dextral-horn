@@ -12,7 +12,7 @@ use DemonDextralHorn\Resolvers\Strategies\Atomic\ParseSetCookieStrategy;
 
 /**
  * [Composite]: Strategy that forwards the 'Set-Cookie' header.
- * 
+ *
  * @class ForwardSetCookieHeaderStrategy
  */
 final readonly class ForwardSetCookieHeaderStrategy extends AbstractStrategy

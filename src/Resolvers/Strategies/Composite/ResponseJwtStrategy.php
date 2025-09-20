@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Resolvers\Strategies\Composite;
 
-use DemonDextralHorn\Resolvers\Strategies\AbstractStrategy;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
-use DemonDextralHorn\Resolvers\Strategies\Atomic\FromResponseBodyStrategy;
+use DemonDextralHorn\Resolvers\Strategies\AbstractStrategy;
 use DemonDextralHorn\Resolvers\Strategies\Atomic\AffixStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Atomic\FromResponseBodyStrategy;
 
 /**
  * [Composite]: Extracts a JWT token from the response body and prefixes it with "Bearer ".
- * 
+ *
  * @class ResponseJwtStrategy
  */
 final readonly class ResponseJwtStrategy extends AbstractStrategy
@@ -36,7 +36,7 @@ final readonly class ResponseJwtStrategy extends AbstractStrategy
             [
                 'strategy' => AffixStrategy::class,
                 'options' => ['prefix' => self::BEARER_PREFIX],
-            ]
+            ],
         ];
 
         return $this->chainExecutor($chain, $requestData, $responseData);

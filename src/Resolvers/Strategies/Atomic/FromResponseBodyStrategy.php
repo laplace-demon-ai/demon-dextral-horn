@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Resolvers\Strategies\Atomic;
 
-use DemonDextralHorn\Resolvers\Strategies\AbstractStrategy;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
+use DemonDextralHorn\Resolvers\Strategies\AbstractStrategy;
 use Illuminate\Support\Arr;
 
 /**
  * [Atomic]: Fetches a value from the response body using a specified position.
- * 
+ *
  * @class FromResponseBodyStrategy
  */
 final readonly class FromResponseBodyStrategy extends AbstractStrategy

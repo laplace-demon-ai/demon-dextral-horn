@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 use DemonDextralHorn\Enums\AuthDriverType;
 use DemonDextralHorn\Enums\OrderType;
+use DemonDextralHorn\Resolvers\Strategies\Atomic\FromResponseBodyStrategy;
 use DemonDextralHorn\Resolvers\Strategies\Composite\ForwardQueryParamStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Composite\ForwardSetCookieHeaderStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Composite\IncrementQueryParamStrategy;
 use DemonDextralHorn\Resolvers\Strategies\Composite\ResponseJwtStrategy;
 use DemonDextralHorn\Resolvers\Strategies\Composite\ResponsePluckStrategy;
-use DemonDextralHorn\Resolvers\Strategies\Composite\ForwardSetCookieHeaderStrategy;
-use DemonDextralHorn\Resolvers\Strategies\Atomic\FromResponseBodyStrategy;
-use DemonDextralHorn\Resolvers\Strategies\Composite\IncrementQueryParamStrategy;
 use Illuminate\Http\Request;
 
 return [

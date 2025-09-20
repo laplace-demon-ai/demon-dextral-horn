@@ -18,9 +18,9 @@ final class StrategyFactory
 {
     /**
      * Create an instance of a strategy class given its class name (the fully qualified class name of the strategy).
-     * 
+     *
      * @param string $strategyClass
-     * 
+     *
      * @return StrategyInterface
      */
     public function make(string $strategyClass): StrategyInterface

@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Resolvers\Strategies\Atomic;
 
-use DemonDextralHorn\Resolvers\Strategies\AbstractStrategy;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
+use DemonDextralHorn\Resolvers\Strategies\AbstractStrategy;
 use Illuminate\Support\Arr;
 
 /**
  * [Atomic]: Strategy to retrieve a specific cookie (session cookie) from the Set-Cookie headers (provided with $value) in an HTTP response.
- * 
+ *
  * @class ParseSetCookieStrategy
  */
 final readonly class ParseSetCookieStrategy extends AbstractStrategy

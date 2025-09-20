@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Resolvers\Strategies\Atomic;
 
-use DemonDextralHorn\Resolvers\Strategies\AbstractStrategy;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
+use DemonDextralHorn\Resolvers\Strategies\AbstractStrategy;
 use Illuminate\Support\Arr;
 
 /**
@@ -28,7 +28,7 @@ final readonly class ArrayLimitStrategy extends AbstractStrategy
     ): mixed {
         $limitRaw = Arr::get($options, 'limit', null);
         $limit = $limitRaw === null ? null : (int) $limitRaw;
-        
+
         // if it's not an array, do nothing
         if (! is_array($value)) {
             return $value;

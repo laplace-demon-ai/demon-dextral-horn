@@ -7,7 +7,6 @@ namespace DemonDextralHorn\Resolvers\Strategies;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Factories\StrategyFactory;
-use DemonDextralHorn\Resolvers\Strategies\StrategyInterface;
 use Illuminate\Support\Arr;
 
 /**
@@ -30,7 +29,7 @@ abstract readonly class AbstractStrategy implements StrategyInterface
      * @param array $chain
      * @param RequestData|null $requestData
      * @param ResponseData|null $responseData
-     * 
+     *
      * @return mixed
      */
     protected function chainExecutor(array $chain, ?RequestData $requestData = null, ?ResponseData $responseData = null): mixed

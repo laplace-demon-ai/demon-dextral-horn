@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Resolvers\Strategies\Composite;
 
-use DemonDextralHorn\Resolvers\Strategies\AbstractStrategy;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
-use DemonDextralHorn\Resolvers\Strategies\Atomic\IncrementValueStrategy;
+use DemonDextralHorn\Resolvers\Strategies\AbstractStrategy;
 use DemonDextralHorn\Resolvers\Strategies\Atomic\FromRequestQueryStrategy;
+use DemonDextralHorn\Resolvers\Strategies\Atomic\IncrementValueStrategy;
 
 /**
  * [Composite]: Strategy that increments a value from the request query parameters.
- * 
+ *
  * @class IncrementQueryParamStrategy
  */
 final readonly class IncrementQueryParamStrategy extends AbstractStrategy

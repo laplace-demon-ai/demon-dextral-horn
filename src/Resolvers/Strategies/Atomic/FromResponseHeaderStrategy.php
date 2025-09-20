@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Resolvers\Strategies\Atomic;
 
-use DemonDextralHorn\Resolvers\Strategies\AbstractStrategy;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
 use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
+use DemonDextralHorn\Resolvers\Strategies\AbstractStrategy;
 use Illuminate\Support\Arr;
 
 /**
  * [Atomic]: Strategy to extract a value from the response header using a specified header_name.
- * 
+ *
  * @class FromResponseHeaderStrategy
  */
 final readonly class FromResponseHeaderStrategy extends AbstractStrategy

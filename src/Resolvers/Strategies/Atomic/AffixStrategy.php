@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Resolvers\Strategies\Atomic;
 
-use DemonDextralHorn\Resolvers\Strategies\AbstractStrategy;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
+use DemonDextralHorn\Resolvers\Strategies\AbstractStrategy;
 use Illuminate\Support\Arr;
 
 /**

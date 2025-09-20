@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Resolvers\Strategies\Atomic;
 
-use DemonDextralHorn\Resolvers\Strategies\AbstractStrategy;
 use DemonDextralHorn\Data\RequestData;
 use DemonDextralHorn\Data\ResponseData;
-use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
 use DemonDextralHorn\Enums\OrderType;
+use DemonDextralHorn\Exceptions\MissingStrategyOptionException;
+use DemonDextralHorn\Resolvers\Strategies\AbstractStrategy;
 use Illuminate\Support\Arr;
 
 /**
  * [Atomic]: Sort an array in ascending or descending order.
  * Return the value as is if it's not an array.
- * 
+ *
  * @class ArraySortStrategy
  */
 final readonly class ArraySortStrategy extends AbstractStrategy
