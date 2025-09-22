@@ -764,4 +764,4 @@ This project is created and maintained by [Moe Mizrak](https://github.com/moe-mi
 
 ## License
 
-// todo create LICENSE file
+Demon Dextral Horn is an open-sourced software licensed under the **[MIT license](LICENSE)**.
