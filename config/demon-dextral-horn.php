@@ -26,20 +26,25 @@ return [
         'cache_store' => env('PREFETCH_RESPONSE_CACHE_DRIVER', 'redis'), // Map spatie laravel-responsecache config 'cache_store' to our package config
     ],
     'rules' => [
+        // HERE YOU CAN DEFINE YOUR PREFETCHING RULES:
+
+
+
         /*
+         * ----------------------------------------------------------------------------
          * Sample rule logic for showcasing different prefetching strategies/scenarios.
+         * (This is just for demonstration purposes and can be removed or modified as needed.)
+         * ----------------------------------------------------------------------------
          */
-        [
+        /*[
             'description' => 'Sample/generalized rule description for prefetching related data',
             'trigger' => [
                 'method' => Request::METHOD_GET,
                 'route' => 'sample.trigger.route.name',
             ],
             'targets' => [
-                /*
-                 * Sample target route with only query parameter, increment query param strategy will be applied.
-                 * e.g. /api/sample?page=1
-                 */
+                // Sample target route with only query parameter, increment query param strategy will be applied.
+                // e.g. /api/sample?page=1
                 [
                     'method' => Request::METHOD_GET,
                     'route' => 'sample.target.route.with.only.query.param',
@@ -54,11 +59,8 @@ return [
                     ],
                 ],
 
-                /*
-                 * Sample target route with only query parameter, forward value strategy will be applied.
-                 * e.g. /api/sample?query_trigger_key=value will be /api/sample?query_target_key=value
-                 * This also showcase that the query parameter can be renamed during the forwarding process.
-                 */
+                // Sample target route with only query parameter, forward value strategy will be applied.
+                // e.g. /api/sample?query_trigger_key=value will be /api/sample?query_target_key=value
                 [
                     'method' => Request::METHOD_GET,
                     'route' => 'sample.target.route.with.forward.value',
@@ -72,19 +74,15 @@ return [
                     ],
                 ],
 
-                /*
-                 * Sample target route without parameters, so no strategy is needed for resolving the parameters.
-                 * e.g. /api/sample
-                 */
+                // Sample target route without parameters, so no strategy is needed for resolving the parameters.
+                // e.g. /api/sample
                 [
                     'method' => Request::METHOD_GET,
                     'route' => 'sample.target.route.without.params',
                 ],
 
-                /*
-                 * Sample target route with route parameter, strategy will be applied to resolve the route parameter from the trigger response data.
-                 * e.g. /api/sample/{route_key} where route_key is extracted from the response data.id
-                 */
+                // Sample target route with route parameter, strategy will be applied to resolve the route parameter from the trigger response data.
+                // e.g. /api/sample/{route_key} where route_key is extracted from the response data.id
                 [
                     'method' => Request::METHOD_GET,
                     'route' => 'sample.target.route.with.route.param',
@@ -98,10 +96,8 @@ return [
                     ],
                 ],
 
-                /*
-                 * Sample target route with route parameter, strategy will be applied to resolve multiple route parameters from the trigger response data.
-                 * e.g. /api/trigger where first 3 ids are extracted/plucked from the response data collection and target route (e.g. api/target/{route_key}) will be dispatched with these 3 ids - route will be called 3 times with each ids separately.
-                 */
+                // Sample target route with route parameter, strategy will be applied to resolve multiple route parameters from the trigger response data.
+                // e.g. /api/trigger where first 3 ids are extracted/plucked from the response data collection and target route (e.g. api/target/{route_key}) will be dispatched with these 3 ids - route will be called 3 times with each ids separately.
                 [
                     'method' => Request::METHOD_GET,
                     'route' => 'sample.target.route.with.pluck.dispatch',
@@ -117,22 +113,17 @@ return [
                     ],
                 ],
             ],
-        ],
+        ],*/
 
-        /*
-         * Sample rule logic for handling login requests including JWT token extraction, laravel session handling etc.
-         */
-        [
+        // Sample rule logic for handling login requests including JWT token extraction, laravel session handling etc.
+        /*[
             'description' => 'Handle login request and prefetch data for authenticated user',
             'trigger' => [
                 'method' => Request::METHOD_POST,
                 'route' => 'auth.login',
             ],
             'targets' => [
-                /*
-                 * Sample target route with authorization header regarding JWT token.
-                 * The Bearer token will be extracted from the response data and added to the authorization header.
-                 */
+                // Sample target route with authorization header regarding JWT token.The Bearer token will be extracted from the response data and added to the authorization header.
                 [
                     'method' => Request::METHOD_GET,
                     'route' => 'sample.target.route.requires.token.from.login.request',
@@ -146,10 +137,7 @@ return [
                     ],
                 ],
 
-                /*
-                 * Sample target route with laravel session cookie.
-                 * The session cookie will be extracted from the response headers (Set-Cookie) and forwarded in the request cookies.
-                 */
+                // Sample target route with laravel session cookie. The session cookie will be extracted from the response headers (Set-Cookie) and forwarded in the request cookies.
                 [
                     'method' => Request::METHOD_GET,
                     'route' => 'sample.target.route.with.session.cookie',
@@ -163,6 +151,6 @@ return [
                     ],
                 ],
             ],
-        ],
+        ],*/
     ],
 ];
