@@ -55,7 +55,7 @@ After publishing the [`demon-dextral-horn`](config/demon-dextral-horn.php) confi
 ```php
 'defaults' => [
     'enabled' => env('PREFETCH_ENABLED', false),
-    'cache_ttl' => env('PREFETCH_CACHE_TTL', 60),
+    'cache_ttl' => env('PREFETCH_CACHE_TTL', 60), // in seconds, e.g. 60 seconds = 1 minute
     'prefetch_prefix' => env('PREFETCH_PREFIX', 'demon_dextral_horn'),
     'cache_max_size' => env('PREFETCH_CACHE_MAX_SIZE', 1048576), // 1 MB = 1024 * 1024 bytes = 1048576 bytes
     'queue_connection' => env('PREFETCH_QUEUE_CONNECTION', 'redis'),
@@ -68,7 +68,7 @@ After publishing the [`demon-dextral-horn`](config/demon-dextral-horn.php) confi
 ```
 
 - `enabled`: **Enable** or **disable** prefetching globally. Default is `false`.
-- `cache_ttl`: **Time-to-live** for cached responses in minutes. It should be **short** because it is for prefetching which is expected to be used soon, otherwise should be flushed not to cause cluttering in cache.
+- `cache_ttl`: **Time-to-live** for cached responses in seconds. It should be **short** because it is for prefetching which is expected to be used soon, otherwise should be flushed not to cause cluttering in cache. Default is `60 seconds`.
 - `prefetch_prefix`: **Prefix for cache keys** to avoid collisions and tag the cached responses.
 - `cache_max_size`: **Maximum size** of cached responses in bytes. If a response exceeds this size, it won't be cached. Default is `1 MB`.
 - `queue_connection`: The **queue connection** to use for prefetching jobs. Default is `redis`.
