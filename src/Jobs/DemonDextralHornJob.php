@@ -33,6 +33,8 @@ final class DemonDextralHornJob implements ShouldQueue
     /**
      * Execute the job.
      *
+     * @param TargetRouteResolverInterface $targetRouteResolver
+     *
      * @return void
      */
     public function handle(TargetRouteResolverInterface $targetRouteResolver): void
