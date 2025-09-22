@@ -19,6 +19,7 @@
   - [Clearing The Cache](#clearing-the-cache)
   - [Monitoring and Debugging Through Events](#monitoring-and-debugging-through-events)
 - [Troubleshooting](#troubleshooting)
+- [TODO](#todo)
 - [Contributing](#contributing)
 - [Authors](#authors)
 - [License](#license)
@@ -753,6 +754,12 @@ There are several events can be used to monitor and debug the Demon Dextral Horn
     - Ensure that the `defaults.cache_store` is set to a valid cache store configured in your application.
     - Make sure your environment (e.g., local, staging, production) is correctly set up to use queues and caching.
 
+## TODO
+> - [ ] **Signalling Route**: A specialized endpoint that allows clients to signal the backend to prepare results proactively, without waiting for actual trigger routes.
+For example, a client could call this endpoint when a user hovers over a link or focuses on an input field, indicating an intent to navigate or submit data soon. The backend can then prefetch and cache the relevant data in anticipation of the user's action.
+> - [ ] **New middleware**: Log user activities to enable dynamic, personalized rules using Markov Chain predictions.
+> - [ ] **Code cleanup**: Remove unnecessary docblocks and comments, no need to repeat what is already clear from the code itself.
+
 ## Contributing
 
 > **Your contributions are welcome!** If you'd like to improve this project, simply create a pull request with your changes. Your efforts help enhance its functionality and documentation.
@@ -763,5 +770,4 @@ There are several events can be used to monitor and debug the Demon Dextral Horn
 This project is created and maintained by [Moe Mizrak](https://github.com/moe-mizrak) with contributions from the [Open Source Community](https://github.com/laplace-demon-ai/demon-dextral-horn/graphs/contributors).
 
 ## License
-
 Demon Dextral Horn is an open-sourced software licensed under the **[MIT license](LICENSE)**.
