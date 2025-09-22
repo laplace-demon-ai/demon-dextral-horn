@@ -28,8 +28,6 @@ return [
     'rules' => [
         // HERE YOU CAN DEFINE YOUR PREFETCHING RULES:
 
-
-
         /*
          * ----------------------------------------------------------------------------
          * Sample rule logic for showcasing different prefetching strategies/scenarios.

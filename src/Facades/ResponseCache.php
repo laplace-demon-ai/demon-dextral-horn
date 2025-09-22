@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace DemonDextralHorn\Facades;
 
+use DemonDextralHorn\Data\TargetRouteData;
 use Illuminate\Support\Facades\Facade;
 use Symfony\Component\HttpFoundation\Response;
-use DemonDextralHorn\Data\TargetRouteData;
 
 /**
  * Facade for the ResponseCache.
