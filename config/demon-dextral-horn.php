@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 
 return [
     'defaults' => [
-        'enabled' => env('PREFETCH_ENABLED', false), // Enable/disable prefetching, default is disabled
+        'enabled' => env('PREFETCH_ENABLED', true), // Enable/disable prefetching, default is enabled
         'cache_ttl' => env('PREFETCH_CACHE_TTL', 60),
         'prefetch_prefix' => env('PREFETCH_PREFIX', 'demon_dextral_horn'),
         'cache_max_size' => env('PREFETCH_CACHE_MAX_SIZE', 1048576), // 1 MB = 1024 * 1024 bytes = 1048576 bytes
