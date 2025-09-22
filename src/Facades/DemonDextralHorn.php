@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace DemonDextralHorn\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use DemonDextralHorn\Data\RequestData;
+use DemonDextralHorn\Data\ResponseData;
 
 /**
  * Facade for the DemonDextralHorn.
