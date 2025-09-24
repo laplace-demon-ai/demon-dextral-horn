@@ -2,6 +2,8 @@
 
 **Demon Dextral Horn** is a Laravel package for **API prefetching**. It **predicts** and **caches** upcoming **API requests** based on configurable rules, so responses are instantly available when users need them.
 
+> Laplace's Demon: the hypothetical entity that, with perfect knowledge of the present, could predict all future events based on causal determinism.
+
 ## Table of Contents
 
 - [Requirements](#requirements)
